@@ -31,7 +31,7 @@
 '<div class="topbar">' +
 '  <div class="container topbar__inner">' +
 '    <span>✨ Free Delivery on all orders (Offer ends soon) &nbsp;|&nbsp; 10 Days Easy Returns &nbsp;|&nbsp; 100% Secure Payments</span>' +
-'    <div class="topbar__right"><a href="#">Help</a><a href="#">About</a></div>' +
+'    <div class="topbar__right"><a href="#">Help</a><a href="about.html">About</a></div>' +
 '  </div>' +
 '</div>' +
 '<header class="site-header" id="site-header">' +
@@ -109,7 +109,7 @@
 '    <div class="footer__col"><h4>Quick Links</h4>' +
 '      <a href="' + href('index.html') + '">Home</a>' +
 '      <a href="' + href('collections.html') + '">All Products</a>' +
-'      <a href="#">About Us</a><a href="#">Contact</a>' +
+'      <a href="about.html">About Us</a><a href="#contact.html">Contact</a>' +
 '    </div>' +
 '    <div class="footer__col"><h4>Customer Service</h4>' +
 '      <a href="#">FAQs</a><a href="#">Shipping Policy</a><a href="#">Return Policy</a><a href="#">Track Order</a><a href="#">Privacy Policy</a>' +
