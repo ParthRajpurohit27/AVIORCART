@@ -1,0 +1,250 @@
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --gold:#fbbf24;--gold2:#f59e0b;--gold3:#fde68a;
+  --black:#060608;--card:#13131a;
+  --white:#fff;--text:#e2e2ea;--muted:#7c7c96;
+  --border:rgba(251,191,36,.13);--wa:#25D366;
+}
+
+/* DARK OUTER WRAPPER */
+.ac-outer{
+  position:relative;
+  background:#060608;
+  overflow:hidden;
+  min-height:80vh;
+  font-family:'DM Sans',sans-serif;
+  color:var(--text);
+}
+
+/* CANVAS */
+#ac-bg{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* FLOAT LAYER */
+.ac-float-layer{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+.ac-floater{position:absolute;width:var(--size,60px);opacity:.15;top:var(--y-start,50%);left:-120px;animation:acFly var(--dur,12s) var(--delay,0s) linear infinite;filter:drop-shadow(0 0 4px rgba(251,191,36,.2));}
+.ac-floater svg{width:100%;height:auto;}
+.ac-floater-up{animation-name:acFlyUp;}
+.ac-floater-diag{animation-name:acFlyDiag;}
+.ac-floater-slow{opacity:.1;animation-name:acFlySlow;}
+.ac-floater-rev{left:auto;right:-120px;animation-name:acFlyRev;}
+.ac-star{position:absolute;font-size:14px;color:#fbbf24;opacity:.12;animation:acStarBob var(--dur,8s) var(--delay,0s) ease-in-out infinite;}
+
+@keyframes acFly{0%{left:-120px;transform:translateY(0);}100%{left:calc(100% + 120px);transform:translateY(-30px);}}
+@keyframes acFlyUp{0%{left:-100px;transform:translateY(20px);}50%{transform:translateY(-40px);}100%{left:calc(100% + 100px);transform:translateY(10px);}}
+@keyframes acFlyDiag{0%{left:-100px;top:85%;}100%{left:calc(100% + 100px);top:5%;}}
+@keyframes acFlySlow{0%{left:-100px;transform:translateY(0) rotate(0deg);}25%{transform:translateY(-25px) rotate(5deg);}75%{transform:translateY(15px) rotate(-5deg);}100%{left:calc(100% + 100px);transform:translateY(0) rotate(0deg);}}
+@keyframes acFlyRev{0%{right:-120px;transform:translateY(0) scaleX(-1);}100%{right:calc(100% + 120px);transform:translateY(-20px) scaleX(-1);}}
+@keyframes acStarBob{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-18px) scale(1.3);}}
+
+/* CONTACT SECTION */
+.ac-wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 24px 80px;text-align:center;}
+
+.ac-badge{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);background:rgba(251,191,36,.05);padding:7px 20px;border-radius:50px;font-size:10px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-bottom:40px;opacity:0;animation:acFadeUp .7s .1s forwards;}
+.ac-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:acBlink 2s infinite;flex-shrink:0;}
+
+.ac-h1{font-family:'Orbitron',monospace;font-size:clamp(36px,8vw,88px);font-weight:900;line-height:.95;margin-bottom:18px;opacity:0;animation:acFadeUp .7s .25s forwards;}
+.ac-h1 .l1{display:block;color:var(--white);}
+.ac-h1 .l2{display:block;background:linear-gradient(135deg,var(--gold),var(--gold3),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+.ac-sub{font-size:16px;color:var(--muted);max-width:440px;line-height:1.75;font-weight:300;margin-bottom:60px;opacity:0;animation:acFadeUp .7s .4s forwards;}
+
+/* CARDS */
+.ac-cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;width:100%;max-width:1000px;}
+.ac-card{flex:1;min-width:240px;max-width:290px;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:36px 28px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform .35s cubic-bezier(.34,1.56,.64,1),border-color .3s,box-shadow .3s;cursor:pointer;opacity:0;}
+.ac-card:nth-child(1){animation:acFadeUp .7s .55s forwards;}
+.ac-card:nth-child(2){animation:acFadeUp .7s .65s forwards;}
+.ac-card:nth-child(3){animation:acFadeUp .7s .75s forwards;}
+.ac-card:hover{transform:translateY(-10px) scale(1.02);border-color:rgba(251,191,36,.35);box-shadow:0 24px 80px rgba(251,191,36,.1);}
+.ac-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(251,191,36,.09) 0%,transparent 65%);opacity:0;transition:opacity .4s;}
+.ac-card:hover::before{opacity:1;}
+.ac-card::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:2px;transform:scaleX(0);transition:transform .4s ease;}
+.ac-card:hover::after{transform:scaleX(1);}
+
+/* WA card */
+.ac-card.wa:hover{border-color:rgba(37,211,102,.35);box-shadow:0 24px 80px rgba(37,211,102,.1);}
+.ac-card.wa::after{background:linear-gradient(90deg,transparent,var(--wa),transparent);}
+.ac-card.wa .ac-ring{background:rgba(37,211,102,.08);border-color:rgba(37,211,102,.2);}
+.ac-card.wa:hover .ac-ring{background:rgba(37,211,102,.15);border-color:rgba(37,211,102,.5);box-shadow:0 0 32px rgba(37,211,102,.2);}
+.ac-card.wa .ac-ctype{color:#25D366;}
+.ac-card.wa .ac-action{background:rgba(37,211,102,.08);border-color:rgba(37,211,102,.2);color:#25D366;}
+.ac-card.wa .ac-action:hover{background:var(--wa);color:var(--black);}
+.ac-card.wa .ac-orbit{border-color:rgba(37,211,102,.15);}
+.ac-card.wa .ac-orb-dot{background:var(--wa);}
+
+.ac-ring{width:72px;height:72px;border-radius:50%;background:rgba(251,191,36,.08);border:1.5px solid rgba(251,191,36,.2);display:flex;align-items:center;justify-content:center;margin-bottom:24px;position:relative;transition:all .35s;}
+.ac-card:hover .ac-ring{background:rgba(251,191,36,.15);border-color:rgba(251,191,36,.5);box-shadow:0 0 32px rgba(251,191,36,.2);}
+.ac-ring svg{transition:transform .35s cubic-bezier(.34,1.56,.64,1);}
+.ac-card:hover .ac-ring svg{transform:scale(1.2) rotate(-8deg);}
+.ac-orbit{position:absolute;inset:-8px;border-radius:50%;border:1px dashed rgba(251,191,36,.15);animation:acSpin 12s linear infinite;}
+.ac-orb-dot{position:absolute;top:4px;left:50%;width:5px;height:5px;border-radius:50%;background:var(--gold);transform:translateX(-50%);}
+
+.ac-ctype{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:10px;}
+.ac-label{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:12px;}
+.ac-val{font-size:14px;font-weight:500;color:var(--text);line-height:1.6;word-break:break-all;}
+.ac-action{display:inline-flex;align-items:center;gap:6px;margin-top:22px;padding:10px 22px;border-radius:50px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);color:var(--gold);font-size:12px;font-weight:600;letter-spacing:.5px;text-decoration:none;transition:all .3s;cursor:pointer;}
+.ac-action:hover{background:var(--gold);color:var(--black);}
+.ac-action svg{transition:transform .3s;}
+.ac-action:hover svg{transform:translateX(3px);}
+
+.ac-note{margin-top:52px;opacity:0;animation:acFadeUp .7s .9s forwards;font-size:13px;color:var(--muted);line-height:1.8;}
+.ac-note strong{color:var(--gold);}
+
+@keyframes acFadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes acBlink{0%,100%{opacity:1;}50%{opacity:.5;}}
+@keyframes acSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+@media(max-width:580px){
+  .ac-cards{flex-direction:column;align-items:center;}
+  .ac-card{max-width:100%;width:100%;}
+}
+</style>
+
+<!-- DARK WRAPPER — sab kuch andar -->
+<div class="ac-outer">
+
+  <canvas id="ac-bg"></canvas>
+
+  <!-- FLOATING DELIVERY ANIMATIONS -->
+  <div class="ac-float-layer" aria-hidden="true">
+    <!-- Delivery boy bicycle -->
+    <div class="ac-floater" style="--dur:14s;--delay:0s;--y-start:65%;--size:72px;">
+      <svg viewBox="0 0 80 60" fill="none"><circle cx="18" cy="46" r="10" stroke="#fbbf24" stroke-width="2.5" fill="none"/><circle cx="18" cy="46" r="3" fill="#fbbf24"/><circle cx="58" cy="46" r="10" stroke="#fbbf24" stroke-width="2.5" fill="none"/><circle cx="58" cy="46" r="3" fill="#fbbf24"/><path d="M18 46 L36 22 L58 46" stroke="#fbbf24" stroke-width="2" fill="none"/><path d="M36 22 L48 46" stroke="#fbbf24" stroke-width="2"/><path d="M36 22 L28 36" stroke="#fbbf24" stroke-width="2"/><path d="M52 30 L62 28 L62 24" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/><ellipse cx="44" cy="26" rx="7" ry="9" fill="#fbbf24" opacity=".9"/><circle cx="44" cy="14" r="7" fill="#fbbf24"/><path d="M37 14 Q44 7 51 14" fill="#d97706"/><rect x="28" y="20" width="14" height="12" rx="2" fill="#d97706" stroke="#fbbf24" stroke-width="1.5"/><line x1="35" y1="20" x2="35" y2="32" stroke="#fbbf24" stroke-width="1"/><line x1="28" y1="26" x2="42" y2="26" stroke="#fbbf24" stroke-width="1"/><line x1="0" y1="38" x2="10" y2="38" stroke="#fbbf24" stroke-width="1.5" opacity=".4" stroke-dasharray="3 2"/><line x1="0" y1="44" x2="8" y2="44" stroke="#fbbf24" stroke-width="1" opacity=".3" stroke-dasharray="3 2"/></svg>
+    </div>
+    <!-- Winged parcel -->
+    <div class="ac-floater ac-floater-up" style="--dur:10s;--delay:2s;--y-start:30%;--size:56px;">
+      <svg viewBox="0 0 60 50" fill="none"><path d="M5 25 Q0 15 8 18 Q12 20 15 25" fill="#fbbf24" opacity=".6"/><path d="M55 25 Q60 15 52 18 Q48 20 45 25" fill="#fbbf24" opacity=".6"/><rect x="15" y="15" width="30" height="24" rx="3" fill="#d97706"/><rect x="15" y="15" width="30" height="24" rx="3" stroke="#fbbf24" stroke-width="2"/><line x1="15" y1="27" x2="45" y2="27" stroke="#fbbf24" stroke-width="2"/><line x1="30" y1="15" x2="30" y2="39" stroke="#fbbf24" stroke-width="2"/><path d="M26 14 Q30 10 34 14" stroke="#fbbf24" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    </div>
+    <!-- Rocket -->
+    <div class="ac-floater ac-floater-diag" style="--dur:18s;--delay:5s;--y-start:20%;--size:50px;">
+      <svg viewBox="0 0 40 70" fill="none"><path d="M20 5 Q28 15 28 35 L20 42 L12 35 Q12 15 20 5Z" fill="#d97706" stroke="#fbbf24" stroke-width="1.5"/><circle cx="20" cy="22" r="5" fill="#fbbf24" opacity=".9"/><circle cx="20" cy="22" r="3" fill="#060608"/><path d="M12 35 L6 45 L12 42Z" fill="#fbbf24" opacity=".8"/><path d="M28 35 L34 45 L28 42Z" fill="#fbbf24" opacity=".8"/><path d="M16 42 Q20 55 24 42" fill="#fbbf24" opacity=".7"/><path d="M18 42 Q20 50 22 42" fill="#fff" opacity=".4"/></svg>
+    </div>
+    <!-- Gift box -->
+    <div class="ac-floater ac-floater-slow" style="--dur:20s;--delay:7s;--y-start:75%;--size:48px;">
+      <svg viewBox="0 0 50 55" fill="none"><rect x="8" y="8" width="34" height="6" rx="2" fill="#fbbf24"/><rect x="22" y="2" width="6" height="12" rx="2" fill="#fbbf24"/><path d="M25 2 Q18 0 18 5 Q18 8 25 8" fill="#d97706" stroke="#fbbf24" stroke-width="1"/><path d="M25 2 Q32 0 32 5 Q32 8 25 8" fill="#d97706" stroke="#fbbf24" stroke-width="1"/><rect x="5" y="14" width="40" height="34" rx="3" fill="#1a1a24" stroke="#fbbf24" stroke-width="2"/><rect x="22" y="14" width="6" height="34" fill="#fbbf24" opacity=".3"/></svg>
+    </div>
+    <!-- Envelope -->
+    <div class="ac-floater ac-floater-up" style="--dur:12s;--delay:9s;--y-start:50%;--size:40px;">
+      <svg viewBox="0 0 50 38" fill="none"><rect x="2" y="2" width="46" height="34" rx="4" fill="#13131a" stroke="#fbbf24" stroke-width="2"/><path d="M2 6 L25 22 L48 6" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <!-- Scooter reverse -->
+    <div class="ac-floater ac-floater-rev" style="--dur:16s;--delay:3s;--y-start:80%;--size:65px;">
+      <svg viewBox="0 0 75 55" fill="none"><circle cx="16" cy="42" r="10" stroke="#fbbf24" stroke-width="2.5" fill="none"/><circle cx="16" cy="42" r="3" fill="#fbbf24"/><circle cx="57" cy="42" r="10" stroke="#fbbf24" stroke-width="2.5" fill="none"/><circle cx="57" cy="42" r="3" fill="#fbbf24"/><path d="M16 42 Q20 28 36 26 Q48 24 52 30 L57 42" stroke="#fbbf24" stroke-width="2.5" fill="none"/><path d="M36 26 L36 18 L44 18" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/><ellipse cx="38" cy="24" rx="6" ry="5" fill="#fbbf24" opacity=".9"/><circle cx="38" cy="13" r="6" fill="#fbbf24"/><path d="M32 13 Q38 6 44 13" fill="#d97706"/><rect x="44" y="18" width="14" height="12" rx="2" fill="#d97706" stroke="#fbbf24" stroke-width="1.5"/></svg>
+    </div>
+    <div class="ac-star" style="--dur:8s;--delay:0s;left:8%;top:18%;">✦</div>
+    <div class="ac-star" style="--dur:11s;--delay:3s;left:83%;top:33%;">⭐</div>
+    <div class="ac-star" style="--dur:9s;--delay:6s;left:48%;top:12%;">✦</div>
+    <div class="ac-star" style="--dur:13s;--delay:1s;left:72%;top:68%;">⭐</div>
+    <div class="ac-star" style="--dur:7s;--delay:4s;left:18%;top:78%;">✦</div>
+  </div>
+
+  <!-- CONTACT SECTION -->
+  <div class="ac-wrap">
+    <div class="ac-badge"><span class="ac-dot"></span> Contact AVIORCART</div>
+
+    <h1 class="ac-h1">
+      <span class="l1">Get in</span>
+      <span class="l2">Touch</span>
+    </h1>
+
+    <p class="ac-sub">Have a question or need help with your order?<br>Reach out — we're always here for you.</p>
+
+    <div class="ac-cards">
+
+      <!-- PHONE -->
+      <div class="ac-card" onclick="window.location='tel:+919425619133'">
+        <div class="ac-ring">
+          <div class="ac-orbit"><div class="ac-orb-dot"></div></div>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.47 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.86a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="ac-ctype">Call Us</div>
+        <div class="ac-label">Mobile Number</div>
+        <div class="ac-val">+91 94256 19133</div>
+        <a class="ac-action" href="tel:+919425619133" onclick="event.stopPropagation()">
+          Call Now <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- WHATSAPP -->
+      <div class="ac-card wa" onclick="window.open('https://wa.me/message/S6DVQCLWODGFE1?src=qr','_blank')">
+        <div class="ac-ring">
+          <div class="ac-orbit"><div class="ac-orb-dot"></div></div>
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <div class="ac-ctype">WhatsApp</div>
+        <div class="ac-label">Chat with Us</div>
+        <div class="ac-val">+91 94256 19133<br><span style="font-size:12px;color:var(--muted);">Tap to open WhatsApp</span></div>
+        <a class="ac-action" href="https://wa.me/message/S6DVQCLWODGFE1?src=qr" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+          Chat Now <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="ac-card" onclick="acMail()">
+        <div class="ac-ring">
+          <div class="ac-orbit"><div class="ac-orb-dot"></div></div>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="ac-ctype">Email Us</div>
+        <div class="ac-label">Email Address</div>
+        <div class="ac-val">parthrajpurohit08<br>@gmail.com</div>
+        <a class="ac-action" onclick="event.stopPropagation();acMail()">
+          Send Email <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+    </div>
+
+    <p class="ac-note">We usually respond within <strong>a few hours</strong>.<br>Monday – Saturday &nbsp;·&nbsp; 11 AM – 7 PM IST</p>
+  </div>
+
+</div><!-- end .ac-outer -->
+
+<script>
+function acMail(){var u='parthrajpurohit08',d='gmail.com';window.location='mai'+'lto:'+u+'@'+d;}
+
+(function(){
+  var wrap=document.querySelector('.ac-outer');
+  var c=document.getElementById('ac-bg');
+  if(!c||!wrap)return;
+  var ctx=c.getContext('2d'),stars=[];
+  function resize(){c.width=wrap.offsetWidth;c.height=wrap.offsetHeight;}
+  resize();
+  window.addEventListener('resize',function(){resize();init();});
+  function init(){
+    stars=[];
+    var W=c.width,H=c.height;
+    for(var i=0;i<Math.floor(W*H/6000);i++)
+      stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.1+.2,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,a:Math.random(),va:(Math.random()-.5)*.007});
+  }
+  init();
+  var mx=c.width/2,my=c.height/2;
+  wrap.addEventListener('mousemove',function(e){
+    var rect=wrap.getBoundingClientRect();
+    mx=e.clientX-rect.left;my=e.clientY-rect.top;
+  });
+  function draw(){
+    var W=c.width,H=c.height;
+    ctx.clearRect(0,0,W,H);
+    var g=ctx.createRadialGradient(mx,my,0,mx,my,300);
+    g.addColorStop(0,'rgba(251,191,36,.03)');
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    for(var i=0;i<stars.length;i++){
+      var s=stars[i];
+      s.x+=s.vx;s.y+=s.vy;s.a+=s.va;
+      if(s.a>1||s.a<0)s.va*=-1;
+      if(s.x<0)s.x=W;if(s.x>W)s.x=0;
+      if(s.y<0)s.y=H;if(s.y>H)s.y=0;
+      var d=Math.sqrt((s.x-mx)*(s.x-mx)+(s.y-my)*(s.y-my));
+      var b=Math.max(0,1-d/200)*.4;
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(251,191,36,'+Math.min(1,(s.a*.35+b)).toFixed(2)+')';
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>

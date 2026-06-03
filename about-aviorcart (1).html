@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About AVIORCART — Our Story</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --gold:#fbbf24;
+  --gold2:#f59e0b;
+  --gold3:#fde68a;
+  --black:#060608;
+  --dark:#0d0d12;
+  --card:#13131a;
+  --card2:#1a1a24;
+  --white:#ffffff;
+  --text:#e2e2ea;
+  --muted:#7c7c96;
+  --border:rgba(251,191,36,0.12);
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--black);
+  color:var(--text);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ── CURSOR ── */
+.cursor{
+  position:fixed;width:12px;height:12px;
+  background:var(--gold);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .2s,height .2s,background .2s;
+  mix-blend-mode:difference;
+}
+.cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:1.5px solid rgba(251,191,36,.5);
+  border-radius:50%;pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:transform .12s ease,width .3s,height .3s;
+}
+
+/* ── CANVAS BACKGROUND ── */
+#bg-canvas{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:1;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.4;pointer-events:none;
+}
+
+/* ── LAYOUT ── */
+.wrap{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:80px 24px;
+  position:relative;
+}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--border);
+  background:rgba(251,191,36,.06);
+  padding:8px 20px;border-radius:50px;
+  font-size:11px;font-weight:600;letter-spacing:3px;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:32px;
+  animation:fadeUp .8s .2s both;
+}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;}
+
+.hero-title{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(42px,8vw,96px);
+  font-weight:900;
+  line-height:.95;
+  letter-spacing:-1px;
+  margin-bottom:24px;
+  animation:fadeUp .8s .35s both;
+}
+.hero-title .line1{display:block;color:var(--white);}
+.hero-title .line2{
+  display:block;
+  background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 50%,var(--gold2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.hero-sub{
+  font-size:clamp(15px,2vw,18px);
+  color:var(--muted);
+  max-width:540px;
+  margin:0 auto 48px;
+  line-height:1.75;
+  font-weight:300;
+  animation:fadeUp .8s .5s both;
+}
+
+.hero-scroll{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--muted);font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  animation:fadeUp .8s .7s both;
+}
+.scroll-line{
+  width:1px;height:48px;
+  background:linear-gradient(var(--gold),transparent);
+  animation:scrollDown 2s infinite;
+}
+
+/* ── SECTION COMMON ── */
+section{padding:100px 0;position:relative;}
+
+.section-label{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:20px;
+}
+.section-label::before,.section-label::after{content:'';height:1px;background:var(--gold);opacity:.4;}
+.section-label::before{width:28px;}
+.section-label::after{width:16px;}
+
+.section-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px,4vw,48px);
+  font-weight:800;
+  color:var(--white);
+  line-height:1.1;
+  margin-bottom:20px;
+}
+
+/* ── DIVIDER ── */
+.divider{
+  width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:0;
+}
+
+/* ── FOUNDER SECTION ── */
+.founder-section{padding:100px 0;}
+
+.founder-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+}
+
+.founder-visual{
+  position:relative;
+}
+.founder-frame{
+  position:relative;
+  width:100%;aspect-ratio:.85;
+  border-radius:20px;overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--border);
+}
+.founder-frame-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 30% 20%,rgba(251,191,36,.08) 0%,transparent 60%),
+    radial-gradient(ellipse at 70% 80%,rgba(251,191,36,.05) 0%,transparent 50%);
+}
+.founder-initials{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px;
+}
+.founder-initials .big-p{
+  font-family:'Orbitron',monospace;
+  font-size:120px;font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--gold3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;opacity:.25;
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.founder-avatar{
+  width:140px;height:140px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',monospace;font-size:48px;font-weight:900;
+  color:var(--black);
+  box-shadow:0 0 60px rgba(251,191,36,.25);
+  position:relative;z-index:1;
+}
+.founder-name-plate{
+  position:relative;z-index:1;text-align:center;
+}
+.founder-name-plate h3{
+  font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+  color:var(--white);margin-bottom:4px;
+}
+.founder-name-plate p{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+
+.founder-corner{
+  position:absolute;width:60px;height:60px;
+  border-color:var(--gold);border-style:solid;opacity:.4;
+}
+.founder-corner.tl{top:-1px;left:-1px;border-width:2px 0 0 2px;border-radius:12px 0 0 0;}
+.founder-corner.br{bottom:-1px;right:-1px;border-width:0 2px 2px 0;border-radius:0 0 12px 0;}
+
+.founder-badge{
+  position:absolute;bottom:-20px;right:-20px;
+  background:var(--gold);
+  color:var(--black);
+  padding:14px 20px;
+  border-radius:14px;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:13px;
+  box-shadow:0 8px 32px rgba(251,191,36,.35);
+  transform:rotate(-4deg);
+  z-index:2;
+}
+
+.founder-content{}
+.founder-tag{
+  display:inline-block;
+  background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);
+  color:var(--gold);padding:5px 14px;border-radius:50px;
+  font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:24px;
+}
+.founder-content h2{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px,3.5vw,44px);font-weight:800;
+  color:var(--white);line-height:1.1;margin-bottom:8px;
+}
+.founder-content h2 .gold-name{
+  background:linear-gradient(135deg,var(--gold),var(--gold3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.founder-role{
+  font-size:13px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:28px;
+}
+.founder-bio{
+  font-size:15px;color:var(--muted);line-height:1.9;margin-bottom:28px;
+  font-weight:300;
+}
+.founder-bio strong{color:var(--text);font-weight:500;}
+
+.founder-quote{
+  border-left:3px solid var(--gold);
+  padding:16px 20px;
+  background:rgba(251,191,36,.04);
+  border-radius:0 12px 12px 0;
+  font-size:15px;font-style:italic;
+  color:var(--text);line-height:1.7;
+  margin-bottom:28px;
+}
+
+.founder-stats{display:flex;gap:28px;flex-wrap:wrap;}
+.f-stat{}
+.f-stat__num{
+  font-family:'Orbitron',monospace;
+  font-size:28px;font-weight:700;
+  color:var(--gold);line-height:1;
+  margin-bottom:4px;
+}
+.f-stat__label{font-size:12px;color:var(--muted);letter-spacing:.5px;}
+
+/* ── MISSION SECTION ── */
+.mission-section{padding:100px 0;background:var(--dark);}
+.mission-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(251,191,36,.06) 0%,transparent 60%);
+  pointer-events:none;
+}
+
+.mission-text-big{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px,4.5vw,58px);
+  font-weight:800;
+  color:var(--white);
+  line-height:1.2;
+  text-align:center;
+  max-width:820px;
+  margin:0 auto 60px;
+}
+.mission-text-big .accent{
+  background:linear-gradient(135deg,var(--gold),var(--gold3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.values-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.value-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:36px 28px;
+  position:relative;overflow:hidden;
+  transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;
+}
+.value-card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(251,191,36,.3);
+  box-shadow:0 20px 60px rgba(251,191,36,.08);
+}
+.value-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 0%,rgba(251,191,36,.06) 0%,transparent 60%);
+  opacity:0;transition:opacity .3s ease;
+}
+.value-card:hover::before{opacity:1;}
+.value-num{
+  font-family:'Orbitron',monospace;
+  font-size:11px;font-weight:700;letter-spacing:3px;
+  color:var(--gold);opacity:.5;margin-bottom:20px;
+}
+.value-icon{font-size:36px;margin-bottom:16px;display:block;}
+.value-title{
+  font-family:'Syne',sans-serif;font-size:18px;font-weight:700;
+  color:var(--white);margin-bottom:10px;
+}
+.value-desc{font-size:14px;color:var(--muted);line-height:1.7;}
+
+/* ── STORY SECTION ── */
+.story-section{padding:100px 0;}
+.story-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:80px;align-items:start;}
+.story-sticky{position:sticky;top:100px;}
+.story-year{
+  font-family:'Orbitron',monospace;
+  font-size:88px;font-weight:900;
+  color:var(--gold);opacity:.08;
+  line-height:1;margin-bottom:-20px;
+}
+.timeline{position:relative;padding-left:32px;}
+.timeline::before{
+  content:'';position:absolute;left:0;top:8px;bottom:8px;
+  width:1px;background:linear-gradient(var(--gold),transparent);
+  opacity:.3;
+}
+.tl-item{position:relative;margin-bottom:44px;}
+.tl-item::before{
+  content:'';
+  position:absolute;left:-36px;top:6px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 12px rgba(251,191,36,.5);
+}
+.tl-date{
+  font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:8px;
+}
+.tl-title{
+  font-family:'Syne',sans-serif;font-size:18px;font-weight:700;
+  color:var(--white);margin-bottom:8px;
+}
+.tl-text{font-size:14px;color:var(--muted);line-height:1.7;}
+
+/* ── PROMISE SECTION ── */
+.promise-section{
+  padding:100px 0;
+  background:var(--dark);
+  text-align:center;
+}
+.promise-cards{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:16px;margin-top:52px;
+}
+.promise-card{
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:16px;padding:32px 20px;
+  transition:all .3s ease;
+  position:relative;overflow:hidden;
+}
+.promise-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  transform:scaleX(0);transition:transform .4s ease;
+}
+.promise-card:hover::after{transform:scaleX(1);}
+.promise-card:hover{transform:translateY(-4px);border-color:rgba(251,191,36,.25);}
+.promise-icon{font-size:40px;margin-bottom:16px;display:block;}
+.promise-title{
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  color:var(--white);margin-bottom:8px;
+}
+.promise-text{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* ── CTA ── */
+.cta-section{
+  padding:120px 24px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(251,191,36,.07) 0%,transparent 65%);
+}
+.cta-glow{
+  position:absolute;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(251,191,36,.12) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  border-radius:50%;
+  animation:breathe 4s infinite;
+}
+.cta-inner{position:relative;z-index:1;}
+.cta-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(32px,5vw,64px);font-weight:800;
+  color:var(--white);margin-bottom:16px;line-height:1.1;
+}
+.cta-title .shimmer{
+  background:linear-gradient(90deg,var(--gold),var(--gold3),var(--gold));
+  background-size:200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:shimmer 3s linear infinite;
+}
+.cta-sub{font-size:16px;color:var(--muted);margin-bottom:44px;max-width:480px;margin-left:auto;margin-right:auto;}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--gold);color:var(--black);
+  padding:16px 40px;border-radius:50px;
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  text-decoration:none;letter-spacing:.5px;
+  transition:all .3s ease;
+  box-shadow:0 8px 40px rgba(251,191,36,.3);
+}
+.cta-btn:hover{
+  background:var(--gold3);transform:translateY(-3px);
+  box-shadow:0 16px 60px rgba(251,191,36,.45);
+}
+.cta-btn svg{transition:transform .3s;}
+.cta-btn:hover svg{transform:translateX(4px);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes scrollDown{
+  0%{transform:scaleY(0);transform-origin:top;}
+  50%{transform:scaleY(1);transform-origin:top;}
+  51%{transform:scaleY(1);transform-origin:bottom;}
+  100%{transform:scaleY(0);transform-origin:bottom;}
+}
+@keyframes pulse{
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(251,191,36,.4);}
+  50%{opacity:.7;box-shadow:0 0 0 6px transparent;}
+}
+@keyframes breathe{
+  0%,100%{transform:translate(-50%,-50%) scale(1);}
+  50%{transform:translate(-50%,-50%) scale(1.15);}
+}
+@keyframes shimmer{
+  0%{background-position:200% center;}
+  100%{background-position:-200% center;}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+@keyframes rotateSlow{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+
+.reveal{
+  opacity:0;transform:translateY(32px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:.1s;}
+.reveal-delay-2{transition-delay:.2s;}
+.reveal-delay-3{transition-delay:.3s;}
+.reveal-delay-4{transition-delay:.4s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .founder-grid,.story-grid{grid-template-columns:1fr;gap:48px;}
+  .values-grid{grid-template-columns:1fr 1fr;}
+  .promise-cards{grid-template-columns:1fr 1fr;}
+  .story-sticky{position:static;}
+  .founder-frame{max-width:320px;margin:0 auto;}
+  .founder-badge{bottom:12px;right:12px;}
+}
+@media(max-width:600px){
+  .values-grid{grid-template-columns:1fr;}
+  .promise-cards{grid-template-columns:1fr 1fr;}
+  .hero-title{font-size:clamp(36px,12vw,64px);}
+  body{cursor:auto;}
+  .cursor,.cursor-ring{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- Animated Background Canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- ════════════ HERO ════════════ -->
+<section class="hero">
+  <div style="text-align:center;max-width:800px;margin:0 auto;">
+    <div class="hero-badge">
+      ✦ Our Story
+    </div>
+    <h1 class="hero-title">
+      <span class="line1">Welcome to</span>
+      <span class="line2">AVIORCART</span>
+    </h1>
+    <p class="hero-sub">
+      Born from a dream, built with passion — India's rising premium shopping destination where quality meets affordability, and every order feels special.
+    </p>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll to explore</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════ FOUNDER ════════════ -->
+<section class="founder-section">
+  <div class="wrap">
+    <div class="founder-grid">
+
+      <div class="founder-visual reveal">
+        <div class="founder-frame">
+          <div class="founder-frame-bg"></div>
+          <div class="big-p">P</div>
+          <div class="founder-initials">
+            <div class="founder-avatar">PR</div>
+            <div class="founder-name-plate">
+              <h3>Parth Rajpurohit</h3>
+              <p>Founder & Owner</p>
+            </div>
+          </div>
+          <div class="founder-corner tl"></div>
+          <div class="founder-corner br"></div>
+        </div>
+        <div class="founder-badge">👑 The Founder</div>
+      </div>
+
+      <div class="founder-content">
+        <div class="founder-tag">✦ Meet the Founder</div>
+        <h2>
+          <span class="gold-name">Parth Rajpurohit</span><br>
+          — The Visionary Behind AVIORCART
+        </h2>
+        <p class="founder-role">Founder &amp; Owner · AVIORCART</p>
+
+        <p class="founder-bio">
+          <strong>Parth Rajpurohit</strong> is the creator, founder, and the driving force behind AVIORCART. With a sharp eye for quality products and an unwavering commitment to customer satisfaction, Parth built AVIORCART from scratch — turning a vision into one of India's exciting new online shopping destinations.
+        </p>
+
+        <p class="founder-bio">
+          His journey began with a simple question: <em>Why should premium shopping be complicated or expensive?</em> That question sparked the creation of a platform where every Indian customer — from metro cities to small towns — can discover, explore, and shop the best products with complete confidence.
+        </p>
+
+        <blockquote class="founder-quote">
+          "I didn't just want to build another online store. I wanted to build a destination — a place where people feel excited to shop, where quality is guaranteed, and where every customer feels valued."
+          <br><br>
+          <strong style="color:var(--gold);font-style:normal;font-size:13px;">— Parth Rajpurohit, Founder</strong>
+        </blockquote>
+
+        <div class="founder-stats">
+          <div class="f-stat reveal reveal-delay-1">
+            <div class="f-stat__num">100%</div>
+            <div class="f-stat__label">Genuine Products</div>
+          </div>
+          <div class="f-stat reveal reveal-delay-2">
+            <div class="f-stat__num">Pan India</div>
+            <div class="f-stat__label">Delivery</div>
+          </div>
+          <div class="f-stat reveal reveal-delay-3">
+            <div class="f-stat__num">10 Days</div>
+            <div class="f-stat__label">Easy Returns</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════ MISSION ════════════ -->
+<section class="mission-section">
+  <div class="wrap" style="position:relative;z-index:1;">
+    <div style="text-align:center;margin-bottom:16px;" class="reveal">
+      <div class="section-label">Our Purpose</div>
+    </div>
+    <p class="mission-text-big reveal">
+      We believe <span class="accent">premium quality</span> and <span class="accent">great value</span> should always go hand in hand — for every Indian shopper.
+    </p>
+
+    <div class="values-grid">
+      <div class="value-card reveal reveal-delay-1">
+        <div class="value-num">01</div>
+        <span class="value-icon">🎯</span>
+        <div class="value-title">Curated Quality</div>
+        <div class="value-desc">Every product on AVIORCART is handpicked and verified. We never compromise on quality — if it doesn't meet our standard, it doesn't reach you.</div>
+      </div>
+      <div class="value-card reveal reveal-delay-2">
+        <div class="value-num">02</div>
+        <span class="value-icon">💫</span>
+        <div class="value-title">Customer First</div>
+        <div class="value-desc">Your satisfaction is our only metric of success. From the moment you browse to the moment your order arrives — we are with you at every step.</div>
+      </div>
+      <div class="value-card reveal reveal-delay-3">
+        <div class="value-num">03</div>
+        <span class="value-icon">🌏</span>
+        <div class="value-title">Made for India</div>
+        <div class="value-desc">Built with the Indian shopper in mind — affordable prices, fast pan-India delivery, Hindi & English support, and payment options that work for everyone.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════ STORY TIMELINE ════════════ -->
+<section class="story-section">
+  <div class="wrap">
+    <div class="story-grid">
+
+      <div class="story-sticky reveal">
+        <div class="section-label">Our Journey</div>
+        <h2 class="section-title">How AVIORCART Came to Life</h2>
+        <p style="color:var(--muted);font-size:15px;line-height:1.8;margin-top:16px;">
+          Every great store has a story. Ours started with one founder, one laptop, and one big dream — to make premium shopping accessible to every Indian household.
+        </p>
+        <div class="story-year">24</div>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="tl-date">The Beginning</div>
+          <div class="tl-title">The Idea is Born</div>
+          <div class="tl-text">Parth Rajpurohit notices a gap — Indian online stores either feel too basic or too expensive. The idea for AVIORCART takes shape: a premium-feel store with prices that make sense.</div>
+        </div>
+        <div class="tl-item reveal reveal-delay-1">
+          <div class="tl-date">Foundation</div>
+          <div class="tl-title">Building the Platform</div>
+          <div class="tl-text">The first version of AVIORCART goes live. Parth personally curates every product, writes every description, and handles every order with meticulous care.</div>
+        </div>
+        <div class="tl-item reveal reveal-delay-2">
+          <div class="tl-date">Growth</div>
+          <div class="tl-title">Fashion, Electronics & Beyond</div>
+          <div class="tl-text">AVIORCART expands its catalog to include fashion, electronics, beauty and lifestyle products — becoming a true one-stop destination for modern Indian shoppers.</div>
+        </div>
+        <div class="tl-item reveal reveal-delay-3">
+          <div class="tl-date">Today & Beyond</div>
+          <div class="tl-title">A Growing Family</div>
+          <div class="tl-text">Customers from across India discover AVIORCART every day. Parth's mission remains unchanged: deliver the best products, the best experience, and keep growing — for you.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════ PROMISES ════════════ -->
+<section class="promise-section">
+  <div class="wrap" style="position:relative;z-index:1;">
+    <div class="reveal">
+      <div class="section-label" style="justify-content:center;">Our Commitment</div>
+      <h2 class="section-title">The AVIORCART Promise</h2>
+      <p style="color:var(--muted);font-size:15px;max-width:480px;margin:0 auto;">These aren't just words — they are the four pillars that Parth built AVIORCART upon.</p>
+    </div>
+    <div class="promise-cards">
+      <div class="promise-card reveal reveal-delay-1">
+        <span class="promise-icon">🚚</span>
+        <div class="promise-title">Fast Delivery</div>
+        <div class="promise-text">Pan-India delivery. Free shipping on orders above ₹499. We get it to your door, fast.</div>
+      </div>
+      <div class="promise-card reveal reveal-delay-2">
+        <span class="promise-icon">✅</span>
+        <div class="promise-title">100% Authentic</div>
+        <div class="promise-text">Every product is genuine and quality-checked before it ships. No compromises, ever.</div>
+      </div>
+      <div class="promise-card reveal reveal-delay-3">
+        <span class="promise-icon">🔄</span>
+        <div class="promise-title">Easy Returns</div>
+        <div class="promise-text">Not happy? No problem. 10-day hassle-free returns with no awkward questions asked.</div>
+      </div>
+      <div class="promise-card reveal reveal-delay-4">
+        <span class="promise-icon">🔒</span>
+        <div class="promise-title">Secure Payments</div>
+        <div class="promise-text">Your transactions are fully encrypted and protected. Shop with complete peace of mind.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ CTA ════════════ -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="cta-inner">
+    <h2 class="cta-title">
+      Ready to experience<br>
+      <span class="shimmer">AVIORCART?</span>
+    </h2>
+    <p class="cta-sub">Join thousands of happy customers who shop smarter. Curated by Parth, crafted for you.</p>
+    <a href="/collections/all" class="cta-btn">
+      Start Shopping
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<script>
+/* ── Custom Cursor ── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+
+(function animRing() {
+  rx += (mx - rx) * .12;
+  ry += (my - ry) * .12;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+
+document.querySelectorAll('a,button,.value-card,.promise-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.width='20px'; cursor.style.height='20px'; ring.style.width='56px'; ring.style.height='56px'; });
+  el.addEventListener('mouseleave', () => { cursor.style.width='12px'; cursor.style.height='12px'; ring.style.width='36px'; ring.style.height='36px'; });
+});
+
+/* ── Canvas Star/Particle Background ── */
+const canvas = document.getElementById('bg-canvas');
+const ctx    = canvas.getContext('2d');
+let W, H, stars = [], conns = [];
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', () => { resize(); initStars(); });
+
+function initStars() {
+  stars = Array.from({length: Math.floor(W * H / 8000)}, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    r: Math.random() * 1.2 + .2,
+    vx: (Math.random() - .5) * .25,
+    vy: (Math.random() - .5) * .25,
+    a: Math.random(),
+    va: (Math.random() - .5) * .008,
+  }));
+}
+initStars();
+
+let mouseX = W/2, mouseY = H/2;
+document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+
+function drawFrame() {
+  ctx.clearRect(0, 0, W, H);
+
+  /* Ambient glow near mouse */
+  const g = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 300);
+  g.addColorStop(0, 'rgba(251,191,36,0.04)');
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+
+  /* Stars */
+  stars.forEach(s => {
+    s.x += s.vx; s.y += s.vy;
+    s.a += s.va;
+    if (s.a > 1 || s.a < 0) s.va *= -1;
+    if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
+    if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
+
+    const dist = Math.hypot(s.x - mouseX, s.y - mouseY);
+    const boost = Math.max(0, 1 - dist / 250) * .4;
+
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(251,191,36,${(s.a * .5 + boost).toFixed(2)})`;
+    ctx.fill();
+  });
+
+  /* Connections between nearby stars */
+  for (let i = 0; i < stars.length; i++) {
+    for (let j = i + 1; j < stars.length; j++) {
+      const d = Math.hypot(stars[i].x - stars[j].x, stars[i].y - stars[j].y);
+      if (d < 100) {
+        ctx.beginPath();
+        ctx.moveTo(stars[i].x, stars[i].y);
+        ctx.lineTo(stars[j].x, stars[j].y);
+        ctx.strokeStyle = `rgba(251,191,36,${((1 - d/100) * .06).toFixed(3)})`;
+        ctx.lineWidth = .5;
+        ctx.stroke();
+      }
+    }
+  }
+
+  requestAnimationFrame(drawFrame);
+}
+drawFrame();
+
+/* ── Scroll Reveal ── */
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+/* ── Counter Animation ── */
+function animateCount(el, target, suffix='') {
+  let start = 0;
+  const dur = 1400;
+  const step = timestamp => {
+    if (!start) start = timestamp;
+    const pct = Math.min((timestamp - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - pct, 3);
+    el.textContent = Math.floor(ease * parseFloat(target)) + suffix;
+    if (pct < 1) requestAnimationFrame(step);
+    else el.textContent = target + suffix;
+  };
+  requestAnimationFrame(step);
+}
+</script>
+
+</body>
+</html>

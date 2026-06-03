@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>Our website is coming soon</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no"/>
+	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+	<style type="text/css">
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+
+		html, body {
+			min-height: 100%;
+			width: 100%;
+			overflow-x: hidden;
+		}
+
+		body {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			min-height: 100vh;
+			font-family: 'Orbitron', 'Courier New', monospace;
+			background: #000005;
+			position: relative;
+		}
+
+		/* ── Animated starfield ── */
+		.stars-layer {
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+			z-index: 0;
+		}
+
+		canvas#starfield {
+			position: fixed;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 0;
+		}
+
+		/* ── Nebula glow blobs ── */
+		.nebula {
+			position: fixed;
+			border-radius: 50%;
+			filter: blur(80px);
+			pointer-events: none;
+			z-index: 0;
+			animation: nebulaPulse 8s ease-in-out infinite;
+		}
+		.nebula-1 {
+			width: 500px; height: 500px;
+			background: radial-gradient(circle, rgba(251,191,36,0.12) 0%, transparent 70%);
+			top: -100px; left: -100px;
+			animation-delay: 0s;
+		}
+		.nebula-2 {
+			width: 400px; height: 400px;
+			background: radial-gradient(circle, rgba(99,179,237,0.08) 0%, transparent 70%);
+			bottom: -80px; right: -80px;
+			animation-delay: 3s;
+		}
+		.nebula-3 {
+			width: 300px; height: 300px;
+			background: radial-gradient(circle, rgba(167,139,250,0.07) 0%, transparent 70%);
+			top: 50%; left: 50%;
+			transform: translate(-50%, -50%);
+			animation-delay: 5s;
+		}
+
+		@keyframes nebulaPulse {
+			0%, 100% { opacity: 0.6; transform: scale(1); }
+			50% { opacity: 1; transform: scale(1.1); }
+		}
+
+		/* ── Shooting stars ── */
+		.shooting-star {
+			position: fixed;
+			width: 2px;
+			height: 2px;
+			background: #fbbf24;
+			border-radius: 50%;
+			z-index: 0;
+			animation: shoot 6s linear infinite;
+			opacity: 0;
+		}
+		.shooting-star::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			right: 0;
+			width: 80px;
+			height: 1px;
+			background: linear-gradient(90deg, transparent, rgba(251,191,36,0.6));
+			transform: translateY(-50%);
+		}
+		.ss1 { top: 15%; left: 80%; animation-delay: 0s; }
+		.ss2 { top: 35%; left: 90%; animation-delay: 2s; }
+		.ss3 { top: 60%; left: 70%; animation-delay: 4s; }
+		.ss4 { top: 10%; left: 60%; animation-delay: 1s; }
+
+		@keyframes shoot {
+			0% { opacity: 0; transform: translateX(0) translateY(0); }
+			5% { opacity: 1; }
+			50% { opacity: 0.5; transform: translateX(-300px) translateY(150px); }
+			100% { opacity: 0; transform: translateX(-500px) translateY(250px); }
+		}
+
+		/* ── Main content ── */
+		.wb-content {
+			position: relative;
+			z-index: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			margin: 0 40px;
+			text-align: center;
+		}
+
+		/* ── Logo ── */
+		.logo-wrap {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 10px;
+			margin-bottom: 40px;
+		}
+
+		.logo-star {
+			width: 48px;
+			height: 48px;
+			animation: starPulse 3s ease-in-out infinite;
+		}
+
+		@keyframes starPulse {
+			0%, 100% { filter: drop-shadow(0 0 8px rgba(251,191,36,0.8)) drop-shadow(0 0 20px rgba(251,191,36,0.4)); }
+			50% { filter: drop-shadow(0 0 16px rgba(251,191,36,1)) drop-shadow(0 0 40px rgba(251,191,36,0.7)); }
+		}
+
+		.logo-text {
+			display: flex;
+			align-items: center;
+			line-height: 1;
+		}
+
+		.logo-avi, .logo-cart {
+			font-family: 'Orbitron', monospace;
+			font-weight: 900;
+			font-size: 40px;
+			letter-spacing: 5px;
+			background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			filter: drop-shadow(0 0 10px rgba(251,191,36,0.5));
+		}
+
+		.logo-or {
+			font-family: 'Orbitron', monospace;
+			font-weight: 900;
+			font-size: 40px;
+			letter-spacing: 5px;
+			background: linear-gradient(180deg, #ffffff 0%, #e5e7eb 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+
+		.logo-tagline {
+			font-family: 'Rajdhani', sans-serif;
+			font-weight: 300;
+			font-size: 11px;
+			letter-spacing: 6px;
+			color: rgba(251,191,36,0.5);
+			text-transform: uppercase;
+		}
+
+		/* ── Divider ── */
+		.wb-hr {
+			display: block;
+			width: 100%;
+			max-width: 400px;
+			height: 1px;
+			background: linear-gradient(90deg, transparent, rgba(251,191,36,0.5), transparent);
+			margin: 24px auto;
+			border: none;
+		}
+
+		/* ── Heading ── */
+		h1 {
+			font-family: 'Orbitron', monospace;
+			font-size: 36px;
+			font-weight: 900;
+			line-height: 1.2;
+			color: #ffffff;
+			letter-spacing: 3px;
+			text-transform: uppercase;
+			margin: 10px 0;
+			text-shadow: 0 0 30px rgba(251,191,36,0.3);
+			animation: textGlow 3s ease-in-out infinite;
+		}
+
+		@keyframes textGlow {
+			0%, 100% { text-shadow: 0 0 20px rgba(251,191,36,0.3); }
+			50% { text-shadow: 0 0 40px rgba(251,191,36,0.6), 0 0 80px rgba(251,191,36,0.2); }
+		}
+
+		/* ── Domain ── */
+		.wb-domain {
+			font-family: 'Rajdhani', sans-serif;
+			font-weight: 400;
+			font-size: 18px;
+			letter-spacing: 4px;
+			color: rgba(251,191,36,0.6);
+			margin: 8px 0 20px;
+			text-decoration: underline;
+			text-underline-offset: 4px;
+		}
+
+		/* ── Powered by ── */
+		.wb-powered {
+			font-family: 'Rajdhani', sans-serif;
+			font-size: 14px;
+			letter-spacing: 3px;
+			color: rgba(255,255,255,0.3);
+			margin-top: 24px;
+			text-transform: uppercase;
+		}
+
+		/* ── Floating particles ── */
+		.particle {
+			position: fixed;
+			width: 3px;
+			height: 3px;
+			border-radius: 50%;
+			background: rgba(251,191,36,0.6);
+			animation: floatUp linear infinite;
+			z-index: 0;
+		}
+
+		@keyframes floatUp {
+			0% { transform: translateY(100vh) scale(0); opacity: 0; }
+			10% { opacity: 1; }
+			90% { opacity: 0.5; }
+			100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+		}
+
+		@media (max-width: 767px) {
+			h1 { font-size: 22px; letter-spacing: 2px; }
+			.logo-avi, .logo-cart, .logo-or { font-size: 28px; }
+			.logo-star { width: 36px; height: 36px; }
+			.wb-domain { font-size: 14px; }
+		}
+	</style>
+</head>
+<body>
+
+	<!-- Animated starfield canvas -->
+	<canvas id="starfield"></canvas>
+
+	<!-- Nebula blobs -->
+	<div class="nebula nebula-1"></div>
+	<div class="nebula nebula-2"></div>
+	<div class="nebula nebula-3"></div>
+
+	<!-- Shooting stars -->
+	<div class="shooting-star ss1"></div>
+	<div class="shooting-star ss2"></div>
+	<div class="shooting-star ss3"></div>
+	<div class="shooting-star ss4"></div>
+
+	<!-- Floating particles -->
+	<div class="particle" style="left:10%;animation-duration:12s;animation-delay:0s;"></div>
+	<div class="particle" style="left:25%;animation-duration:18s;animation-delay:3s;"></div>
+	<div class="particle" style="left:50%;animation-duration:15s;animation-delay:6s;"></div>
+	<div class="particle" style="left:70%;animation-duration:20s;animation-delay:1s;"></div>
+	<div class="particle" style="left:85%;animation-duration:14s;animation-delay:8s;"></div>
+
+	<!-- Main Content -->
+	<div class="wb-content">
+
+		<!-- AVIORCART Logo -->
+		<div class="logo-wrap">
+			<svg class="logo-star" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<polygon points="27,2 32,20 50,20 36,31 41,49 27,38 13,49 18,31 4,20 22,20" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+				<polygon points="27,8 31,19 43,19 34,26 37,38 27,31 17,38 20,26 11,19 23,19" fill="rgba(251,191,36,0.12)" stroke="none"/>
+				<circle cx="27" cy="27" r="3" fill="#fbbf24" opacity="0.9"/>
+				<line x1="27" y1="0" x2="27" y2="6" stroke="#fbbf24" stroke-width="1" opacity="0.5"/>
+				<line x1="27" y1="48" x2="27" y2="54" stroke="#fbbf24" stroke-width="1" opacity="0.5"/>
+				<line x1="0" y1="27" x2="6" y2="27" stroke="#fbbf24" stroke-width="1" opacity="0.5"/>
+				<line x1="48" y1="27" x2="54" y2="27" stroke="#fbbf24" stroke-width="1" opacity="0.5"/>
+			</svg>
+			<div class="logo-text">
+				<span class="logo-avi">AVI</span>
+				<span class="logo-or">OR</span>
+				<span class="logo-cart">CART</span>
+			</div>
+			<div class="logo-tagline">Shop Beyond The Stars</div>
+		</div>
+
+		<div class="wb-hr"></div>
+		<h1>Our Website is Coming Soon</h1>
+		<div class="wb-domain">aviorcart.wuaze.com</div>
+		<div class="wb-hr"></div>
+		<div class="wb-powered">Powered by Parth Rajpurohit</div>
+
+	</div>
+
+	<script>
+		// Animated starfield
+		const canvas = document.getElementById('starfield');
+		const ctx = canvas.getContext('2d');
+
+		let stars = [];
+		const NUM_STARS = 200;
+
+		function resize() {
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+		}
+
+		function initStars() {
+			stars = [];
+			for (let i = 0; i < NUM_STARS; i++) {
+				stars.push({
+					x: Math.random() * canvas.width,
+					y: Math.random() * canvas.height,
+					radius: Math.random() * 1.5 + 0.2,
+					alpha: Math.random(),
+					speed: Math.random() * 0.5 + 0.1,
+					pulse: Math.random() * Math.PI * 2
+				});
+			}
+		}
+
+		function drawStars() {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			const t = Date.now() / 1000;
+
+			stars.forEach(s => {
+				const glow = 0.4 + 0.6 * Math.abs(Math.sin(t * s.speed + s.pulse));
+				ctx.beginPath();
+				ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+				ctx.fillStyle = `rgba(255, 240, 200, ${glow * s.alpha})`;
+				ctx.fill();
+
+				// Gold twinkling stars
+				if (s.radius > 1.2) {
+					ctx.beginPath();
+					ctx.arc(s.x, s.y, s.radius * 2, 0, Math.PI * 2);
+					ctx.fillStyle = `rgba(251, 191, 36, ${glow * 0.15})`;
+					ctx.fill();
+				}
+			});
+
+			requestAnimationFrame(drawStars);
+		}
+
+		window.addEventListener('resize', () => { resize(); initStars(); });
+		resize();
+		initStars();
+		drawStars();
+	</script>
+
+</body>
+</html>
