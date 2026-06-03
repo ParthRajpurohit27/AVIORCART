@@ -31,7 +31,7 @@
 '<div class="topbar">' +
 '  <div class="container topbar__inner">' +
 '    <span>✨ Free Delivery on all orders (Offer ends soon) &nbsp;|&nbsp; 10 Days Easy Returns &nbsp;|&nbsp; 100% Secure Payments</span>' +
-'    <div class="topbar__right"><a href="#">Help</a><a href="about.html">About</a></div>' +
+'    <div class="topbar__right"><a href="contact.html">Help</a><a href="about.html">About</a></div>' +
 '  </div>' +
 '</div>' +
 '<header class="site-header" id="site-header">' +
