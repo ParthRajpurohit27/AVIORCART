@@ -1,0 +1,373 @@
+/* ═══════════════════════════════════════════
+   AVIORCART — REELS  (v2 — Full Screen)
+   assets/reels.css
+═══════════════════════════════════════════ */
+
+/* ── Full-screen page wrapper ── */
+.reels-page {
+  background: #000;
+  width: 100%;
+  height: 100dvh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Scrollable feed — now full 100dvh ── */
+.reels-feed {
+  height: 100dvh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  overscroll-behavior-y: contain;
+  position: relative;
+}
+.reels-feed::-webkit-scrollbar { display: none; }
+
+/* ── Single reel card — full viewport ── */
+.reel-card {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ── Video ── */
+.reel-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  cursor: pointer;
+}
+
+/* ── Tap-to-pause icon ── */
+.reel-pause-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 10;
+  width: 64px;
+  height: 64px;
+  background: rgba(0,0,0,0.55);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+  pointer-events: none;
+  opacity: 0;
+}
+.reel-pause-icon.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+/* ── Gradient overlay ── */
+.reel-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.85) 0%,
+    rgba(0,0,0,0.25) 35%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* ── Bottom info: description + shop btn ── */
+.reel-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 20px 16px max(env(safe-area-inset-bottom, 16px), 70px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Description ── */
+.reel-desc-wrap {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+  font-family: 'Inter', sans-serif;
+  max-width: 82%;
+}
+.reel-desc-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin: 0;
+}
+.reel-desc-text.expanded {
+  -webkit-line-clamp: unset;
+  display: block;
+}
+.reel-showmore {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.65);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0 0;
+  font-family: 'Inter', sans-serif;
+  display: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.reel-showmore.visible { display: inline-block; }
+
+/* ── Shop Now button ── */
+.reel-shop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #0a0a0a;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  padding: 11px 22px;
+  border-radius: 50px;
+  text-decoration: none;
+  width: fit-content;
+  box-shadow: 0 4px 20px rgba(251,191,36,0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+.reel-shop-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, transparent 60%);
+  border-radius: inherit;
+}
+.reel-shop-btn:hover,
+.reel-shop-btn:active {
+  transform: scale(1.04);
+  box-shadow: 0 6px 28px rgba(251,191,36,0.6);
+}
+
+/* ── Progress bar (top edge of each card) ── */
+.reel-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  z-index: 4;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ═══════════════════════════════════════════
+   OVERLAY UI — fixed to viewport
+═══════════════════════════════════════════ */
+
+/* ── Home button (top-left) ── */
+.reel-home-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 200;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px 8px 10px;
+  border-radius: 50px;
+  text-decoration: none;
+  letter-spacing: 0.2px;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.reel-home-btn:hover,
+.reel-home-btn:active {
+  background: rgba(0, 0, 0, 0.78);
+  transform: scale(1.04);
+}
+
+/* ── Mute button (top-right) ── */
+.reel-mute-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 200;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.reel-mute-btn:hover,
+.reel-mute-btn:active {
+  background: rgba(0, 0, 0, 0.78);
+  transform: scale(1.08);
+}
+
+/* ── Side dots ── */
+.reels-dots {
+  position: fixed;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+}
+.reels-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  transition: all 0.3s ease;
+}
+.reels-dot.active {
+  background: #fbbf24;
+  height: 18px;
+  border-radius: 3px;
+}
+
+/* ── Tap-to-Unmute overlay (bottom-center) ── */
+.reels-unmute-overlay {
+  position: fixed;
+  bottom: 110px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.reels-unmute-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.reels-unmute-tap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  animation: unmutePulse 2s ease-in-out infinite;
+  white-space: nowrap;
+}
+@keyframes unmutePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2); }
+  50%       { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
+}
+
+/* ── Scroll hint ── */
+.reels-scroll-hint {
+  position: absolute;
+  bottom: 110px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  animation: hintFade 4s ease forwards;
+  pointer-events: none;
+}
+.reels-scroll-hint svg { animation: hintBounce 1s ease-in-out infinite; }
+
+@keyframes hintFade {
+  0%  { opacity: 0; }
+  15% { opacity: 1; }
+  75% { opacity: 1; }
+  100%{ opacity: 0; }
+}
+@keyframes hintBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(5px); }
+}
+
+/* ── Loading shimmer ── */
+.reel-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #111 0%, #222 50%, #111 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  z-index: 0;
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── Empty state ── */
+.reels-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  gap: 12px;
+  font-family: 'Inter', sans-serif;
+  background: #000;
+}
+.reels-empty svg { opacity: 0.3; }
+.reels-empty h3  { font-size: 20px; color: #fff; margin: 0; }
+.reels-empty p   { font-size: 14px; margin: 0; max-width: 260px; line-height: 1.5; }
+
+/* ── Mobile tweaks ── */
+@media (max-width: 480px) {
+  .reel-info { padding: 16px 14px max(env(safe-area-inset-bottom, 16px), 70px); }
+  .reel-desc-wrap { max-width: 78%; font-size: 13px; }
+  .reel-shop-btn  { font-size: 13px; padding: 10px 18px; }
+  .reel-home-btn  { font-size: 12px; padding: 7px 12px 7px 9px; }
+}

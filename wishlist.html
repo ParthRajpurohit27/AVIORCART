@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wishlist — AVIORCART</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/assets/manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/assets/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <script>
+    if('serviceWorker' in navigator){
+      window.addEventListener('load',function(){
+        navigator.serviceWorker.register('/assets/sw.js',{scope:'/'})
+          .then(()=>console.log('AVIORCART SW registered'))
+          .catch(err=>console.log('SW error:',err));
+      });
+    }
+  </script>
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+</head>
+<body>
+<div id="header-placeholder"></div>
+<main id="main-content">
+  <div class="cart-page">
+    <div class="container">
+      <h1>My Wishlist ❤️</h1>
+      <div id="wishlist-content" style="margin-top:24px;"></div>
+    </div>
+  </div>
+</main>
+<div id="footer-placeholder"></div>
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/layout.js"></script>
+<script>
+function renderWishlist() {
+  const wish = getWishlist();
+  const el = document.getElementById('wishlist-content');
+  const items = PRODUCTS.filter(p => wish.includes(p.id));
+  if (!items.length) {
+    el.innerHTML = `<div style="text-align:center;padding:80px 0;">
+      <div style="font-size:64px;margin-bottom:16px;">❤️</div>
+      <h2 style="font-size:20px;font-weight:700;margin-bottom:8px;">Your wishlist is empty!</h2>
+      <p style="color:#6b7280;margin-bottom:24px;">Save items you love here.</p>
+      <a href="collections.html" class="btn btn-gold btn-lg">Browse Products</a>
+    </div>`;
+    return;
+  }
+  el.innerHTML = `<div class="product-grid">${items.map(p => {
+    const onSale = p.compare_at_price > 0 && p.compare_at_price > p.price;
+    const disc = onSale ? Math.round((p.compare_at_price - p.price)*100/p.compare_at_price) : 0;
+    return `<div class="product-card" data-animate>
+      <div class="product-card__img">
+        <a href="products/${p.handle}.html"><img src="${p.images[0]||''}" alt="${p.title}" loading="lazy" onerror="this.style.display='none'"></a>
+        ${onSale ? `<span class="product-card__badge badge-sale">${disc}% OFF</span>` : '<span class="product-card__badge badge-hot">New</span>'}
+        <button class="product-card__wish active" onclick="removeFromWishlist(${p.id}, this)" aria-label="Remove">❤️</button>
+        <div class="product-card__quick">
+          <button class="btn btn-gold btn-sm btn-full" onclick="event.preventDefault();quickAdd(${p.id}, ${p.variants[0]?.id||0}, this)">+ Add to Cart</button>
+        </div>
+      </div>
+      <div class="product-card__info">
+        <div class="product-card__brand">${p.vendor||'AVIORCART'}</div>
+        <a href="products/${p.handle}.html" class="product-card__name">${p.title}</a>
+        <div class="product-card__price">
+          <span class="price-current">${money(p.price)}</span>
+          ${onSale ? `<span class="price-old">${money(p.compare_at_price)}</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function removeFromWishlist(id, btn) {
+  let wish = getWishlist();
+  wish = wish.filter(x => x !== id);
+  localStorage.setItem('aviorcart_wishlist', JSON.stringify(wish));
+  showToast('Removed from wishlist');
+  renderWishlist();
+}
+
+function quickAdd(productId, variantId, btn) {
+  const p = PRODUCTS.find(x => x.id === productId);
+  if (p) addToCart(p, variantId, 1, btn);
+}
+
+document.addEventListener('DOMContentLoaded', renderWishlist);
+</script>
+</body>
+</html>

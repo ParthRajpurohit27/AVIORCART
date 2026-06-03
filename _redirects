@@ -1,0 +1,6 @@
+/collections /collections.html 200
+/cart /cart.html 200
+/search /search.html 200
+/wishlist /wishlist.html 200
+/products/:slug /products/:slug.html 200
+/* /404.html 404

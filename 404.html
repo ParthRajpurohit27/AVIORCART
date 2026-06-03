@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 Not Found — AVIORCART</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/assets/manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/assets/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <script>
+    if('serviceWorker' in navigator){
+      window.addEventListener('load',function(){
+        navigator.serviceWorker.register('/assets/sw.js',{scope:'/'})
+          .then(()=>console.log('AVIORCART SW registered'))
+          .catch(err=>console.log('SW error:',err));
+      });
+    }
+  </script>
+  <link rel="stylesheet" href="assets/theme.css">
+</head>
+<body>
+<div id="header-placeholder"></div>
+<main id="main-content">
+  <div class="page-404">
+    <div class="page-404__num">404</div>
+    <h1 class="page-404__title">Page Not Found</h1>
+    <p class="page-404__desc">Sorry, the page you're looking for doesn't exist.</p>
+    <a href="index.html" class="btn btn-gold btn-lg">Back to Home</a>
+    <div style="margin-top:16px;">
+      <a href="collections.html" class="btn btn-black">Browse Products</a>
+    </div>
+  </div>
+</main>
+<div id="footer-placeholder"></div>
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/layout.js"></script>
+</body>
+</html>

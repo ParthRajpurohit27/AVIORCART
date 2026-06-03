@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart — AVIORCART</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/assets/manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/assets/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <script>
+    if('serviceWorker' in navigator){
+      window.addEventListener('load',function(){
+        navigator.serviceWorker.register('/assets/sw.js',{scope:'/'})
+          .then(()=>console.log('AVIORCART SW registered'))
+          .catch(err=>console.log('SW error:',err));
+      });
+    }
+  </script>
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+</head>
+<body>
+<div id="header-placeholder"></div>
+<main id="main-content">
+  <div class="cart-page">
+    <div class="container">
+      <h1>Shopping Cart <span id="cart-page-count" style="color:#6b7280;font-size:16px;font-family:'Inter',sans-serif;"></span></h1>
+      <div id="cart-page-content"></div>
+    </div>
+  </div>
+</main>
+<div id="footer-placeholder"></div>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/layout.js"></script>
+<script>
+function renderCartPage() {
+  const cart = getCart();
+  const total = cartTotal();
+  const count = cartCount();
+  const el = document.getElementById('cart-page-content');
+  const countEl = document.getElementById('cart-page-count');
+  if (countEl) countEl.textContent = count > 0 ? `(${count} items)` : '';
+
+  if (cart.length === 0) {
+    el.innerHTML = `<div style="text-align:center;padding:80px 0;">
+      <div style="font-size:64px;margin-bottom:16px;">🛒</div>
+      <h2 style="font-size:20px;font-weight:700;margin-bottom:8px;">Your cart is empty!</h2>
+      <p style="color:#6b7280;margin-bottom:24px;">Add items to it now.</p>
+      <a href="collections.html" class="btn btn-gold btn-lg">Shop Now</a>
+    </div>`;
+    return;
+  }
+
+  const totalSaving = cart.reduce((s, item) => {
+    const p = PRODUCTS.find(x => x.id === item.product_id);
+    const v = p?.variants.find(x => x.id === item.variant_id);
+    if (v && v.compare_at_price > v.price) s += (v.compare_at_price - v.price) * item.quantity;
+    return s;
+  }, 0);
+
+  el.innerHTML = `
+  <div class="cart-layout">
+    <div class="cart-items-box">
+      ${cart.map(item => {
+        const p = PRODUCTS.find(x => x.id === item.product_id);
+        return `
+        <div class="cart-item-row" id="cart-row-${item.key}">
+          <div class="cart-item__img">
+            <a href="products/${item.handle}.html">
+              <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.style.display='none'">
+            </a>
+          </div>
+          <div>
+            <div class="cart-item__name">${item.title}</div>
+            ${item.variant_title ? `<div class="cart-item__variant">${item.variant_title}</div>` : ''}
+            <div style="color:#6b7280;font-size:13px;margin-bottom:10px;">${money(item.price)} each</div>
+            <div style="margin-top:10px;">
+              <div class="qty-selector" style="height:36px;display:inline-flex;">
+                <button class="qty-btn" style="width:36px;font-size:18px;" onclick="pageCartUpdate('${item.key}', ${item.quantity-1})">−</button>
+                <input class="qty-input" style="width:44px;height:34px;" type="number" value="${item.quantity}" min="0" onchange="pageCartUpdate('${item.key}', parseInt(this.value))">
+                <button class="qty-btn" style="width:36px;font-size:18px;" onclick="pageCartUpdate('${item.key}', ${item.quantity+1})">+</button>
+              </div>
+            </div>
+            <button class="cart-item__remove" onclick="pageCartRemove('${item.key}')">✕ Remove</button>
+          </div>
+          <div class="cart-item__price">${money(item.price * item.quantity)}</div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="cart-summary-box">
+      <h3>Price Details</h3>
+      ${cart.map(item => `
+        <div class="summary-line">
+          <span>${item.title.substring(0,28)}… × ${item.quantity}</span>
+          <span>${money(item.price * item.quantity)}</span>
+        </div>`).join('')}
+      ${totalSaving > 0 ? `<div class="summary-line" style="color:#22c55e;"><span>Discount</span><span>−${money(totalSaving)}</span></div>` : ''}
+      <div class="summary-line"><span>Delivery</span><span style="color:#22c55e;">Free</span></div>
+      <div class="summary-total">
+        <span>Total Amount</span><span>${money(total)}</span>
+      </div>
+      ${totalSaving > 0 ? `<div style="background:#f0fdf4;border-radius:6px;padding:10px;margin-top:12px;font-size:13px;color:#16a34a;font-weight:600;">🎉 You save ${money(totalSaving)} on this order!</div>` : ''}
+      <button onclick="proceedCheckout()" class="btn btn-gold btn-full btn-lg" style="margin-top:16px;margin-bottom:8px;">Proceed to Checkout →</button>
+      <a href="collections.html" class="btn btn-black btn-full">Continue Shopping</a>
+      <div class="summary-note">🔒 Safe and Secure Payments. 100% Authentic products.</div>
+    </div>
+  </div>`;
+}
+
+function pageCartUpdate(key, qty) {
+  cartUpdateQty(key, qty);
+  renderCartPage();
+}
+
+function pageCartRemove(key) {
+  cartRemoveItem(key);
+  renderCartPage();
+}
+
+function proceedCheckout() {
+  const cart = getCart();
+  const total = cartTotal();
+  if (!cart.length) return;
+  const items = cart.map(i => `${i.title} x${i.quantity} = ${money(i.price*i.quantity)}`).join('\n');
+  const msg = `Hi! I want to place an order from AVIORCART:\n\n${items}\n\nTotal: ${money(total)}\n\nPlease confirm availability.`;
+  window.open(`https://wa.me/919425619133?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+document.addEventListener('DOMContentLoaded', renderCartPage);
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search — AVIORCART</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/assets/manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/assets/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <script>
+    if('serviceWorker' in navigator){
+      window.addEventListener('load',function(){
+        navigator.serviceWorker.register('/assets/sw.js',{scope:'/'})
+          .then(()=>console.log('AVIORCART SW registered'))
+          .catch(err=>console.log('SW error:',err));
+      });
+    }
+  </script>
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+</head>
+<body>
+<div id="header-placeholder"></div>
+<main id="main-content">
+  <div class="search-results-page">
+    <div class="collection-header-bar">
+      <div class="container">
+        <h1 id="search-heading">Search Results</h1>
+        <div style="margin-top:16px;max-width:500px;">
+          <div class="header__search" style="height:48px;">
+            <input class="header__search-input" id="search-input-page" type="text" placeholder="Search products..." style="font-size:15px;">
+            <button class="header__search-btn" onclick="doPageSearch()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container" style="padding-top:24px;">
+      <div class="sort-row">
+        <span id="search-count" class="sort-row__count"></span>
+      </div>
+      <div class="product-grid" id="search-results-grid"></div>
+    </div>
+  </div>
+</main>
+<div id="footer-placeholder"></div>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/layout.js"></script>
+<script>
+function productCardHTML(p) {
+  const onSale = p.compare_at_price > 0 && p.compare_at_price > p.price;
+  const disc = onSale ? Math.round((p.compare_at_price - p.price) * 100 / p.compare_at_price) : 0;
+  const hasVariants = p.variants.length > 1 && !(p.variants.length === 1 && p.variants[0].option1 === 'Default Title');
+  const quickBtn = hasVariants
+    ? `<a href="products/${p.handle}.html" class="btn btn-gold btn-sm btn-full">View Options</a>`
+    : `<button class="btn btn-gold btn-sm btn-full" onclick="event.preventDefault();event.stopPropagation();quickAddToCart(${p.id},${p.variants[0]?.id||0},this)">+ Add to Cart</button>`;
+  return `
+<div class="product-card" data-animate>
+  <div class="product-card__img">
+    <a href="products/${p.handle}.html">
+      <img src="${p.images[0]||''}" alt="${p.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:#f9fafb;\'>🛍️</div>'">
+    </a>
+    ${onSale ? `<span class="product-card__badge badge-sale">${disc}% OFF</span>` : '<span class="product-card__badge badge-hot">New</span>'}
+    <button class="product-card__wish" onclick="event.preventDefault();toggleWishlist(this,${p.id})" aria-label="Wishlist">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <div class="product-card__quick">${quickBtn}</div>
+  </div>
+  <div class="product-card__info">
+    <div class="product-card__brand">${p.vendor||'AVIORCART'}</div>
+    <a href="products/${p.handle}.html" class="product-card__name">${p.title}</a>
+    <div class="product-card__rating"><span class="stars-filled">★★★★★</span></div>
+    <div class="product-card__price">
+      <span class="price-current">${money(p.price)}</span>
+      ${onSale ? `<span class="price-old">${money(p.compare_at_price)}</span><span class="price-discount">${disc}% off</span>` : ''}
+    </div>
+  </div>
+</div>`;
+}
+
+function quickAddToCart(productId, variantId, btn) {
+  const p = PRODUCTS.find(x => x.id === productId);
+  if (p) addToCart(p, variantId, 1, btn);
+}
+
+function doPageSearch() {
+  const q = document.getElementById('search-input-page').value.trim();
+  if (q) window.location.href = `search.html?q=${encodeURIComponent(q)}`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const q = new URLSearchParams(window.location.search).get('q') || '';
+  const input = document.getElementById('search-input-page');
+  const heading = document.getElementById('search-heading');
+  const countEl = document.getElementById('search-count');
+  const grid = document.getElementById('search-results-grid');
+  if (input) input.value = q;
+  if (!q) {
+    if (heading) heading.textContent = 'Search Products';
+    if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#6b7280;">Enter a search query to find products.</div>';
+    return;
+  }
+  if (heading) heading.textContent = `Results for "${q}"`;
+  const results = searchProducts(q);
+  if (countEl) countEl.textContent = `${results.length} result${results.length!==1?'s':''} for "${q}"`;
+  if (!results.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:80px;">
+      <div style="font-size:64px;margin-bottom:16px;">🔍</div>
+      <h3>No results found for "${q}"</h3>
+      <p style="color:#6b7280;margin:12px 0 24px;">Try a different keyword</p>
+      <a href="collections.html" class="btn btn-gold">Browse All Products</a>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = results.map(p => productCardHTML(p)).join('');
+  grid.querySelectorAll('[data-animate]').forEach((el, i) => {
+    el.style.cssText = `opacity:0;transform:translateY(20px);transition:opacity 0.4s ${i*40}ms ease,transform 0.4s ${i*40}ms ease`;
+    setTimeout(() => { el.style.opacity='1'; el.style.transform='translateY(0)'; }, 50+i*40);
+  });
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && document.activeElement?.id === 'search-input-page') doPageSearch();
+});
+</script>
+</body>
+</html>

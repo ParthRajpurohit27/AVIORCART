@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Products — AVIORCART</title>
+  <meta name="description" content="Browse all premium products at AVIORCART. Fashion, electronics, beauty & more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/assets/manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/assets/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <script>
+    if('serviceWorker' in navigator){
+      window.addEventListener('load',function(){
+        navigator.serviceWorker.register('/assets/sw.js',{scope:'/'})
+          .then(()=>console.log('AVIORCART SW registered'))
+          .catch(err=>console.log('SW error:',err));
+      });
+    }
+  </script>
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<main id="main-content">
+  <div class="collection-page">
+    <!-- HEADER BAR -->
+    <div class="collection-header-bar">
+      <div class="container collection-header-bar__inner">
+        <nav class="breadcrumb" style="margin-bottom:8px;">
+          <a href="index.html" style="color:rgba(255,255,255,0.5);">Home</a>
+          <span class="breadcrumb__sep" style="color:rgba(255,255,255,0.3);">›</span>
+          <span id="page-title-bc" style="color:rgba(255,255,255,0.8);">All Products</span>
+        </nav>
+        <h1 id="collection-title">All Products</h1>
+        <p id="collection-desc" style="color:rgba(255,255,255,0.5);margin-top:6px;font-size:14px;display:none;"></p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- CATEGORY FILTER PILLS -->
+      <div style="padding:16px 0 4px;">
+        <div class="category-filter-bar" id="cat-pills"></div>
+      </div>
+
+      <div class="collection-layout">
+        <!-- FILTERS -->
+        <aside class="filter-panel" id="filter-panel">
+          <div class="filter-panel__head">
+            <span>Filters</span>
+            <button onclick="clearFilters()">Clear All</button>
+          </div>
+          <div class="filter-section">
+            <div class="filter-section__title">Price Range</div>
+            <div style="padding:0 16px 14px;">
+              <div class="price-filter">
+                <input type="number" id="min-price" placeholder="Min" min="0">
+                <span>—</span>
+                <input type="number" id="max-price" placeholder="Max" max="10000">
+              </div>
+              <button class="btn btn-gold btn-sm" style="margin-top:10px;width:100%;" onclick="applyPriceFilter()">Apply</button>
+            </div>
+          </div>
+          <div class="filter-section">
+            <div class="filter-section__title">Type</div>
+            <div id="type-filters"></div>
+          </div>
+        </aside>
+
+        <!-- PRODUCTS AREA -->
+        <div>
+          <div class="sort-row">
+            <span class="sort-row__count" id="product-count">Loading...</span>
+            <select class="sort-select" id="sort-select" onchange="applySort()">
+              <option value="featured">Featured</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="name-asc">Name: A–Z</option>
+              <option value="name-desc">Name: Z–A</option>
+              <option value="sale">On Sale First</option>
+            </select>
+          </div>
+
+          <div class="product-grid" id="product-grid"></div>
+
+          <div class="pagination" id="pagination-bar" style="margin-top:32px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/layout.js"></script>
+<script>
+/* ── COLLECTION PAGE ── */
+const PAGE_SIZE = 24;
+let currentPage = 1;
+let activeCategory = '';
+let activeType = '';
+let minPrice = 0;
+let maxPrice = Infinity;
+let sortMode = 'featured';
+
+function getURLParams() {
+  const params = new URLSearchParams(window.location.search);
+  return { cat: params.get('cat') || '', q: params.get('q') || '' };
+}
+
+function productCardHTML(p) {
+  const onSale = p.compare_at_price > 0 && p.compare_at_price > p.price;
+  const disc = onSale ? Math.round((p.compare_at_price - p.price) * 100 / p.compare_at_price) : 0;
+  const hasVariants = p.variants.length > 1 && !(p.variants.length === 1 && p.variants[0].option1 === 'Default Title');
+  const wishlist = JSON.parse(localStorage.getItem('aviorcart_wishlist') || '[]');
+  const isWished = wishlist.includes(p.id);
+  const badge = onSale ? `<span class="product-card__badge badge-sale">${disc}% OFF</span>` : `<span class="product-card__badge badge-hot">New</span>`;
+  const quickBtn = hasVariants
+    ? `<a href="products/${p.handle}.html" class="btn btn-gold btn-sm btn-full">View Options</a>`
+    : `<button class="btn btn-gold btn-sm btn-full" onclick="event.preventDefault();event.stopPropagation();quickAddToCart(${p.id},${p.variants[0]?.id||0},this)">+ Add to Cart</button>`;
+  return `
+<div class="product-card" data-animate>
+  <div class="product-card__img">
+    <a href="products/${p.handle}.html">
+      <img src="${p.images[0]||''}" alt="${p.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:#f9fafb;\'>🛍️</div>'">
+    </a>
+    ${badge}
+    <button class="product-card__wish${isWished?' active':''}" onclick="event.preventDefault();toggleWishlist(this,${p.id})" aria-label="Wishlist">
+      ${isWished ? '❤️' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'}
+    </button>
+    <div class="product-card__quick">${quickBtn}</div>
+  </div>
+  <div class="product-card__info">
+    <div class="product-card__brand">${p.vendor||'AVIORCART'}</div>
+    <a href="products/${p.handle}.html" class="product-card__name">${p.title}</a>
+    <div class="product-card__rating"><span class="stars-filled">★★★★★</span> <span style="color:#6b7280;font-size:11px;">(${Math.floor(Math.random()*80+20)})</span></div>
+    <div class="product-card__price">
+      <span class="price-current">${money(p.price)}</span>
+      ${onSale ? `<span class="price-old">${money(p.compare_at_price)}</span><span class="price-discount">${disc}% off</span>` : ''}
+    </div>
+  </div>
+</div>`;
+}
+
+function quickAddToCart(productId, variantId, btn) {
+  const p = PRODUCTS.find(x => x.id === productId);
+  if (!p) return;
+  addToCart(p, variantId, 1, btn);
+}
+
+function getFilteredProducts() {
+  let prods = PRODUCTS;
+  if (activeCategory) prods = prods.filter(p => p.category_name && p.category_name.toLowerCase() === activeCategory.toLowerCase());
+  if (activeType) prods = prods.filter(p => p.type === activeType);
+  prods = prods.filter(p => p.price >= minPrice && p.price <= maxPrice);
+  // Sort
+  if (sortMode === 'price-asc') prods = [...prods].sort((a,b) => a.price - b.price);
+  else if (sortMode === 'price-desc') prods = [...prods].sort((a,b) => b.price - a.price);
+  else if (sortMode === 'name-asc') prods = [...prods].sort((a,b) => a.title.localeCompare(b.title));
+  else if (sortMode === 'name-desc') prods = [...prods].sort((a,b) => b.title.localeCompare(a.title));
+  else if (sortMode === 'sale') prods = [...prods].sort((a,b) => (b.compare_at_price > b.price ? 1 : 0) - (a.compare_at_price > a.price ? 1 : 0));
+  return prods;
+}
+
+function renderProducts() {
+  const prods = getFilteredProducts();
+  const total = prods.length;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const page = prods.slice(start, start + PAGE_SIZE);
+
+  const grid = document.getElementById('product-grid');
+  const countEl = document.getElementById('product-count');
+  if (countEl) countEl.textContent = `${total} Product${total !== 1 ? 's' : ''}`;
+
+  if (page.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:80px 0;color:#6b7280;">
+      <div style="font-size:48px;margin-bottom:12px;">🛍️</div>
+      <h3 style="font-size:18px;margin-bottom:8px;">No products found</h3>
+      <button class="btn btn-black" style="margin-top:12px;" onclick="clearFilters()">Clear Filters</button>
+    </div>`;
+    document.getElementById('pagination-bar').innerHTML = '';
+    return;
+  }
+
+  grid.innerHTML = page.map(p => productCardHTML(p)).join('');
+  renderPagination(total);
+
+  // Animate
+  grid.querySelectorAll('[data-animate]').forEach((el, i) => {
+    el.style.cssText = `opacity:0;transform:translateY(20px);transition:opacity 0.4s ${i*40}ms ease,transform 0.4s ${i*40}ms ease`;
+    setTimeout(() => { el.style.opacity='1'; el.style.transform='translateY(0)'; }, 50 + i*40);
+  });
+}
+
+function renderPagination(total) {
+  const pages = Math.ceil(total / PAGE_SIZE);
+  const bar = document.getElementById('pagination-bar');
+  if (!bar || pages <= 1) { if(bar) bar.innerHTML=''; return; }
+  let html = '';
+  if (currentPage > 1) html += `<a href="#" onclick="goPage(${currentPage-1});return false;">‹</a>`;
+  for (let i = 1; i <= pages; i++) {
+    if (i === currentPage) html += `<span class="current">${i}</span>`;
+    else if (i === 1 || i === pages || Math.abs(i - currentPage) <= 2) html += `<a href="#" onclick="goPage(${i});return false;">${i}</a>`;
+    else if (Math.abs(i - currentPage) === 3) html += `<span>…</span>`;
+  }
+  if (currentPage < pages) html += `<a href="#" onclick="goPage(${currentPage+1});return false;">›</a>`;
+  bar.innerHTML = html;
+}
+
+function goPage(n) { currentPage = n; renderProducts(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function applySort() { sortMode = document.getElementById('sort-select').value; currentPage=1; renderProducts(); }
+function applyPriceFilter() {
+  minPrice = parseFloat(document.getElementById('min-price').value) || 0;
+  maxPrice = parseFloat(document.getElementById('max-price').value) || Infinity;
+  currentPage=1; renderProducts();
+}
+function clearFilters() {
+  activeCategory=''; activeType=''; minPrice=0; maxPrice=Infinity;
+  document.getElementById('min-price').value='';
+  document.getElementById('max-price').value='';
+  document.querySelectorAll('#type-filters input').forEach(cb => cb.checked=false);
+  document.querySelectorAll('#cat-pills .cat-filter-btn').forEach(b => b.classList.remove('active'));
+  currentPage=1; renderProducts();
+}
+
+function initTypeFilters() {
+  const types = [...new Set(PRODUCTS.map(p=>p.type).filter(Boolean))].sort();
+  const el = document.getElementById('type-filters');
+  if (!el) return;
+  el.innerHTML = types.map(t => `
+    <label class="filter-option">
+      <input type="checkbox" onchange="filterByType('${t}', this.checked)">
+      ${t} <span style="color:#9ca3af;font-size:11px;">(${PRODUCTS.filter(p=>p.type===t).length})</span>
+    </label>`).join('');
+}
+
+function filterByType(type, checked) {
+  activeType = checked ? type : '';
+  // Uncheck others
+  document.querySelectorAll('#type-filters input').forEach(cb => { if(cb !== event.target) cb.checked=false; });
+  currentPage=1; renderProducts();
+}
+
+function initCategoryPills() {
+  const cats = ['All Products', 'Clothing', 'Watches', 'Beauty', 'Footwear', 'Jewelry', 'Electronics', 'Home', 'Food', 'Sarees', 'Fashion'];
+  const el = document.getElementById('cat-pills');
+  if (!el) return;
+  el.innerHTML = cats.map(c => {
+    const val = c === 'All Products' ? '' : c;
+    return `<button class="cat-filter-btn${activeCategory===val?' active':''}" onclick="filterByCat('${val}', this)">${c}</button>`;
+  }).join('');
+}
+
+function filterByCat(cat, btn) {
+  activeCategory = cat;
+  document.querySelectorAll('#cat-pills .cat-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const titleEl = document.getElementById('collection-title');
+  const bcEl = document.getElementById('page-title-bc');
+  const label = cat || 'All Products';
+  if (titleEl) titleEl.textContent = label;
+  if (bcEl) bcEl.textContent = label;
+  currentPage=1; renderProducts();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const { cat } = getURLParams();
+  if (cat) {
+    activeCategory = cat;
+    const titleEl = document.getElementById('collection-title');
+    const bcEl = document.getElementById('page-title-bc');
+    if (titleEl) titleEl.textContent = cat;
+    if (bcEl) bcEl.textContent = cat;
+  }
+  initCategoryPills();
+  // Mark active pill
+  document.querySelectorAll('#cat-pills .cat-filter-btn').forEach(b => {
+    const val = b.textContent.trim() === 'All Products' ? '' : b.textContent.trim();
+    if (val === activeCategory) b.classList.add('active');
+  });
+  initTypeFilters();
+  renderProducts();
+});
+</script>
+</body>
+</html>

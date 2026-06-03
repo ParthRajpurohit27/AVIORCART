@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*).html",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/collections", "destination": "/collections.html" },
+    { "source": "/cart", "destination": "/cart.html" },
+    { "source": "/search", "destination": "/search.html" },
+    { "source": "/wishlist", "destination": "/wishlist.html" },
+    { "source": "/products/:slug", "destination": "/products/:slug.html" }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/404.html", "status": 404 }
+  ]
+}

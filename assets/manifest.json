@@ -1,0 +1,98 @@
+{
+  "name": "AVIORCART \u2014 Shop Beyond The Stars",
+  "short_name": "AVIORCART",
+  "description": "Shop premium products at AVIORCART. Fast delivery across India.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#06060a",
+  "theme_color": "#fbbf24",
+  "lang": "en-IN",
+  "categories": [
+    "shopping",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "/assets/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "All Products",
+      "url": "/collections/all",
+      "icons": [
+        {
+          "src": "/cdn/shop/t/6/assets/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Track Order",
+      "url": "/apps/parcelpanel",
+      "icons": [
+        {
+          "src": "/cdn/shop/t/6/assets/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "My Cart",
+      "url": "/cart",
+      "icons": [
+        {
+          "src": "/cdn/shop/t/6/assets/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}

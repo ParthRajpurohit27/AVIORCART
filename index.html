@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="application-name" content="AVIORCART">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AVIORCART">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#fbbf24">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AVIORCART — Premium Online Shopping</title>
+  <meta name="description" content="Shop premium fashion, electronics, beauty & more at AVIORCART. Free delivery on all orders.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/assets/manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/assets/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <script>
+    if('serviceWorker' in navigator){
+      window.addEventListener('load',function(){
+        navigator.serviceWorker.register('/assets/sw.js',{scope:'/'})
+          .then(()=>console.log('AVIORCART SW registered'))
+          .catch(err=>console.log('SW error:',err));
+      });
+    }
+  </script>
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+</head>
+<body>
+
+<!-- Header injected by layout.js -->
+<div id="header-placeholder"></div>
+
+<main id="main-content">
+
+  <!-- HERO BANNER -->
+  <section class="hero-banner">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-tag">⭐ New Season Arrivals</div>
+        <h1 class="hero-title">
+          Shop <span class="gold">Premium</span><br>Products at Best Prices
+        </h1>
+        <p class="hero-sub">Fashion, Electronics, Beauty & more — Best prices, fastest delivery.</p>
+        <div class="hero-btns">
+          <a href="collections.html" class="btn btn-gold btn-lg">Shop Now →</a>
+          <a href="collections.html" class="btn btn-outline-white btn-lg">Browse Categories</a>
+        </div>
+        <div style="display:flex;gap:24px;margin-top:28px;flex-wrap:wrap;">
+          <div style="color:rgba(255,255,255,0.6);font-size:13px;">✅ FREE Delivery — All Orders!</div>
+          <div style="color:rgba(255,255,255,0.6);font-size:13px;">🔒 100% Secure</div>
+          <div style="color:rgba(255,255,255,0.6);font-size:13px;">🔄 Easy Returns</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES STRIP -->
+  <div class="features-strip">
+    <div class="container">
+      <div class="features-strip__grid">
+        <div class="feature-item"><div class="feature-item__icon">🚚</div><div><div class="feature-item__title">Free Delivery</div><div class="feature-item__desc">On Every Order — Ends Soon!</div></div></div>
+        <div class="feature-item"><div class="feature-item__icon">🔄</div><div><div class="feature-item__title">Easy Returns</div><div class="feature-item__desc">10 days return policy</div></div></div>
+        <div class="feature-item"><div class="feature-item__icon">🔒</div><div><div class="feature-item__title">Secure Payment</div><div class="feature-item__desc">100% safe & trusted</div></div></div>
+        <div class="feature-item"><div class="feature-item__icon">💬</div><div><div class="feature-item__title">24/7 Support</div><div class="feature-item__desc">Always here to help</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="section" style="background:#fff;padding:28px 0;">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">Shop by Category</h2>
+        <a href="collections.html" class="view-all">View All →</a>
+      </div>
+      <div class="cat-grid" id="cat-grid"></div>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="section" style="background:#f9fafb;">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">🔥 Trending Now</h2>
+        <a href="collections.html" class="view-all">View All →</a>
+      </div>
+      <div class="product-grid" id="featured-grid"></div>
+    </div>
+  </section>
+
+  <!-- NEW ARRIVALS -->
+  <section class="section" style="background:#fff;">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">✨ New Arrivals</h2>
+        <a href="collections.html" class="view-all">View All →</a>
+      </div>
+      <div class="product-grid" id="new-arrivals-grid"></div>
+    </div>
+  </section>
+
+  <!-- FASHION SECTION -->
+  <section class="section" style="background:#f9fafb;">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">👗 Fashion & Clothing</h2>
+        <a href="collections.html?cat=Clothing" class="view-all">View All →</a>
+      </div>
+      <div class="product-grid" id="fashion-grid"></div>
+    </div>
+  </section>
+
+  <!-- WATCHES & JEWELRY -->
+  <section class="section" style="background:#fff;">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">⌚ Watches & Jewelry</h2>
+        <a href="collections.html?cat=Watches" class="view-all">View All →</a>
+      </div>
+      <div class="product-grid" id="watches-grid"></div>
+    </div>
+  </section>
+
+  <!-- BEAUTY -->
+  <section class="section" style="background:#f9fafb;">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">💄 Beauty & Skincare</h2>
+        <a href="collections.html?cat=Beauty" class="view-all">View All →</a>
+      </div>
+      <div class="product-grid" id="beauty-grid"></div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <div class="newsletter__inner">
+      <h2 class="newsletter__title">Get Exclusive Deals 🔥</h2>
+      <p class="newsletter__sub">Subscribe & get 10% off your first order</p>
+      <div class="newsletter__form">
+        <input class="newsletter__input" type="email" id="nl-email" placeholder="Enter your email" required>
+        <button class="btn btn-gold" onclick="subscribeNewsletter()">Subscribe</button>
+      </div>
+      <p id="nl-success" style="color:var(--gold);margin-top:12px;font-size:14px;display:none;">✅ Thank you for subscribing!</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer injected by layout.js -->
+<div id="footer-placeholder"></div>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/layout.js"></script>
+<script>
+/* ── HOME PAGE LOGIC ── */
+const CATEGORIES = [
+  { name: 'Fashion', emoji: '👗', url: 'collections.html?cat=Clothing' },
+  { name: 'Watches', emoji: '⌚', url: 'collections.html?cat=Watches' },
+  { name: 'Beauty', emoji: '💄', url: 'collections.html?cat=Beauty' },
+  { name: 'Footwear', emoji: '👟', url: 'collections.html?cat=Footwear' },
+  { name: 'Jewelry', emoji: '💍', url: 'collections.html?cat=Jewelry' },
+  { name: 'Electronics', emoji: '🔋', url: 'collections.html?cat=Electronics' },
+  { name: 'Home', emoji: '🏠', url: 'collections.html?cat=Home' },
+  { name: 'Food', emoji: '🍿', url: 'collections.html?cat=Food' },
+  { name: 'Clothing', emoji: '👕', url: 'collections.html?cat=Clothing' },
+  { name: 'All Products', emoji: '🛍️', url: 'collections.html' },
+];
+
+function productCardHTML(p, root='') {
+  const onSale = p.compare_at_price > 0 && p.compare_at_price > p.price;
+  const disc = onSale ? Math.round((p.compare_at_price - p.price) * 100 / p.compare_at_price) : 0;
+  const hasVariants = p.variants.length > 1 && !(p.variants.length === 1 && p.variants[0].option1 === 'Default Title');
+  const wishlist = JSON.parse(localStorage.getItem('aviorcart_wishlist') || '[]');
+  const isWished = wishlist.includes(p.id);
+  const badge = onSale ? `<span class="product-card__badge badge-sale">${disc}% OFF</span>` : `<span class="product-card__badge badge-hot">New</span>`;
+  const quickBtn = hasVariants
+    ? `<a href="${root}products/${p.handle}.html" class="btn btn-gold btn-sm btn-full">View Options</a>`
+    : `<button class="btn btn-gold btn-sm btn-full" onclick="event.preventDefault();event.stopPropagation();quickAddToCart(${p.id},${p.variants[0]?.id||0},this)">+ Add to Cart</button>`;
+  return `
+<div class="product-card" data-animate>
+  <div class="product-card__img">
+    <a href="${root}products/${p.handle}.html">
+      <img src="${p.images[0]||''}" alt="${p.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:#f9fafb;\'>🛍️</div>'">
+    </a>
+    ${badge}
+    <button class="product-card__wish${isWished?' active':''}" onclick="event.preventDefault();toggleWishlist(this,${p.id})" aria-label="Wishlist">
+      ${isWished ? '❤️' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'}
+    </button>
+    <div class="product-card__quick">${quickBtn}</div>
+  </div>
+  <div class="product-card__info">
+    <div class="product-card__brand">${p.vendor||'AVIORCART'}</div>
+    <a href="${root}products/${p.handle}.html" class="product-card__name">${p.title}</a>
+    <div class="product-card__rating"><span class="stars-filled">★★★★★</span> <span style="color:#6b7280;font-size:11px;">(${Math.floor(Math.random()*80+20)})</span></div>
+    <div class="product-card__price">
+      <span class="price-current">${money(p.price)}</span>
+      ${onSale ? `<span class="price-old">${money(p.compare_at_price)}</span><span class="price-discount">${disc}% off</span>` : ''}
+    </div>
+  </div>
+</div>`;
+}
+
+function quickAddToCart(productId, variantId, btn) {
+  const p = PRODUCTS.find(x => x.id === productId);
+  if (!p) return;
+  addToCart(p, variantId, 1, btn);
+}
+
+function renderGrid(gridId, products, limit, root='') {
+  const el = document.getElementById(gridId);
+  if (!el) return;
+  el.innerHTML = products.slice(0, limit).map(p => productCardHTML(p, root)).join('');
+  // Re-run animations
+  el.querySelectorAll('[data-animate]').forEach((el, i) => {
+    el.style.cssText = `opacity:0;transform:translateY(20px);transition:opacity 0.5s ${i*60}ms ease,transform 0.5s ${i*60}ms ease`;
+    const obs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) { el.style.opacity='1'; el.style.transform='translateY(0)'; obs.disconnect(); }
+    }, {threshold:0.05});
+    obs.observe(el);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Categories
+  const catEl = document.getElementById('cat-grid');
+  if (catEl) {
+    catEl.innerHTML = CATEGORIES.map(c => `
+      <a href="${c.url}" class="cat-card" data-animate>
+        <span class="cat-card__icon">${c.emoji}</span>
+        <div class="cat-card__name">${c.name}</div>
+      </a>`).join('');
+  }
+
+  // Featured: products with compare price (on sale)
+  const onSale = PRODUCTS.filter(p => p.compare_at_price > p.price);
+  const remaining = PRODUCTS.filter(p => !onSale.includes(p));
+  const featured = [...onSale, ...remaining].slice(0, 8);
+  renderGrid('featured-grid', featured, 8);
+
+  // New arrivals: last 8
+  renderGrid('new-arrivals-grid', [...PRODUCTS].reverse().slice(0, 8), 8);
+
+  // Fashion
+  const fashion = PRODUCTS.filter(p => ['Clothing','Saree','Kurti','Dress','Midi Dress','T-Shirt','Hoodie','Sweatshirt','Coord Set','Shrug','Casual Shirt'].includes(p.type));
+  renderGrid('fashion-grid', fashion, 8);
+
+  // Watches
+  const watches = PRODUCTS.filter(p => ['Watch','Analog Watch','Digital Watch','watch'].includes(p.type));
+  const jewelry = PRODUCTS.filter(p => ['Jewelry','Earrings','Hoop Earrings','Kamarband'].includes(p.type));
+  renderGrid('watches-grid', [...watches, ...jewelry], 8);
+
+  // Beauty
+  const beauty = PRODUCTS.filter(p => p.category_name === 'Beauty');
+  renderGrid('beauty-grid', beauty, 8);
+});
+
+function subscribeNewsletter() {
+  const email = document.getElementById('nl-email').value;
+  if (!email || !email.includes('@')) { showToast('Please enter a valid email'); return; }
+  document.getElementById('nl-success').style.display = 'block';
+  document.getElementById('nl-email').value = '';
+  showToast('✅ Subscribed successfully!');
+}
+</script>
+</body>
+</html>
