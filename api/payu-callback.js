@@ -22,6 +22,8 @@ module.exports = async (req, res) => {
       productinfo,
       firstname,
       email,
+      mode,
+      mihpayid,
       hash: receivedHash
     } = body;
 
@@ -65,7 +67,7 @@ module.exports = async (req, res) => {
         await notifyTelegram({
           success: false,
           reason: 'Security hash mismatch (possible tampering or wrong PAYU_SALT)',
-          txnid, amount, productinfo,
+          txnid, amount, productinfo, mode, mihpayid,
           order: decodeOrder(udf1, udf2, udf3, udf4, udf5)
         });
       } catch (err) {
@@ -80,7 +82,7 @@ module.exports = async (req, res) => {
         await notifyTelegram({
           success: false,
           reason: `PayU status: ${status || 'failed'}`,
-          txnid, amount, productinfo,
+          txnid, amount, productinfo, mode, mihpayid,
           order: decodeOrder(udf1, udf2, udf3, udf4, udf5)
         });
       } catch (err) {
@@ -97,7 +99,7 @@ module.exports = async (req, res) => {
     const order = decodeOrder(udf1, udf2, udf3, udf4, udf5);
 
     try {
-      await notifyTelegram({ success: true, txnid, amount, productinfo, order });
+      await notifyTelegram({ success: true, txnid, amount, productinfo, mode, mihpayid, order });
     } catch (err) {
       // Don't fail the checkout if Telegram is down — just log it.
       console.error('Telegram notify failed:', err);
@@ -138,7 +140,23 @@ function mdEscape(str) {
   return String(str == null ? '' : str).replace(/([_*`\[])/g, '\\$1');
 }
 
-async function notifyTelegram({ success, reason, txnid, amount, productinfo, order }) {
+function paymentModeLabel(mode) {
+  const map = {
+    CC: 'Credit Card', DC: 'Debit Card', NB: 'Net Banking',
+    UPI: 'UPI', EMI: 'EMI', CASH: 'Cash', WLT: 'Wallet', CARD: 'Card'
+  };
+  if (!mode) return 'N/A';
+  const key = String(mode).toUpperCase();
+  return map[key] || key;
+}
+
+function orderTimestamp() {
+  return new Date().toLocaleString('en-IN', {
+    timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short'
+  }) + ' IST';
+}
+
+async function notifyTelegram({ success, reason, txnid, amount, productinfo, mode, mihpayid, order }) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   // Support TELEGRAM_CHAT_ID (single recipient) as well as separate
   // owner / logs-group IDs, and send to whichever are configured.
@@ -155,23 +173,35 @@ async function notifyTelegram({ success, reason, txnid, amount, productinfo, ord
   }
 
   const itemsText = order && order.items && order.items.length
-    ? order.items.map(it => `• ${mdEscape(it.title)} × ${it.quantity} — ₹${it.price}`).join('\n')
+    ? order.items.map((it, i) => `${i + 1}. ${mdEscape(it.title)} × ${it.quantity} — ₹${it.price}`).join('\n')
     : mdEscape(productinfo || 'N/A');
+
+  const totalQty = order && order.items && order.items.length
+    ? order.items.reduce((sum, it) => sum + Number(it.quantity || 0), 0)
+    : null;
 
   const addressText = order
     ? `${mdEscape(order.fullName)}\n${mdEscape(order.address)}\n${mdEscape(order.city)}, ${mdEscape(order.state)} - ${mdEscape(order.pincode)}\n📞 ${mdEscape(order.phone)}\n✉️ ${mdEscape(order.email)}`
     : 'N/A';
 
+  const metaText =
+    `*Date & Time:* ${orderTimestamp()}\n` +
+    `*Items Count:* ${totalQty != null ? totalQty : 'N/A'}\n` +
+    `*Payment Mode:* ${mdEscape(paymentModeLabel(mode))}\n` +
+    `*PayU Ref (mihpayid):* ${mihpayid ? mdEscape(mihpayid) : 'N/A'}`;
+
   const text = success
     ? `🛒 *New Order — AVIORCART*\n\n` +
       `*Order ID:* \`${mdEscape(txnid)}\`\n` +
-      `*Amount:* ₹${mdEscape(amount)}\n\n` +
+      `*Amount:* ₹${mdEscape(amount)}\n` +
+      `${metaText}\n\n` +
       `*Items:*\n${itemsText}\n\n` +
       `*Delivery Address:*\n${addressText}`
     : `❌ *Payment Failed — AVIORCART*\n\n` +
       `*Order ID:* \`${mdEscape(txnid)}\`\n` +
       `*Amount:* ₹${mdEscape(amount)}\n` +
-      `*Reason:* ${mdEscape(reason || 'Unknown')}\n\n` +
+      `*Reason:* ${mdEscape(reason || 'Unknown')}\n` +
+      `${metaText}\n\n` +
       `*Items:*\n${itemsText}\n\n` +
       `*Customer Details:*\n${addressText}`;
 
