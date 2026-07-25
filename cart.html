@@ -125,11 +125,8 @@ function pageCartRemove(key) {
 
 function proceedCheckout() {
   const cart = getCart();
-  const total = cartTotal();
   if (!cart.length) return;
-  const items = cart.map(i => `${i.title} x${i.quantity} = ${money(i.price*i.quantity)}`).join('\n');
-  const msg = `Hi! I want to place an order from AVIORCART:\n\n${items}\n\nTotal: ${money(total)}\n\nPlease confirm availability.`;
-  window.open(`https://wa.me/919425619133?text=${encodeURIComponent(msg)}`, '_blank');
+  window.location.href = 'checkout.html';
 }
 
 document.addEventListener('DOMContentLoaded', renderCartPage);

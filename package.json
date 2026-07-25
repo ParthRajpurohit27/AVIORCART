@@ -1,0 +1,9 @@
+{
+  "name": "aviorcart",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AVIORCART static storefront + PayU checkout + Telegram order notifications (Vercel serverless functions in /api).",
+  "engines": {
+    "node": ">=18"
+  }
+}

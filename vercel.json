@@ -22,6 +22,9 @@
     { "source": "/cart", "destination": "/cart.html" },
     { "source": "/search", "destination": "/search.html" },
     { "source": "/wishlist", "destination": "/wishlist.html" },
+    { "source": "/checkout", "destination": "/checkout.html" },
+    { "source": "/order-success", "destination": "/order-success.html" },
+    { "source": "/order-failure", "destination": "/order-failure.html" },
     { "source": "/products/:slug", "destination": "/products/:slug.html" }
   ],
   "routes": [

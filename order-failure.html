@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Failed — AVIORCART</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/assets/manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-152x152.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="stylesheet" href="assets/checkout.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+</head>
+<body>
+<div id="header-placeholder"></div>
+<main id="main-content">
+  <div class="order-result-page">
+    <div class="container">
+      <div class="order-result-card">
+        <div class="order-result__icon-wrap is-fail">
+          <svg width="88" height="88" viewBox="0 0 60 60" fill="none">
+            <circle class="x-circle" cx="30" cy="30" r="26"/>
+            <path class="x-mark" d="M22 22l16 16"/>
+            <path class="x-mark" d="M38 22l-16 16"/>
+          </svg>
+        </div>
+        <h1>Payment Failed</h1>
+        <p>Something went wrong and your payment couldn't be completed.</p>
+        <p>Don't worry — no amount has been charged. Your cart is still saved.</p>
+        <div class="order-result__txnid" id="txnid-badge"></div>
+
+        <div class="order-result__actions">
+          <a href="checkout.html" class="btn btn-gold">Try Again</a>
+          <a href="cart.html" class="btn btn-black">View Cart</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<div id="footer-placeholder"></div>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/layout.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const txnid = params.get('txnid') || '';
+  document.getElementById('txnid-badge').textContent = txnid ? `Reference: ${txnid}` : '';
+});
+</script>
+</body>
+</html>

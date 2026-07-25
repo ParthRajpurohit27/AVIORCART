@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed — AVIORCART</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/assets/manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-152x152.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="stylesheet" href="assets/checkout.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+</head>
+<body>
+<div id="header-placeholder"></div>
+<main id="main-content">
+  <div class="order-result-page">
+    <div class="container">
+      <div class="order-result-card">
+        <div class="order-result__icon-wrap">
+          <svg width="88" height="88" viewBox="0 0 60 60" fill="none">
+            <circle class="check-circle" cx="30" cy="30" r="26"/>
+            <path class="check-mark" d="M18 31l8 8 16-18"/>
+          </svg>
+        </div>
+        <h1>Order Confirmed!</h1>
+        <p>Thank you — your payment was received and your order is being processed.</p>
+        <div class="order-result__txnid" id="txnid-badge"></div>
+
+        <div class="order-result__summary" id="order-summary" style="display:none;">
+          <div class="review-block">
+            <div class="review-block__head"><h3>Delivered To</h3></div>
+            <div class="review-address" id="summary-address"></div>
+          </div>
+          <div class="review-block">
+            <div class="review-block__head"><h3>Items</h3></div>
+            <div class="review-items" id="summary-items"></div>
+          </div>
+          <div class="summary-total" style="margin-top:8px;">
+            <span>Total Paid</span><span id="summary-amount">₹0</span>
+          </div>
+        </div>
+
+        <div class="order-result__actions">
+          <a href="collections.html" class="btn btn-gold">Continue Shopping</a>
+          <a href="contact.html" class="btn btn-black">Need Help?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<div id="footer-placeholder"></div>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/checkout.js"></script>
+<script src="assets/layout.js"></script>
+<script>
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const txnid = params.get('txnid') || '';
+  document.getElementById('txnid-badge').textContent = txnid ? `Order ID: ${txnid}` : '';
+
+  // This local record is purely a same-device UX nicety — the seller's
+  // real order record was already sent to Telegram by api/payu-callback.js.
+  const record = txnid ? getOrderRecord(txnid) : null;
+  if (record) {
+    const el = document.getElementById('order-summary');
+    el.style.display = 'block';
+
+    const a = record.address || {};
+    document.getElementById('summary-address').innerHTML = `
+      <b>${escapeHtml(a.fullName || '')}</b><br>
+      ${escapeHtml(a.address || '')}<br>
+      ${escapeHtml(a.city || '')}, ${escapeHtml(a.state || '')} - ${escapeHtml(a.pincode || '')}<br>
+      📞 ${escapeHtml(a.phone || '')}`;
+
+    document.getElementById('summary-items').innerHTML = (record.items || []).map(i => `
+      <div class="review-item-row">
+        <div class="review-item__img"><img src="${i.image || ''}" alt="${escapeHtml(i.title)}" onerror="this.style.display='none'"></div>
+        <div>
+          <div class="review-item__name">${escapeHtml(i.title)}</div>
+          <div class="review-item__meta">${i.variant_title ? escapeHtml(i.variant_title) + ' · ' : ''}Qty ${i.quantity}</div>
+        </div>
+        <div class="review-item__price">${money(i.price * i.quantity)}</div>
+      </div>`).join('');
+
+    document.getElementById('summary-amount').textContent = money(record.amount || 0);
+
+    // Payment is verified at this point (server redirected here only
+    // after PayU + our reverse-hash check both succeeded) — safe to
+    // clear whichever source this order came from.
+    if (record.mode === 'buynow') {
+      clearBuyNowItem();
+    } else {
+      cartClear();
+    }
+  }
+});
+</script>
+</body>
+</html>
