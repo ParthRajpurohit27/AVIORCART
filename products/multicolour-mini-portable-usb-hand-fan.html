@@ -138,6 +138,7 @@ let __selectedVariantId = 27001;
 </script>
 <script src="../assets/products.js"></script>
 <script src="../assets/cart.js"></script>
+<script src="../assets/checkout.js"></script>
 <script src="../assets/layout.js"></script>
 <script>
 // Gallery
@@ -187,16 +188,11 @@ function handleAddToCart(btn) {
   addToCart(__product, __selectedVariantId, qty, btn);
 }
 
-// Buy now — WhatsApp + cart
+// Buy now — skips the cart, goes straight to a single-item checkout
 function handleBuyNow() {
   const qty = parseInt(document.getElementById('qty-input')?.value||1);
-  const variant = __variants.find(v => v.id === __selectedVariantId) || __variants[0];
-  const selectedOpt = document.querySelector('.variant-btn.active')?.dataset?.value || '';
-  const varLabel = selectedOpt && selectedOpt !== 'Default Title' ? ' (' + selectedOpt + ')' : '';
-  cartAddItem(__product, __selectedVariantId, qty);
-  const msg = `Hi! I want to buy:\n\n$Multicolour Mini Portable USB Hand Fan${varLabel} x${qty}\nPrice: ₹${Math.round((variant?.price||199) * qty).toLocaleString('en-IN')}\n\nPlease confirm and process my order.`;
-  window.open('https://wa.me/919425619133?text=' + encodeURIComponent(msg), '_blank');
-  showToast('✨ Added to cart & opening WhatsApp!');
+  setBuyNowItem(__product, __selectedVariantId, qty);
+  window.location.href = '../checkout.html?mode=buynow';
 }
 </script>
 </body>

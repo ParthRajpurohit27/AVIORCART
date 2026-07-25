@@ -15,27 +15,35 @@ function saveCart(cart) {
   updateCartCount();
 }
 
+/* Builds a plain cart-item object the same way cartAddItem does, without
+   touching localStorage. Shared by cartAddItem() and the Buy Now flow
+   (see assets/checkout.js) so the item shape only lives in one place. */
+function buildCartItem(product, variantId, qty = 1) {
+  const variant = product.variants.find(v => v.id === variantId) || product.variants[0];
+  if (!variant) return null;
+  const varLabel = (!variant.option1 || variant.option1 === 'Default Title') ? '' : variant.option1 + (variant.option2 ? ' / ' + variant.option2 : '');
+  return {
+    key: `${product.id}_${variant.id}`,
+    product_id: product.id,
+    variant_id: variant.id,
+    title: product.title,
+    variant_title: varLabel,
+    price: variant.price,
+    image: product.images[0] || '',
+    handle: product.handle,
+    quantity: qty
+  };
+}
+
 function cartAddItem(product, variantId, qty = 1) {
   const cart = getCart();
-  const variant = product.variants.find(v => v.id === variantId) || product.variants[0];
-  if (!variant) return;
-  const key = `${product.id}_${variant.id}`;
-  const existing = cart.find(i => i.key === key);
+  const item = buildCartItem(product, variantId, qty);
+  if (!item) return;
+  const existing = cart.find(i => i.key === item.key);
   if (existing) {
     existing.quantity += qty;
   } else {
-    const varLabel = (!variant.option1 || variant.option1 === 'Default Title') ? '' : variant.option1 + (variant.option2 ? ' / ' + variant.option2 : '');
-    cart.push({
-      key,
-      product_id: product.id,
-      variant_id: variant.id,
-      title: product.title,
-      variant_title: varLabel,
-      price: variant.price,
-      image: product.images[0] || '',
-      handle: product.handle,
-      quantity: qty
-    });
+    cart.push(item);
   }
   saveCart(cart);
   return cart;
