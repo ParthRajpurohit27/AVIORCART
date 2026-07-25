@@ -61,11 +61,31 @@ module.exports = async (req, res) => {
 
     if (!verified) {
       console.error('PayU hash verification failed for txnid', txnid);
+      try {
+        await notifyTelegram({
+          success: false,
+          reason: 'Security hash mismatch (possible tampering or wrong PAYU_SALT)',
+          txnid, amount, productinfo,
+          order: decodeOrder(udf1, udf2, udf3, udf4, udf5)
+        });
+      } catch (err) {
+        console.error('Telegram notify failed:', err);
+      }
       redirect(res, `/order-failure.html?txnid=${enc(txnid)}&status=failed`);
       return;
     }
 
     if (status !== 'success') {
+      try {
+        await notifyTelegram({
+          success: false,
+          reason: `PayU status: ${status || 'failed'}`,
+          txnid, amount, productinfo,
+          order: decodeOrder(udf1, udf2, udf3, udf4, udf5)
+        });
+      } catch (err) {
+        console.error('Telegram notify failed:', err);
+      }
       redirect(res, `/order-failure.html?txnid=${enc(txnid)}&status=${enc(status || 'failed')}`);
       return;
     }
@@ -77,7 +97,7 @@ module.exports = async (req, res) => {
     const order = decodeOrder(udf1, udf2, udf3, udf4, udf5);
 
     try {
-      await notifyTelegram({ txnid, amount, productinfo, order });
+      await notifyTelegram({ success: true, txnid, amount, productinfo, order });
     } catch (err) {
       // Don't fail the checkout if Telegram is down — just log it.
       console.error('Telegram notify failed:', err);
@@ -118,7 +138,7 @@ function mdEscape(str) {
   return String(str == null ? '' : str).replace(/([_*`\[])/g, '\\$1');
 }
 
-async function notifyTelegram({ txnid, amount, productinfo, order }) {
+async function notifyTelegram({ success, reason, txnid, amount, productinfo, order }) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   // Support TELEGRAM_CHAT_ID (single recipient) as well as separate
   // owner / logs-group IDs, and send to whichever are configured.
@@ -142,12 +162,18 @@ async function notifyTelegram({ txnid, amount, productinfo, order }) {
     ? `${mdEscape(order.fullName)}\n${mdEscape(order.address)}\n${mdEscape(order.city)}, ${mdEscape(order.state)} - ${mdEscape(order.pincode)}\n📞 ${mdEscape(order.phone)}\n✉️ ${mdEscape(order.email)}`
     : 'N/A';
 
-  const text =
-    `🛒 *New Order — AVIORCART*\n\n` +
-    `*Order ID:* \`${mdEscape(txnid)}\`\n` +
-    `*Amount:* ₹${mdEscape(amount)}\n\n` +
-    `*Items:*\n${itemsText}\n\n` +
-    `*Delivery Address:*\n${addressText}`;
+  const text = success
+    ? `🛒 *New Order — AVIORCART*\n\n` +
+      `*Order ID:* \`${mdEscape(txnid)}\`\n` +
+      `*Amount:* ₹${mdEscape(amount)}\n\n` +
+      `*Items:*\n${itemsText}\n\n` +
+      `*Delivery Address:*\n${addressText}`
+    : `❌ *Payment Failed — AVIORCART*\n\n` +
+      `*Order ID:* \`${mdEscape(txnid)}\`\n` +
+      `*Amount:* ₹${mdEscape(amount)}\n` +
+      `*Reason:* ${mdEscape(reason || 'Unknown')}\n\n` +
+      `*Items:*\n${itemsText}\n\n` +
+      `*Customer Details:*\n${addressText}`;
 
   await Promise.all(uniqueChatIds.map(chatId =>
     fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
