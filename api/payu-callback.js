@@ -173,7 +173,11 @@ async function notifyTelegram({ success, reason, txnid, amount, productinfo, mod
   }
 
   const itemsText = order && order.items && order.items.length
-    ? order.items.map((it, i) => `${i + 1}. ${mdEscape(it.title)} × ${it.quantity} — ₹${it.price}`).join('\n')
+    ? order.items.map((it, i) =>
+        `*${i + 1}. ${mdEscape(it.title)}*\n` +
+        `   • Quantity: ${mdEscape(it.quantity)}\n` +
+        `   • Price: ₹${mdEscape(it.price)}`
+      ).join('\n\n')
     : mdEscape(productinfo || 'N/A');
 
   const totalQty = order && order.items && order.items.length
@@ -181,29 +185,41 @@ async function notifyTelegram({ success, reason, txnid, amount, productinfo, mod
     : null;
 
   const addressText = order
-    ? `${mdEscape(order.fullName)}\n${mdEscape(order.address)}\n${mdEscape(order.city)}, ${mdEscape(order.state)} - ${mdEscape(order.pincode)}\n📞 ${mdEscape(order.phone)}\n✉️ ${mdEscape(order.email)}`
+    ? `👤 Name: ${mdEscape(order.fullName)}\n` +
+      `🏠 Address: ${mdEscape(order.address)}\n` +
+      `🏙️ City: ${mdEscape(order.city)}\n` +
+      `🗺️ State: ${mdEscape(order.state)}\n` +
+      `📮 Pincode: ${mdEscape(order.pincode)}\n` +
+      `📞 Phone: ${mdEscape(order.phone)}\n` +
+      `✉️ Email: ${mdEscape(order.email)}`
     : 'N/A';
 
   const metaText =
-    `*Date & Time:* ${orderTimestamp()}\n` +
-    `*Items Count:* ${totalQty != null ? totalQty : 'N/A'}\n` +
-    `*Payment Mode:* ${mdEscape(paymentModeLabel(mode))}\n` +
-    `*PayU Ref (mihpayid):* ${mihpayid ? mdEscape(mihpayid) : 'N/A'}`;
+    `🗓️ *Date & Time:* ${orderTimestamp()}\n` +
+    `📦 *Items Count:* ${totalQty != null ? totalQty : 'N/A'}\n` +
+    `💳 *Payment Mode:* ${mdEscape(paymentModeLabel(mode))}\n` +
+    `🔖 *PayU Ref:* ${mihpayid ? mdEscape(mihpayid) : 'N/A'}`;
+
+  const divider = '➖➖➖➖➖➖➖➖➖➖';
 
   const text = success
     ? `🛒 *New Order — AVIORCART*\n\n` +
-      `*Order ID:* \`${mdEscape(txnid)}\`\n` +
-      `*Amount:* ₹${mdEscape(amount)}\n` +
+      `🆔 *Order ID:* \`${mdEscape(txnid)}\`\n` +
+      `💰 *Amount:* ₹${mdEscape(amount)}\n` +
       `${metaText}\n\n` +
-      `*Items:*\n${itemsText}\n\n` +
-      `*Delivery Address:*\n${addressText}`
+      `${divider}\n` +
+      `🛍️ *Items Ordered:*\n\n${itemsText}\n\n` +
+      `${divider}\n` +
+      `👤 *Customer Details:*\n${addressText}`
     : `❌ *Payment Failed — AVIORCART*\n\n` +
-      `*Order ID:* \`${mdEscape(txnid)}\`\n` +
-      `*Amount:* ₹${mdEscape(amount)}\n` +
-      `*Reason:* ${mdEscape(reason || 'Unknown')}\n` +
+      `🆔 *Order ID:* \`${mdEscape(txnid)}\`\n` +
+      `💰 *Amount:* ₹${mdEscape(amount)}\n` +
+      `⚠️ *Reason:* ${mdEscape(reason || 'Unknown')}\n` +
       `${metaText}\n\n` +
-      `*Items:*\n${itemsText}\n\n` +
-      `*Customer Details:*\n${addressText}`;
+      `${divider}\n` +
+      `🛍️ *Items Ordered:*\n\n${itemsText}\n\n` +
+      `${divider}\n` +
+      `👤 *Customer Details:*\n${addressText}`;
 
   await Promise.all(uniqueChatIds.map(chatId =>
     fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
