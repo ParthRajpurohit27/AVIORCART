@@ -114,10 +114,11 @@ function validateAddress(a) {
   if (!a.fullName || a.fullName.trim().length < 2) errors.fullName = 'Enter your full name';
   if (!/^[6-9]\d{9}$/.test(a.phone || '')) errors.phone = 'Enter a valid 10-digit mobile number';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(a.email || '')) errors.email = 'Enter a valid email address';
-  if (!a.address || a.address.trim().length < 5) errors.address = 'Enter your full address';
+  // Address Line 1 is compulsory (min 5 chars); Line 2 is optional and unvalidated.
+  if (!a.addressLine1 || a.addressLine1.trim().length < 5) errors.addressLine1 = 'Enter your address (min 5 characters)';
   if (!a.city || a.city.trim().length < 2) errors.city = 'Enter your city';
   if (!/^\d{6}$/.test(a.pincode || '')) errors.pincode = 'Enter a valid 6-digit pincode';
-  if (!a.state || a.state.trim().length < 2) errors.state = 'Enter your state';
+  if (!a.state || a.state.trim().length < 2) errors.state = 'Select your state';
   return errors;
 }
 
