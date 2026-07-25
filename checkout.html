@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — AVIORCART</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/assets/manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/assets/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <script>
+    if('serviceWorker' in navigator){
+      window.addEventListener('load',function(){
+        navigator.serviceWorker.register('/assets/sw.js',{scope:'/'})
+          .then(()=>{}).catch(()=>{});
+      });
+    }
+  </script>
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="stylesheet" href="assets/checkout.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+</head>
+<body>
+<div id="header-placeholder"></div>
+<main id="main-content">
+  <div class="checkout-page">
+    <div class="container">
+      <h1>Checkout</h1>
+      <div class="checkout-page__sub" id="checkout-item-count"></div>
+
+      <div class="checkout-progress" id="checkout-progress">
+        <div class="checkout-progress__step is-active" data-step="1">
+          <div class="checkout-progress__bubble">1</div>
+          <div class="checkout-progress__label">Delivery Address</div>
+        </div>
+        <div class="checkout-progress__bar" id="progress-bar"></div>
+        <div class="checkout-progress__step" data-step="2">
+          <div class="checkout-progress__bubble">2</div>
+          <div class="checkout-progress__label">Review &amp; Pay</div>
+        </div>
+      </div>
+
+      <div id="checkout-empty" style="display:none;text-align:center;padding:80px 0;">
+        <div style="font-size:64px;margin-bottom:16px;">🛒</div>
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:8px;">There's nothing to check out</h2>
+        <p style="color:#6b7280;margin-bottom:24px;">Your cart is empty.</p>
+        <a href="collections.html" class="btn btn-gold btn-lg">Shop Now</a>
+      </div>
+
+      <div class="checkout-layout" id="checkout-layout">
+        <!-- LEFT: steps -->
+        <div class="checkout-card">
+
+          <!-- STEP 1 — ADDRESS -->
+          <div class="checkout-step" id="step-1">
+            <h2>📍 Delivery Address</h2>
+            <form id="address-form" novalidate>
+              <div class="co-form-grid">
+                <div class="co-field full">
+                  <label for="f-name">Full Name</label>
+                  <input type="text" id="f-name" name="fullName" autocomplete="name" placeholder="e.g. Rohan Sharma">
+                  <div class="co-field__error" data-error-for="fullName">⚠ Enter your full name</div>
+                </div>
+                <div class="co-field">
+                  <label for="f-phone">Phone Number</label>
+                  <input type="tel" id="f-phone" name="phone" autocomplete="tel" placeholder="98765 43210" maxlength="10" inputmode="numeric">
+                  <div class="co-field__error" data-error-for="phone">⚠ Enter a valid 10-digit mobile number</div>
+                </div>
+                <div class="co-field">
+                  <label for="f-email">Email Address</label>
+                  <input type="email" id="f-email" name="email" autocomplete="email" placeholder="you@example.com">
+                  <div class="co-field__error" data-error-for="email">⚠ Enter a valid email address</div>
+                </div>
+                <div class="co-field full">
+                  <label for="f-address">Address (House No, Street, Area)</label>
+                  <textarea id="f-address" name="address" autocomplete="street-address" placeholder="Flat / House no., Building, Street, Area"></textarea>
+                  <div class="co-field__error" data-error-for="address">⚠ Enter your full address</div>
+                </div>
+                <div class="co-field">
+                  <label for="f-city">City</label>
+                  <input type="text" id="f-city" name="city" autocomplete="address-level2" placeholder="e.g. Ajmer">
+                  <div class="co-field__error" data-error-for="city">⚠ Enter your city</div>
+                </div>
+                <div class="co-field">
+                  <label for="f-pincode">Pincode</label>
+                  <input type="text" id="f-pincode" name="pincode" autocomplete="postal-code" placeholder="6-digit pincode" maxlength="6" inputmode="numeric">
+                  <div class="co-field__error" data-error-for="pincode">⚠ Enter a valid 6-digit pincode</div>
+                </div>
+                <div class="co-field full">
+                  <label for="f-state">State</label>
+                  <input type="text" id="f-state" name="state" autocomplete="address-level1" placeholder="e.g. Rajasthan">
+                  <div class="co-field__error" data-error-for="state">⚠ Enter your state</div>
+                </div>
+              </div>
+              <div class="co-actions">
+                <a href="cart.html" class="btn btn-black btn-full">← Back to Cart</a>
+                <button type="submit" class="btn btn-gold btn-full">Continue to Review →</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- STEP 2 — REVIEW -->
+          <div class="checkout-step" id="step-2" hidden>
+            <h2>🧾 Order Review</h2>
+
+            <div class="review-block">
+              <div class="review-block__head">
+                <h3>Deliver To</h3>
+                <button type="button" class="review-edit" onclick="goToStep(1)">✎ Edit</button>
+              </div>
+              <div class="review-address" id="review-address"></div>
+            </div>
+
+            <div class="review-block">
+              <div class="review-block__head">
+                <h3>Items</h3>
+              </div>
+              <div class="review-items" id="review-items"></div>
+            </div>
+
+            <button type="button" class="btn btn-gold btn-full btn-lg btn-pay" id="pay-btn" onclick="handleProceedToPay()">
+              <span class="btn-pay__spinner"></span>
+              <span class="btn-pay__label">🔒 Proceed to Pay</span>
+            </button>
+            <div class="summary-note" style="margin-top:12px;">🔒 You'll be redirected to PayU's secure payment page.</div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: order summary -->
+        <div class="checkout-summary-box">
+          <h3>Order Summary</h3>
+          <div id="summary-lines"></div>
+          <div class="summary-line"><span>Delivery</span><span style="color:#22c55e;">Free</span></div>
+          <div class="summary-total">
+            <span>Total Amount</span><span id="summary-total-amount">₹0</span>
+          </div>
+          <div class="summary-note">🔒 Safe and Secure Payments via PayU</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<div id="footer-placeholder"></div>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/checkout.js"></script>
+<script src="assets/layout.js"></script>
+<script>
+/* ═══ Determine which items this checkout session covers ═══ */
+const params = new URLSearchParams(window.location.search);
+const MODE = params.get('mode') === 'buynow' ? 'buynow' : 'cart';
+
+let CHECKOUT_ITEMS = [];
+if (MODE === 'buynow') {
+  const item = getBuyNowItem();
+  CHECKOUT_ITEMS = item ? [item] : [];
+} else {
+  CHECKOUT_ITEMS = getCart();
+}
+
+const checkoutTotal = CHECKOUT_ITEMS.reduce((s, i) => s + i.price * i.quantity, 0);
+const checkoutCount = CHECKOUT_ITEMS.reduce((s, i) => s + i.quantity, 0);
+
+let currentStep = 1;
+let addressData = null;
+
+function init() {
+  if (!CHECKOUT_ITEMS.length) {
+    document.getElementById('checkout-empty').style.display = 'block';
+    document.getElementById('checkout-layout').style.display = 'none';
+    document.getElementById('checkout-progress').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('checkout-item-count').textContent =
+    `${checkoutCount} item${checkoutCount > 1 ? 's' : ''} · ${money(checkoutTotal)}`;
+
+  renderSummary();
+}
+
+function renderSummary() {
+  const linesEl = document.getElementById('summary-lines');
+  linesEl.innerHTML = CHECKOUT_ITEMS.map(i => `
+    <div class="summary-line">
+      <span>${escapeHtml(i.title).substring(0,28)}${i.title.length > 28 ? '…' : ''} × ${i.quantity}</span>
+      <span>${money(i.price * i.quantity)}</span>
+    </div>`).join('');
+  document.getElementById('summary-total-amount').textContent = money(checkoutTotal);
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ═══ Step navigation ═══ */
+function goToStep(step, direction) {
+  const s1 = document.getElementById('step-1');
+  const s2 = document.getElementById('step-2');
+  const target = step === 1 ? s1 : s2;
+  const other = step === 1 ? s2 : s1;
+
+  other.hidden = true;
+  target.hidden = false;
+  target.classList.remove('step-back');
+  void target.offsetWidth; // restart animation
+  target.classList.add(direction === 'back' ? 'step-back' : '');
+
+  currentStep = step;
+
+  document.querySelectorAll('.checkout-progress__step').forEach(el => {
+    const n = parseInt(el.dataset.step);
+    el.classList.toggle('is-active', n === step);
+    el.classList.toggle('is-done', n < step);
+  });
+  document.getElementById('progress-bar').classList.toggle('is-filled', step >= 2);
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ═══ Step 1: validate & collect address ═══ */
+document.getElementById('address-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const data = {
+    fullName: (fd.get('fullName') || '').trim(),
+    phone: (fd.get('phone') || '').trim(),
+    email: (fd.get('email') || '').trim(),
+    address: (fd.get('address') || '').trim(),
+    city: (fd.get('city') || '').trim(),
+    pincode: (fd.get('pincode') || '').trim(),
+    state: (fd.get('state') || '').trim()
+  };
+
+  const errors = validateAddress(data);
+  document.querySelectorAll('.co-field__error').forEach(el => el.classList.remove('show'));
+  document.querySelectorAll('.co-field input, .co-field textarea').forEach(el => el.classList.remove('is-invalid'));
+
+  const keys = Object.keys(errors);
+  if (keys.length) {
+    keys.forEach(k => {
+      const err = document.querySelector(`[data-error-for="${k}"]`);
+      const input = document.querySelector(`[name="${k}"]`);
+      if (err) err.classList.add('show');
+      if (input) input.classList.add('is-invalid');
+    });
+    document.querySelector(`[name="${keys[0]}"]`)?.focus();
+    return;
+  }
+
+  addressData = data;
+  renderReview();
+  goToStep(2);
+});
+
+function renderReview() {
+  document.getElementById('review-address').innerHTML = `
+    <b>${escapeHtml(addressData.fullName)}</b><br>
+    ${escapeHtml(addressData.address)}<br>
+    ${escapeHtml(addressData.city)}, ${escapeHtml(addressData.state)} - ${escapeHtml(addressData.pincode)}<br>
+    📞 ${escapeHtml(addressData.phone)} &nbsp;|&nbsp; ✉️ ${escapeHtml(addressData.email)}`;
+
+  document.getElementById('review-items').innerHTML = CHECKOUT_ITEMS.map(i => `
+    <div class="review-item-row">
+      <div class="review-item__img"><img src="${i.image}" alt="${escapeHtml(i.title)}" onerror="this.style.display='none'"></div>
+      <div>
+        <div class="review-item__name">${escapeHtml(i.title)}</div>
+        <div class="review-item__meta">${i.variant_title ? escapeHtml(i.variant_title) + ' · ' : ''}Qty ${i.quantity}</div>
+      </div>
+      <div class="review-item__price">${money(i.price * i.quantity)}</div>
+    </div>`).join('');
+}
+
+/* ═══ Step 2: Proceed to Pay ═══ */
+async function handleProceedToPay() {
+  if (!addressData || !CHECKOUT_ITEMS.length) return;
+  const btn = document.getElementById('pay-btn');
+  btn.classList.add('is-loading');
+  btn.disabled = true;
+
+  try {
+    const txnid = genTxnId();
+    const udf = encodeOrderToUdf(addressData, CHECKOUT_ITEMS);
+    const productinfo = CHECKOUT_ITEMS.length === 1
+      ? CHECKOUT_ITEMS[0].title.substring(0, 90)
+      : `AVIORCART Order (${checkoutCount} items)`;
+
+    const payload = {
+      txnid,
+      amount: checkoutTotal.toFixed(2),
+      productinfo,
+      firstname: addressData.fullName,
+      email: addressData.email,
+      phone: addressData.phone,
+      udf1: udf.udf1, udf2: udf.udf2, udf3: udf.udf3, udf4: udf.udf4, udf5: udf.udf5
+    };
+
+    // Keep a local copy so order-success.html can show a rich summary
+    // on this device. This is a UX nicety only — Telegram (sent from
+    // api/payu-callback.js after PayU verifies payment) is the real
+    // record for the seller.
+    saveOrderRecord(txnid, {
+      items: CHECKOUT_ITEMS,
+      address: addressData,
+      amount: checkoutTotal,
+      mode: MODE
+    });
+
+    const res = await fetch('/api/generate-hash', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error('Failed to initialize payment');
+    const data = await res.json();
+
+    const origin = window.location.origin;
+    const formFields = Object.assign({}, data, {
+      surl: origin + '/api/payu-callback',
+      furl: origin + '/api/payu-callback'
+    });
+
+    submitToPayU(data.payuUrl, formFields);
+    // Note: we intentionally don't clear the cart/buy-now item here —
+    // it's cleared once PayU redirects back with a verified success
+    // (see order-success.html), so a failed/abandoned payment doesn't
+    // lose the customer's cart.
+  } catch (err) {
+    console.error(err);
+    btn.classList.remove('is-loading');
+    btn.disabled = false;
+    showToast('❌ Could not start payment. Please try again.');
+  }
+}
+
+function submitToPayU(url, fields) {
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = url;
+  ['key','txnid','amount','productinfo','firstname','email','phone','udf1','udf2','udf3','udf4','udf5','hash','surl','furl'].forEach(name => {
+    if (fields[name] === undefined) return;
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = fields[name];
+    form.appendChild(input);
+  });
+  document.body.appendChild(form);
+  form.submit();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
