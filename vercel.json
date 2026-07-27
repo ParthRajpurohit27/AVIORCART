@@ -25,6 +25,10 @@
     { "source": "/checkout", "destination": "/checkout.html" },
     { "source": "/order-success", "destination": "/order-success.html" },
     { "source": "/order-failure", "destination": "/order-failure.html" },
+    { "source": "/privacy-policy", "destination": "/privacy-policy.html" },
+    { "source": "/terms-and-conditions", "destination": "/terms-and-conditions.html" },
+    { "source": "/refund-policy", "destination": "/refund-policy.html" },
+    { "source": "/shipping-policy", "destination": "/shipping-policy.html" },
     { "source": "/products/:slug", "destination": "/products/:slug.html" }
   ],
   "routes": [

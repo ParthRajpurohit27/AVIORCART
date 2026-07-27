@@ -23,12 +23,6 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
 </head>
 <body>
-<div class="checkout-weather" id="checkout-weather" aria-hidden="true">
-  <div class="rain-layer" id="rain-layer"></div>
-  <div class="delivery-flyer">
-    🛸<span class="parcel">📦</span>
-  </div>
-</div>
 <div id="header-placeholder"></div>
 <main id="main-content">
   <div class="checkout-page">
@@ -65,46 +59,39 @@
             <form id="address-form" novalidate>
               <div class="co-form-grid">
                 <div class="co-field full">
-                  <label for="f-address1">Address Line 1 <span class="co-required">*</span></label>
-                  <input type="text" id="f-address1" name="addressLine1" autocomplete="address-line1" placeholder="House / Flat No., Building, Street">
-                  <div class="co-field__error" data-error-for="addressLine1">⚠ Enter your address (min 5 characters)</div>
-                </div>
-                <div class="co-field full">
-                  <label for="f-address2">Address Line 2 <span class="co-optional">(optional)</span></label>
-                  <input type="text" id="f-address2" name="addressLine2" autocomplete="address-line2" placeholder="Landmark, Area (optional)">
-                </div>
-                <div class="co-field">
-                  <label for="f-pincode">Pincode <span class="co-required">*</span></label>
-                  <input type="text" id="f-pincode" name="pincode" autocomplete="postal-code" placeholder="6-digit pincode" maxlength="6" inputmode="numeric">
-                  <div class="co-field__error" data-error-for="pincode">⚠ Enter a valid 6-digit pincode</div>
-                  <div class="co-field__hint" id="pincode-hint"></div>
-                </div>
-                <div class="co-field">
-                  <label for="f-city">City <span class="co-required">*</span></label>
-                  <input type="text" id="f-city" name="city" autocomplete="address-level2" placeholder="Auto-filled from pincode">
-                  <div class="co-field__error" data-error-for="city">⚠ Enter your city</div>
-                </div>
-                <div class="co-field full">
-                  <label for="f-state">State <span class="co-required">*</span></label>
-                  <select id="f-state" name="state" autocomplete="address-level1">
-                    <option value="">Select State (auto-fills from pincode)</option>
-                  </select>
-                  <div class="co-field__error" data-error-for="state">⚠ Select your state</div>
-                </div>
-                <div class="co-field">
-                  <label for="f-name">Full Name <span class="co-required">*</span></label>
+                  <label for="f-name">Full Name</label>
                   <input type="text" id="f-name" name="fullName" autocomplete="name" placeholder="e.g. Rohan Sharma">
                   <div class="co-field__error" data-error-for="fullName">⚠ Enter your full name</div>
                 </div>
                 <div class="co-field">
-                  <label for="f-phone">Phone Number <span class="co-required">*</span></label>
+                  <label for="f-phone">Phone Number</label>
                   <input type="tel" id="f-phone" name="phone" autocomplete="tel" placeholder="98765 43210" maxlength="10" inputmode="numeric">
                   <div class="co-field__error" data-error-for="phone">⚠ Enter a valid 10-digit mobile number</div>
                 </div>
-                <div class="co-field full">
-                  <label for="f-email">Email Address <span class="co-required">*</span></label>
+                <div class="co-field">
+                  <label for="f-email">Email Address</label>
                   <input type="email" id="f-email" name="email" autocomplete="email" placeholder="you@example.com">
                   <div class="co-field__error" data-error-for="email">⚠ Enter a valid email address</div>
+                </div>
+                <div class="co-field full">
+                  <label for="f-address">Address (House No, Street, Area)</label>
+                  <textarea id="f-address" name="address" autocomplete="street-address" placeholder="Flat / House no., Building, Street, Area"></textarea>
+                  <div class="co-field__error" data-error-for="address">⚠ Enter your full address</div>
+                </div>
+                <div class="co-field">
+                  <label for="f-city">City</label>
+                  <input type="text" id="f-city" name="city" autocomplete="address-level2" placeholder="e.g. Ajmer">
+                  <div class="co-field__error" data-error-for="city">⚠ Enter your city</div>
+                </div>
+                <div class="co-field">
+                  <label for="f-pincode">Pincode</label>
+                  <input type="text" id="f-pincode" name="pincode" autocomplete="postal-code" placeholder="6-digit pincode" maxlength="6" inputmode="numeric">
+                  <div class="co-field__error" data-error-for="pincode">⚠ Enter a valid 6-digit pincode</div>
+                </div>
+                <div class="co-field full">
+                  <label for="f-state">State</label>
+                  <input type="text" id="f-state" name="state" autocomplete="address-level1" placeholder="e.g. Rajasthan">
+                  <div class="co-field__error" data-error-for="state">⚠ Enter your state</div>
                 </div>
               </div>
               <div class="co-actions">
@@ -181,68 +168,6 @@ const checkoutCount = CHECKOUT_ITEMS.reduce((s, i) => s + i.quantity, 0);
 let currentStep = 1;
 let addressData = null;
 
-const INDIAN_STATES = [
-  'Andaman and Nicobar Islands','Andhra Pradesh','Arunachal Pradesh','Assam','Bihar',
-  'Chandigarh','Chhattisgarh','Dadra and Nagar Haveli and Daman and Diu','Delhi','Goa',
-  'Gujarat','Haryana','Himachal Pradesh','Jammu and Kashmir','Jharkhand','Karnataka',
-  'Kerala','Ladakh','Lakshadweep','Madhya Pradesh','Maharashtra','Manipur','Meghalaya',
-  'Mizoram','Nagaland','Odisha','Puducherry','Punjab','Rajasthan','Sikkim','Tamil Nadu',
-  'Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal'
-];
-
-function populateStateDropdown() {
-  const sel = document.getElementById('f-state');
-  INDIAN_STATES.forEach(s => {
-    const opt = document.createElement('option');
-    opt.value = s;
-    opt.textContent = s;
-    sel.appendChild(opt);
-  });
-}
-
-/* ═══ Pincode → auto-fill City + State (India Post public API) ═══ */
-let pincodeLookupToken = 0;
-async function lookupPincode(pincode) {
-  const hint = document.getElementById('pincode-hint');
-  const cityInput = document.getElementById('f-city');
-  const stateSelect = document.getElementById('f-state');
-
-  if (!/^\d{6}$/.test(pincode)) { hint.textContent = ''; hint.className = 'co-field__hint'; return; }
-
-  const myToken = ++pincodeLookupToken; // guard against out-of-order responses
-  hint.textContent = '🔎 Looking up pincode…';
-  hint.className = 'co-field__hint';
-
-  try {
-    const res = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
-    const json = await res.json();
-    if (myToken !== pincodeLookupToken) return; // a newer lookup superseded this one
-
-    const result = Array.isArray(json) ? json[0] : null;
-    const office = result && result.Status === 'Success' && result.PostOffice && result.PostOffice[0];
-
-    if (office) {
-      cityInput.value = office.District || office.Name || cityInput.value;
-      const matchedState = INDIAN_STATES.find(s => s.toLowerCase() === String(office.State || '').toLowerCase());
-      if (matchedState) stateSelect.value = matchedState;
-      hint.textContent = `✅ ${office.District || ''}, ${office.State || ''}`;
-      hint.className = 'co-field__hint is-ok';
-      // Clear any stale error state now that we auto-filled these fields
-      ['city','state'].forEach(k => {
-        document.querySelector(`[data-error-for="${k}"]`)?.classList.remove('show');
-        document.querySelector(`[name="${k}"]`)?.classList.remove('is-invalid');
-      });
-    } else {
-      hint.textContent = '⚠ Pincode not found — please fill City & State manually';
-      hint.className = 'co-field__hint is-warn';
-    }
-  } catch (err) {
-    if (myToken !== pincodeLookupToken) return;
-    hint.textContent = '⚠ Could not auto-fill — please fill City & State manually';
-    hint.className = 'co-field__hint is-warn';
-  }
-}
-
 function init() {
   if (!CHECKOUT_ITEMS.length) {
     document.getElementById('checkout-empty').style.display = 'block';
@@ -304,15 +229,11 @@ document.getElementById('address-form').addEventListener('submit', function(e) {
     fullName: (fd.get('fullName') || '').trim(),
     phone: (fd.get('phone') || '').trim(),
     email: (fd.get('email') || '').trim(),
-    addressLine1: (fd.get('addressLine1') || '').trim(),
-    addressLine2: (fd.get('addressLine2') || '').trim(),
+    address: (fd.get('address') || '').trim(),
     city: (fd.get('city') || '').trim(),
     pincode: (fd.get('pincode') || '').trim(),
     state: (fd.get('state') || '').trim()
   };
-  // Combined single-string address for the backend/Telegram/order record —
-  // Line 2 (optional) is appended only if the customer filled it in.
-  data.address = data.addressLine2 ? `${data.addressLine1}, ${data.addressLine2}` : data.addressLine1;
 
   const errors = validateAddress(data);
   document.querySelectorAll('.co-field__error').forEach(el => el.classList.remove('show'));
@@ -394,7 +315,14 @@ async function handleProceedToPay() {
       body: JSON.stringify(payload)
     });
 
-    if (!res.ok) throw new Error('Failed to initialize payment');
+    if (!res.ok) {
+      let serverMsg = '';
+      try {
+        const errBody = await res.json();
+        serverMsg = errBody && errBody.error ? errBody.error : '';
+      } catch (e) { /* response wasn't JSON, ignore */ }
+      throw new Error(serverMsg || `Payment could not be started (HTTP ${res.status})`);
+    }
     const data = await res.json();
 
     const origin = window.location.origin;
@@ -412,7 +340,7 @@ async function handleProceedToPay() {
     console.error(err);
     btn.classList.remove('is-loading');
     btn.disabled = false;
-    showToast('❌ Could not start payment. Please try again.');
+    showToast('❌ ' + (err.message || 'Could not start payment. Please try again.'));
   }
 }
 
@@ -432,31 +360,7 @@ function submitToPayU(url, fields) {
   form.submit();
 }
 
-/* ═══ Decorative background: falling rain + delivery drone dropping parcels ═══ */
-function initWeather() {
-  const layer = document.getElementById('rain-layer');
-  if (!layer) return;
-  const DROP_COUNT = 45;
-  let html = '';
-  for (let i = 0; i < DROP_COUNT; i++) {
-    const left = Math.random() * 100;
-    const duration = (0.7 + Math.random() * 0.9).toFixed(2);
-    const delay = (Math.random() * -2).toFixed(2);
-    const height = 40 + Math.random() * 40;
-    html += `<div class="rain-drop" style="left:${left}%;height:${height}px;animation-duration:${duration}s;animation-delay:${delay}s;"></div>`;
-  }
-  layer.innerHTML = html;
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  init();
-  populateStateDropdown();
-  initWeather();
-  document.getElementById('f-pincode').addEventListener('input', function(e) {
-    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
-    lookupPincode(e.target.value);
-  });
-});
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
