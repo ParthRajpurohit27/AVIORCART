@@ -22,8 +22,6 @@ module.exports = async (req, res) => {
       productinfo,
       firstname,
       email,
-      mode,
-      mihpayid,
       hash: receivedHash
     } = body;
 
@@ -63,31 +61,11 @@ module.exports = async (req, res) => {
 
     if (!verified) {
       console.error('PayU hash verification failed for txnid', txnid);
-      try {
-        await notifyTelegram({
-          success: false,
-          reason: 'Security hash mismatch (possible tampering or wrong PAYU_SALT)',
-          txnid, amount, productinfo, mode, mihpayid,
-          order: decodeOrder(udf1, udf2, udf3, udf4, udf5)
-        });
-      } catch (err) {
-        console.error('Telegram notify failed:', err);
-      }
       redirect(res, `/order-failure.html?txnid=${enc(txnid)}&status=failed`);
       return;
     }
 
     if (status !== 'success') {
-      try {
-        await notifyTelegram({
-          success: false,
-          reason: `PayU status: ${status || 'failed'}`,
-          txnid, amount, productinfo, mode, mihpayid,
-          order: decodeOrder(udf1, udf2, udf3, udf4, udf5)
-        });
-      } catch (err) {
-        console.error('Telegram notify failed:', err);
-      }
       redirect(res, `/order-failure.html?txnid=${enc(txnid)}&status=${enc(status || 'failed')}`);
       return;
     }
@@ -99,7 +77,7 @@ module.exports = async (req, res) => {
     const order = decodeOrder(udf1, udf2, udf3, udf4, udf5);
 
     try {
-      await notifyTelegram({ success: true, txnid, amount, productinfo, mode, mihpayid, order });
+      await notifyTelegram({ txnid, amount, productinfo, order });
     } catch (err) {
       // Don't fail the checkout if Telegram is down — just log it.
       console.error('Telegram notify failed:', err);
@@ -140,23 +118,7 @@ function mdEscape(str) {
   return String(str == null ? '' : str).replace(/([_*`\[])/g, '\\$1');
 }
 
-function paymentModeLabel(mode) {
-  const map = {
-    CC: 'Credit Card', DC: 'Debit Card', NB: 'Net Banking',
-    UPI: 'UPI', EMI: 'EMI', CASH: 'Cash', WLT: 'Wallet', CARD: 'Card'
-  };
-  if (!mode) return 'N/A';
-  const key = String(mode).toUpperCase();
-  return map[key] || key;
-}
-
-function orderTimestamp() {
-  return new Date().toLocaleString('en-IN', {
-    timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short'
-  }) + ' IST';
-}
-
-async function notifyTelegram({ success, reason, txnid, amount, productinfo, mode, mihpayid, order }) {
+async function notifyTelegram({ txnid, amount, productinfo, order }) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   // Support TELEGRAM_CHAT_ID (single recipient) as well as separate
   // owner / logs-group IDs, and send to whichever are configured.
@@ -173,53 +135,19 @@ async function notifyTelegram({ success, reason, txnid, amount, productinfo, mod
   }
 
   const itemsText = order && order.items && order.items.length
-    ? order.items.map((it, i) =>
-        `*${i + 1}. ${mdEscape(it.title)}*\n` +
-        `   • Quantity: ${mdEscape(it.quantity)}\n` +
-        `   • Price: ₹${mdEscape(it.price)}`
-      ).join('\n\n')
+    ? order.items.map(it => `• ${mdEscape(it.title)} × ${it.quantity} — ₹${it.price}`).join('\n')
     : mdEscape(productinfo || 'N/A');
 
-  const totalQty = order && order.items && order.items.length
-    ? order.items.reduce((sum, it) => sum + Number(it.quantity || 0), 0)
-    : null;
-
   const addressText = order
-    ? `👤 Name: ${mdEscape(order.fullName)}\n` +
-      `🏠 Address: ${mdEscape(order.address)}\n` +
-      `🏙️ City: ${mdEscape(order.city)}\n` +
-      `🗺️ State: ${mdEscape(order.state)}\n` +
-      `📮 Pincode: ${mdEscape(order.pincode)}\n` +
-      `📞 Phone: ${mdEscape(order.phone)}\n` +
-      `✉️ Email: ${mdEscape(order.email)}`
+    ? `${mdEscape(order.fullName)}\n${mdEscape(order.address)}\n${mdEscape(order.city)}, ${mdEscape(order.state)} - ${mdEscape(order.pincode)}\n📞 ${mdEscape(order.phone)}\n✉️ ${mdEscape(order.email)}`
     : 'N/A';
 
-  const metaText =
-    `🗓️ *Date & Time:* ${orderTimestamp()}\n` +
-    `📦 *Items Count:* ${totalQty != null ? totalQty : 'N/A'}\n` +
-    `💳 *Payment Mode:* ${mdEscape(paymentModeLabel(mode))}\n` +
-    `🔖 *PayU Ref:* ${mihpayid ? mdEscape(mihpayid) : 'N/A'}`;
-
-  const divider = '➖➖➖➖➖➖➖➖➖➖';
-
-  const text = success
-    ? `🛒 *New Order — AVIORCART*\n\n` +
-      `🆔 *Order ID:* \`${mdEscape(txnid)}\`\n` +
-      `💰 *Amount:* ₹${mdEscape(amount)}\n` +
-      `${metaText}\n\n` +
-      `${divider}\n` +
-      `🛍️ *Items Ordered:*\n\n${itemsText}\n\n` +
-      `${divider}\n` +
-      `👤 *Customer Details:*\n${addressText}`
-    : `❌ *Payment Failed — AVIORCART*\n\n` +
-      `🆔 *Order ID:* \`${mdEscape(txnid)}\`\n` +
-      `💰 *Amount:* ₹${mdEscape(amount)}\n` +
-      `⚠️ *Reason:* ${mdEscape(reason || 'Unknown')}\n` +
-      `${metaText}\n\n` +
-      `${divider}\n` +
-      `🛍️ *Items Ordered:*\n\n${itemsText}\n\n` +
-      `${divider}\n` +
-      `👤 *Customer Details:*\n${addressText}`;
+  const text =
+    `🛒 *New Order — AVIORCART*\n\n` +
+    `*Order ID:* \`${mdEscape(txnid)}\`\n` +
+    `*Amount:* ₹${mdEscape(amount)}\n\n` +
+    `*Items:*\n${itemsText}\n\n` +
+    `*Delivery Address:*\n${addressText}`;
 
   await Promise.all(uniqueChatIds.map(chatId =>
     fetch(`https://api.telegram.org/bot${token}/sendMessage`, {

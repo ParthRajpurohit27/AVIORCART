@@ -3,57 +3,6 @@
    Built on theme.css design tokens (gold/black, Orbitron/Inter)
    ═══════════════════════════════════ */
 
-/* ═══ Decorative background: rain + delivery drone ═══ */
-.checkout-weather{
-  position:fixed;inset:0;
-  overflow:hidden;pointer-events:none;
-  z-index:-1;
-}
-.rain-drop{
-  position:absolute;top:-60px;width:2px;
-  background:linear-gradient(to bottom, rgba(148,163,184,0), rgba(148,163,184,0.55));
-  animation-name:rainFall;animation-timing-function:linear;animation-iteration-count:infinite;
-}
-@keyframes rainFall{
-  to{ transform:translateY(115vh); }
-}
-.delivery-flyer{
-  position:absolute;top:7%;left:-12%;
-  font-size:34px;line-height:1;
-  animation:flyAcross 16s linear infinite;
-  filter:drop-shadow(0 4px 6px rgba(0,0,0,0.12));
-}
-@keyframes flyAcross{
-  0%{ left:-12%; transform:translateY(0) rotate(0deg); }
-  48%{ transform:translateY(-14px) rotate(-3deg); }
-  52%{ transform:translateY(-14px) rotate(3deg); }
-  100%{ left:112%; transform:translateY(0) rotate(0deg); }
-}
-.delivery-flyer .parcel{
-  position:absolute;left:4px;top:24px;
-  font-size:17px;opacity:0;
-  animation:dropParcel 16s linear infinite;
-}
-@keyframes dropParcel{
-  0%,44%{ opacity:0; transform:translateY(0) rotate(0deg); }
-  46%{ opacity:1; transform:translateY(6px) rotate(10deg); }
-  88%{ opacity:1; transform:translateY(430px) rotate(300deg); }
-  100%{ opacity:0; transform:translateY(450px) rotate(320deg); }
-}
-@media (max-width:640px){
-  .delivery-flyer{ font-size:26px; top:5%; }
-  .delivery-flyer .parcel{ font-size:13px; }
-  @keyframes dropParcel{
-    0%,44%{ opacity:0; transform:translateY(0) rotate(0deg); }
-    46%{ opacity:1; transform:translateY(4px) rotate(10deg); }
-    88%{ opacity:1; transform:translateY(260px) rotate(300deg); }
-    100%{ opacity:0; transform:translateY(275px) rotate(320deg); }
-  }
-}
-@media (prefers-reduced-motion: reduce){
-  .checkout-weather{ display:none; }
-}
-
 .checkout-page{padding:24px 0 60px}
 .checkout-page h1{font-family:'Orbitron',monospace;font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:0.5px}
 .checkout-page__sub{color:var(--gray-500);font-size:13px;margin-bottom:24px}
@@ -153,10 +102,10 @@
   border-color:var(--gold);
   box-shadow:0 0 0 3px rgba(251,191,36,0.15);
 }
-.co-field input.is-invalid,.co-field textarea.is-invalid,.co-field select.is-invalid{
+.co-field input.is-invalid,.co-field textarea.is-invalid{
   border-color:var(--red);
 }
-.co-field input.is-invalid:focus,.co-field textarea.is-invalid:focus,.co-field select.is-invalid:focus{
+.co-field input.is-invalid:focus,.co-field textarea.is-invalid:focus{
   box-shadow:0 0 0 3px rgba(239,68,68,0.15);
 }
 .co-field__error{
@@ -164,14 +113,6 @@
   display:none;align-items:center;gap:4px;
 }
 .co-field__error.show{display:flex}
-.co-required{color:var(--red);font-weight:700}
-.co-optional{color:var(--gray-400);font-weight:500;font-size:11px;text-transform:none;letter-spacing:0}
-.co-field__hint{
-  font-size:11.5px;margin-top:5px;min-height:14px;
-  color:var(--gray-400);
-}
-.co-field__hint.is-ok{color:#16a34a}
-.co-field__hint.is-warn{color:#d97706}
 
 .co-actions{display:flex;gap:12px;margin-top:8px}
 .co-actions .btn{flex:1}

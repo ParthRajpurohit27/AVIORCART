@@ -1,0 +1,98 @@
+/* ═══════════════════════════════════
+   AVIORCART — Legal / Policy pages
+   Built on theme.css design tokens
+   ═══════════════════════════════════ */
+
+.legal-hero{
+  background:var(--black);
+  padding:48px 0 40px;
+  text-align:center;
+}
+.legal-hero h1{
+  font-family:'Orbitron',monospace;
+  font-size:26px;font-weight:700;
+  color:var(--white);letter-spacing:0.5px;margin-bottom:10px;
+}
+.legal-hero__updated{
+  display:inline-block;
+  font-size:12px;color:var(--gold);
+  background:rgba(251,191,36,0.1);
+  border:1px solid rgba(251,191,36,0.3);
+  padding:5px 14px;border-radius:50px;
+  letter-spacing:0.3px;
+}
+
+.legal-page{padding:44px 0 70px}
+.legal-content{
+  max-width:760px;margin:0 auto;
+  background:var(--white);
+  border:1px solid var(--gray-200);
+  border-radius:var(--radius);
+  padding:40px 44px;
+}
+.legal-content h2{
+  font-family:'Orbitron',monospace;
+  font-size:16px;font-weight:700;
+  color:var(--gray-900);
+  margin:32px 0 12px;
+  padding-bottom:10px;
+  border-bottom:2px solid var(--gray-100);
+  letter-spacing:0.3px;
+}
+.legal-content h2:first-child{margin-top:0}
+.legal-content h2 .num{color:var(--gold-dark);margin-right:8px}
+.legal-content h3{
+  font-size:14px;font-weight:700;color:var(--gray-900);
+  margin:18px 0 8px;
+}
+.legal-content p{
+  font-size:14px;line-height:1.85;color:var(--gray-700);margin-bottom:12px;
+}
+.legal-content ul,.legal-content ol{
+  margin:0 0 14px 20px;
+}
+.legal-content li{
+  font-size:14px;line-height:1.85;color:var(--gray-700);margin-bottom:6px;
+}
+.legal-content a{color:var(--gold-dark);text-decoration:underline;text-decoration-color:rgba(251,191,36,0.4)}
+.legal-content a:hover{color:var(--black)}
+.legal-content strong{color:var(--gray-900)}
+
+.legal-callout{
+  background:var(--gray-50);
+  border:1px solid var(--gray-200);
+  border-left:3px solid var(--gold);
+  border-radius:8px;
+  padding:14px 18px;
+  margin:16px 0;
+  font-size:13.5px;color:var(--gray-700);line-height:1.8;
+}
+
+.legal-contact-box{
+  background:var(--black);
+  border-radius:var(--radius);
+  padding:22px 24px;
+  margin-top:8px;
+  color:var(--white);
+}
+.legal-contact-box p{color:rgba(255,255,255,0.65);margin-bottom:6px;font-size:13.5px}
+.legal-contact-box strong{color:var(--gold)}
+
+.legal-toc{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin-bottom:8px;
+}
+.legal-toc a{
+  font-size:12px;font-weight:600;
+  background:var(--gray-50);border:1px solid var(--gray-200);
+  padding:6px 12px;border-radius:50px;
+  color:var(--gray-700);text-decoration:none;
+  transition:all .2s ease;
+}
+.legal-toc a:hover{border-color:var(--gold);color:var(--gray-900);background:rgba(251,191,36,0.08)}
+
+@media (max-width:640px){
+  .legal-content{padding:26px 20px}
+  .legal-hero{padding:36px 0 30px}
+  .legal-hero h1{font-size:20px}
+}

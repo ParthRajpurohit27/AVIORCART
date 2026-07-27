@@ -109,10 +109,10 @@
 '    <div class="footer__col"><h4>Quick Links</h4>' +
 '      <a href="' + href('index.html') + '">Home</a>' +
 '      <a href="' + href('collections.html') + '">All Products</a>' +
-'      <a href="about.html">About Us</a><a href="#contact.html">Contact</a>' +
+'      <a href="' + href('about.html') + '">About Us</a><a href="' + href('contact.html') + '">Contact</a>' +
 '    </div>' +
 '    <div class="footer__col"><h4>Customer Service</h4>' +
-'      <a href="#">FAQs</a><a href="#">Shipping Policy</a><a href="#">Return Policy</a><a href="#">Track Order</a><a href="#">Privacy Policy</a>' +
+'      <a href="' + href('shipping-policy.html') + '">Shipping Policy</a><a href="' + href('refund-policy.html') + '">Return &amp; Refund Policy</a><a href="' + href('terms-and-conditions.html') + '">Terms &amp; Conditions</a><a href="' + href('privacy-policy.html') + '">Privacy Policy</a>' +
 '    </div>' +
 '    <div class="footer__col"><h4>Contact Us</h4>' +
 '      <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.8;">👤 Parth Rajpurohit<br>📍 Rajasthan 327001<br>📧 parthrajpurohit08@gmail.com<br>📞 +91 9425619133<br>🕐 Mon-Sat 11AM - 7PM</p>' +
