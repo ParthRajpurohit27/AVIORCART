@@ -5905,6 +5905,47 @@ const PRODUCTS = [
     "id": 97,
     "category_emoji": "🛍️",
     "category_name": "All"
+  },
+  {
+    "handle": "airpod-4-case-cover",
+    "title": "Airpod 4 Case cover",
+    "description": "Soft breathable cotton t-shirt with fun cartoon print. Machine washable and skin-friendly.",
+    "vendor": "AVIORCART",
+    "type": "Cover",
+    "tags": [
+      "airpod case",
+      "airpod",
+      "case",
+      "cover",
+      "apple",
+      "airpod 4",
+      "bluethooth",
+      "headphone",
+      "new"
+    ],
+    "status": "active",
+    "price": 399.0,
+    "compare_at_price": 899.0,
+    "option1_name": "Airpod",
+    "option2_name": "",
+    "variants": [
+      {
+        "id": 98001,
+        "sku": "",
+        "price": 399.0,
+        "compare_at_price": 899.0,
+        "option1": "4th gen",
+        "option2": "",
+        "available": true
+      }
+    ],
+    "images": [
+      "https://www.amazon.in/Roced-Compatible-Apple-AirPods-Generation/dp/B0FL1DQXZ7",
+      "https://www.amazon.in/Meyaar-Silicone-Cartoon-Airpods-Generation/dp/B0DHH45TTB"
+    ],
+    "id": 98,
+    "category_emoji": "👕",
+    "category_name": "Case"
   }
 ];
 
