@@ -1,12 +1,13 @@
 
 const BUYNOW_KEY = 'aviorcart_buynow_item';
-const ORDERS_KEY = 'aviorcart_orders'; // { [txnid]: { items, address, amount, ts } }
+const ORDERS_KEY = 'aviorcart_orders';
+
+// { [txnid]: { items, address, amount, ts } }
 
 /* ── Buy Now (single item, isolated from the real cart) ── */
 
 // Called from product pages. Builds one line item the same way
-// cartAddItem() would, but stores it separately so the customer's
-// actual cart is left untouched.
+// cartAddItem() would, but stores it separately so the customer's actul cart is not disturbed
 function setBuyNowItem(product, variantId, qty) {
   const item = buildCartItem(product, variantId, qty);
   if (!item) return null;
