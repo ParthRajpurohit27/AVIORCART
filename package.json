@@ -2,8 +2,11 @@
   "name": "aviorcart",
   "version": "1.0.0",
   "private": true,
-  "description": "AVIORCART static storefront + PayU checkout + Telegram order notifications (Vercel serverless functions in /api).",
+  "description": "AVIORCART static storefront + PayU checkout",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2"
   }
 }
