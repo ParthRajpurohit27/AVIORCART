@@ -1,12 +1,12 @@
-// api/payu-callback.js
-// Set as BOTH surl and furl in the PayU form. PayU POSTs back here whether
-// the payment succeeded or failed. We verify the reverse hash server-side
-// (never trust status/amount from the request without this), then notify
-// the seller on Telegram for verified successes, then redirect the
-// customer's browser to a result page.
+
 
 const crypto = require('crypto');
+const { createClient } = require('@supabase/supabase-js');
 
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 module.exports = async (req, res) => {
   try {
     if (req.method !== 'POST') {
@@ -45,9 +45,9 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // PayU v1 reverse hash sequence:
+    // PayU reverse hash sequence:
     // SALT|status|udf10|udf9|udf8|udf7|udf6|udf5|udf4|udf3|udf2|udf1|email|firstname|productinfo|amount|txnid|key
-    // udf6-udf10 are unused here and stay empty.
+    // udf6-udf10 are until now empty kyunki abhi tk use nai kara
     const reverseSeq = [
       salt, status || '',
       '', '', '', '', '',
@@ -70,16 +70,43 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // Verified success — decode the order from udf and notify Telegram.
-    // This is the seller's source of truth (not the browser localStorage
-    // copy), so it fires here regardless of whether the customer's
-    // browser makes it back to order-success.html.
     const order = decodeOrder(udf1, udf2, udf3, udf4, udf5);
+// Save successful order to Supabase
+try {
+  if (!order) {
+    console.error('Order data could not be decoded for txnid:', txnid);
+  } else {
+    const { error } = await supabase
+      .from('orders')
+      .insert({
+        full_name: order.fullName || '',
+        phone: order.phone || '',
+        email: order.email || '',
+        address: order.address || '',
+        city: order.city || '',
+        state: order.state || '',
+        pincode: order.pincode || '',
+        items: order.items || [],
+        amount: amount || 0,
+        txnid: txnid,
+        payment_status: 'success'
+      });
 
+    if (error) {
+      console.error('Supabase order insert failed:', error);
+    } else {
+      console.log('Order saved to Supabase:', txnid);
+    }
+  }
+} catch (err) {
+  console.error('Supabase save error:', err);
+}
+//now for telegram notification 
     try {
       await notifyTelegram({ txnid, amount, productinfo, order });
     } catch (err) {
-      // Don't fail the checkout if Telegram is down — just log it.
+
+      
       console.error('Telegram notify failed:', err);
     }
 
@@ -114,14 +141,13 @@ function decodeOrder(udf1, udf2, udf3, udf4, udf5) {
 }
 
 function mdEscape(str) {
-  // Legacy Telegram Markdown only needs a handful of characters escaped.
+
   return String(str == null ? '' : str).replace(/([_*`\[])/g, '\\$1');
 }
 
 async function notifyTelegram({ txnid, amount, productinfo, order }) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
-  // Support TELEGRAM_CHAT_ID (single recipient) as well as separate
-  // owner / logs-group IDs, and send to whichever are configured.
+
   const chatIds = [
     process.env.TELEGRAM_CHAT_ID,
     process.env.TELEGRAM_OWNER_ID,

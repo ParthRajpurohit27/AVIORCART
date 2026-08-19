@@ -1,17 +1,13 @@
-/* ═══════════════════════════════════════════════════
-   AVIORCART — Checkout helpers
-   Shared by checkout.html, order-success.html and the
-   per-product "Buy Now" buttons.
-   ═══════════════════════════════════════════════════ */
 
 const BUYNOW_KEY = 'aviorcart_buynow_item';
-const ORDERS_KEY = 'aviorcart_orders'; // { [txnid]: { items, address, amount, ts } }
+const ORDERS_KEY = 'aviorcart_orders';
+
+// { [txnid]: { items, address, amount, ts } }
 
 /* ── Buy Now (single item, isolated from the real cart) ── */
 
 // Called from product pages. Builds one line item the same way
-// cartAddItem() would, but stores it separately so the customer's
-// actual cart is left untouched.
+// cartAddItem() would, but stores it separately so the customer's actul cart is not disturbed
 function setBuyNowItem(product, variantId, qty) {
   const item = buildCartItem(product, variantId, qty);
   if (!item) return null;
@@ -44,12 +40,8 @@ function getOrderRecord(txnid) {
   } catch (e) { return null; }
 }
 
-/* ── PayU UDF encode/decode ──
-   PayU udf1-udf5 fields are limited to 255 chars each and are echoed
-   back untouched by PayU on the callback. We pack a compact JSON blob
-   (short keys) describing the order and split it across udf1-udf5. */
 
-const UDF_CHUNK_SIZE = 200; // stay safely under PayU's 255-char limit per field
+const UDF_CHUNK_SIZE = 200; 
 const UDF_FIELD_COUNT = 5;
 const UDF_MAX_TOTAL = UDF_CHUNK_SIZE * UDF_FIELD_COUNT;
 
@@ -81,8 +73,7 @@ function encodeOrderToUdf(address, items) {
     json = JSON.stringify(compact);
   }
 
-  // Last resort: drop item detail entirely, keep just a count + total,
-  // so the address (the critical part for delivery) always survives.
+
   if (json.length > UDF_MAX_TOTAL) {
     compact.i = [['(see order summary)', items.reduce((s, it) => s + it.quantity, 0), items.reduce((s, it) => s + it.price * it.quantity, 0)]];
     json = JSON.stringify(compact);
