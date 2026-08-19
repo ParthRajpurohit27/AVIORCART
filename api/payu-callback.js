@@ -1,7 +1,12 @@
 
 
 const crypto = require('crypto');
+const { createClient } = require('@supabase/supabase-js');
 
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 module.exports = async (req, res) => {
   try {
     if (req.method !== 'POST') {
@@ -66,6 +71,36 @@ module.exports = async (req, res) => {
     }
 
     const order = decodeOrder(udf1, udf2, udf3, udf4, udf5);
+// Save successful order to Supabase
+try {
+  if (!order) {
+    console.error('Order data could not be decoded for txnid:', txnid);
+  } else {
+    const { error } = await supabase
+      .from('orders')
+      .insert({
+        full_name: order.fullName || '',
+        phone: order.phone || '',
+        email: order.email || '',
+        address: order.address || '',
+        city: order.city || '',
+        state: order.state || '',
+        pincode: order.pincode || '',
+        items: order.items || [],
+        amount: amount || 0,
+        txnid: txnid,
+        payment_status: 'success'
+      });
+
+    if (error) {
+      console.error('Supabase order insert failed:', error);
+    } else {
+      console.log('Order saved to Supabase:', txnid);
+    }
+  }
+} catch (err) {
+  console.error('Supabase save error:', err);
+}
 //now for telegram notification 
     try {
       await notifyTelegram({ txnid, amount, productinfo, order });
