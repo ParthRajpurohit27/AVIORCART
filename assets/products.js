@@ -5946,6 +5946,41 @@ const PRODUCTS = [
     "id": 98,
     "category_emoji": "👕",
     "category_name": "Case"
+  },
+  {
+    "handle": "free-product-order-test",
+    "title": "Free Product order test",
+    "description": "test product",
+    "vendor": "AVIORCART",
+    "type": "free type",
+    "tags": [
+      "free product latet",
+      "free",
+      "new",
+      "muft"
+    ],
+    "status": "active",
+    "price": 0.0,
+    "compare_at_price": 899.0,
+    "option1_name": "free",
+    "option2_name": "",
+    "variants": [
+      {
+        "id": 99001,
+        "sku": "",
+        "price": 1.0,
+        "compare_at_price": 899.0,
+        "option1": "free version 1",
+        "option2": "",
+        "available": true
+      }
+    ],
+    "images": [
+      "https://i.postimg.cc/J0mqWVDp/free.jpg"
+    ],
+    "id": 99,
+    "category_emoji": "free",
+    "category_name": "free"
   }
 ];
 
