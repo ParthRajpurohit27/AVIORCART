@@ -113,32 +113,58 @@ function orderCardHtml(o: Order, index: number): string {
     })
     .join("");
 
-  const date = new Date(o.created_at).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+  const date = new Date(o.created_at).toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
   const delay = (index % 12) * 40;
 
   return (
     '<div class="order-card reveal" style="--delay:' + delay + 'ms" data-id="' + o.id + '">' +
+
     '<div class="order-card__head">' +
     "<div>" +
     '<span class="order-id">#' + o.id + "</span>" +
-    '<span class="order-txn">' + escapeHtml(o.txnid || "-") + "</span>" +
+    '<span class="order-txn">Txn ID: ' + escapeHtml(o.txnid || "-") + "</span>" +
     "</div>" +
     '<span class="status-badge ' + statusClass(o.payment_status) + '">' + escapeHtml(o.payment_status || "pending") + "</span>" +
     "</div>" +
+
     '<div class="order-card__body">' +
-    '<div class="order-customer">' +
-    "<strong>" + escapeHtml(o.full_name || "-") + "</strong>" +
-    "<span>" + escapeHtml(o.phone || "-") + " • " + escapeHtml(o.email || "-") + "</span>" +
-    "<span>" +
-    escapeHtml(o.address || "-") + ", " + escapeHtml(o.city || "-") + ", " + escapeHtml(o.state || "-") + " - " + escapeHtml(o.pincode || "-") +
-    "</span>" +
-    "</div>" +
+
+    detailRow("Customer", escapeHtml(o.full_name || "-")) +
+    detailRow("Phone", escapeHtml(o.phone || "-")) +
+    detailRow("Email", escapeHtml(o.email || "-")) +
+    detailRow(
+      "Address",
+      escapeHtml(o.address || "-") + ", " + escapeHtml(o.city || "-") + ", " + escapeHtml(o.state || "-") + " - " + escapeHtml(o.pincode || "-")
+    ) +
+    detailRow("Order Time", date) +
+
+    '<div class="order-section-label">Items Ordered</div>' +
     '<div class="order-items">' + itemsHtml + "</div>" +
+
     "</div>" +
+
     '<div class="order-card__foot">' +
-    '<span class="order-date">🕒 ' + date + "</span>" +
+    '<span class="detail-label">Total Amount</span>' +
     '<span class="order-amount">' + money(o.amount) + "</span>" +
     "</div>" +
+
+    "</div>"
+  );
+}
+
+function detailRow(label: string, value: string): string {
+  return (
+    '<div class="detail-row">' +
+    '<span class="detail-label">' + label + "</span>" +
+    '<span class="detail-value">' + value + "</span>" +
     "</div>"
   );
 }
