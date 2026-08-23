@@ -18,6 +18,7 @@
   ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
+    { "source": "/dashboard", "destination": "/dashboard/index.html" },
     { "source": "/collections", "destination": "/collections.html" },
     { "source": "/cart", "destination": "/cart.html" },
     { "source": "/search", "destination": "/search.html" },
