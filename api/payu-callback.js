@@ -65,42 +65,16 @@ module.exports = async (req, res) => {
       return;
     }
 
+    const order = decodeOrder(udf1, udf2, udf3, udf4, udf5);
+
     if (status !== 'success') {
+      await saveOrderToSupabase(order, amount, txnid, status || 'failed');
       redirect(res, `/order-failure.html?txnid=${enc(txnid)}&status=${enc(status || 'failed')}`);
       return;
     }
 
-    const order = decodeOrder(udf1, udf2, udf3, udf4, udf5);
 // Save successful order to Supabase
-try {
-  if (!order) {
-    console.error('Order data could not be decoded for txnid:', txnid);
-  } else {
-    const { error } = await supabase
-      .from('orders')
-      .insert({
-        full_name: order.fullName || '',
-        phone: order.phone || '',
-        email: order.email || '',
-        address: order.address || '',
-        city: order.city || '',
-        state: order.state || '',
-        pincode: order.pincode || '',
-        items: order.items || [],
-        amount: amount || 0,
-        txnid: txnid,
-        payment_status: 'success'
-      });
-
-    if (error) {
-      console.error('Supabase order insert failed:', error);
-    } else {
-      console.log('Order saved to Supabase:', txnid);
-    }
-  }
-} catch (err) {
-  console.error('Supabase save error:', err);
-}
+await saveOrderToSupabase(order, amount, txnid, 'success');
 //now for telegram notification 
     try {
       await notifyTelegram({ txnid, amount, productinfo, order });
@@ -116,6 +90,40 @@ try {
     redirect(res, '/order-failure.html?status=failed');
   }
 };
+
+// Saves any order attempt (success OR failed) to Supabase so the admin
+// dashboard can show both. Never throws — logs and swallows errors.
+async function saveOrderToSupabase(order, amount, txnid, paymentStatus) {
+  try {
+    if (!order) {
+      console.error('Order data could not be decoded for txnid:', txnid);
+      return;
+    }
+    const { error } = await supabase
+      .from('orders')
+      .insert({
+        full_name: order.fullName || '',
+        phone: order.phone || '',
+        email: order.email || '',
+        address: order.address || '',
+        city: order.city || '',
+        state: order.state || '',
+        pincode: order.pincode || '',
+        items: order.items || [],
+        amount: amount || 0,
+        txnid: txnid,
+        payment_status: paymentStatus
+      });
+
+    if (error) {
+      console.error('Supabase order insert failed:', error);
+    } else {
+      console.log('Order saved to Supabase (' + paymentStatus + '):', txnid);
+    }
+  } catch (err) {
+    console.error('Supabase save error:', err);
+  }
+}
 
 function redirect(res, location) {
   res.writeHead(302, { Location: location });

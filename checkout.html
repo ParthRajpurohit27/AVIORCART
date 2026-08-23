@@ -281,6 +281,13 @@ async function handleProceedToPay() {
   btn.classList.add('is-loading');
   btn.disabled = true;
 
+  // Free / ₹1 test products skip PayU entirely — order is saved as
+  // successful straight away, no payment redirect needed.
+  const FREE_ORDER_MAX_AMOUNT = 1;
+  if (checkoutTotal <= FREE_ORDER_MAX_AMOUNT) {
+    return handleFreeOrder(btn);
+  }
+
   try {
     const txnid = genTxnId();
     const udf = encodeOrderToUdf(addressData, CHECKOUT_ITEMS);
@@ -341,6 +348,52 @@ async function handleProceedToPay() {
     btn.classList.remove('is-loading');
     btn.disabled = false;
     showToast('❌ ' + (err.message || 'Could not start payment. Please try again.'));
+  }
+}
+
+/* ═══ Free / ₹1 order — no PayU redirect ═══ */
+async function handleFreeOrder(btn) {
+  try {
+    const res = await fetch('/api/free-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fullName: addressData.fullName,
+        phone: addressData.phone,
+        email: addressData.email,
+        address: addressData.address,
+        city: addressData.city,
+        state: addressData.state,
+        pincode: addressData.pincode,
+        items: CHECKOUT_ITEMS.map(i => ({ title: i.title, quantity: i.quantity, price: i.price })),
+        amount: checkoutTotal
+      })
+    });
+
+    if (!res.ok) {
+      let serverMsg = '';
+      try {
+        const errBody = await res.json();
+        serverMsg = errBody && errBody.error ? errBody.error : '';
+      } catch (e) { /* response wasn't JSON, ignore */ }
+      throw new Error(serverMsg || `Order could not be placed (HTTP ${res.status})`);
+    }
+
+    const data = await res.json();
+
+    saveOrderRecord(data.txnid, {
+      items: CHECKOUT_ITEMS,
+      address: addressData,
+      amount: checkoutTotal,
+      mode: MODE
+    });
+
+    window.location.href = `order-success.html?txnid=${encodeURIComponent(data.txnid)}&status=success`;
+  } catch (err) {
+    console.error(err);
+    btn.classList.remove('is-loading');
+    btn.disabled = false;
+    showToast('❌ ' + (err.message || 'Could not place order. Please try again.'));
   }
 }
 
