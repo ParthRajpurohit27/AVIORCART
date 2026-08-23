@@ -1,12 +1,10 @@
 {
-  "name": "aviorcart",
-  "version": "1.0.0",
+  "name": "aviorcart-dashboard",
   "private": true,
-  "description": "AVIORCART static storefront + PayU checkout",
-  "engines": {
-    "node": ">=18"
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "^2"
+  "devDependencies": {
+    "typescript": "^5.6.3"
   }
 }
