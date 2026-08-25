@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About AVIORCART — Our Story</title>
+<meta name="description" content="Learn the story behind AVIORCART — India's online shopping destination for fashion, watches, beauty, footwear, jewelry and electronics. Shop Your Vibe.">
+<link rel="canonical" href="https://aviorcart.vercel.app/about.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AVIORCART">
+<meta property="og:title" content="About AVIORCART — Our Story">
+<meta property="og:description" content="Learn the story behind AVIORCART — India's online shopping destination for fashion, watches, beauty, footwear, jewelry and electronics.">
+<meta property="og:url" content="https://aviorcart.vercel.app/about.html">
+<meta property="og:image" content="https://aviorcart.vercel.app/assets/icon-512x512.png">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -31,7 +39,7 @@ body{
   cursor:none;
 }
 
-/* cursor */
+/* ── CURSOR ── */
 .cursor{
   position:fixed;width:12px;height:12px;
   background:var(--gold);border-radius:50%;
@@ -48,23 +56,23 @@ body{
   transition:transform .12s ease,width .3s,height .3s;
 }
 
-/* canvas background */
+/* ── CANVAS BACKGROUND ── */
 #bg-canvas{
   position:fixed;inset:0;z-index:0;
   pointer-events:none;
 }
 
-/* noise overlay */
+/* ── NOISE OVERLAY ── */
 body::before{
   content:'';position:fixed;inset:0;z-index:1;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   opacity:.4;pointer-events:none;
 }
 
-/* layout */
+/* ── LAYOUT ── */
 .wrap{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 24px}
 
-/* hero */
+/* ── HERO ── */
 .hero{
   min-height:100vh;
   display:flex;align-items:center;justify-content:center;
@@ -121,7 +129,7 @@ body::before{
   animation:scrollDown 2s infinite;
 }
 
-/* section common */
+/* ── SECTION COMMON ── */
 section{padding:100px 0;position:relative;}
 
 .section-label{
@@ -142,14 +150,14 @@ section{padding:100px 0;position:relative;}
   margin-bottom:20px;
 }
 
-/* divider */
+/* ── DIVIDER ── */
 .divider{
   width:100%;height:1px;
   background:linear-gradient(90deg,transparent,var(--border),transparent);
   margin:0;
 }
 
-/* founder section */
+/* ── FOUNDER SECTION ── */
 .founder-section{padding:100px 0;}
 
 .founder-grid{
@@ -271,7 +279,7 @@ section{padding:100px 0;position:relative;}
 }
 .f-stat__label{font-size:12px;color:var(--muted);letter-spacing:.5px;}
 
-/* mission section */
+/* ── MISSION SECTION ── */
 .mission-section{padding:100px 0;background:var(--dark);}
 .mission-section::before{
   content:'';position:absolute;inset:0;
@@ -330,7 +338,7 @@ section{padding:100px 0;position:relative;}
 }
 .value-desc{font-size:14px;color:var(--muted);line-height:1.7;}
 
-/* story section */
+/* ── STORY SECTION ── */
 .story-section{padding:100px 0;}
 .story-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:80px;align-items:start;}
 .story-sticky{position:sticky;top:100px;}
@@ -364,7 +372,7 @@ section{padding:100px 0;position:relative;}
 }
 .tl-text{font-size:14px;color:var(--muted);line-height:1.7;}
 
-/* promise section */
+/* ── PROMISE SECTION ── */
 .promise-section{
   padding:100px 0;
   background:var(--dark);
@@ -396,7 +404,7 @@ section{padding:100px 0;position:relative;}
 }
 .promise-text{font-size:13px;color:var(--muted);line-height:1.6;}
 
-/* cta */
+/* ── CTA ── */
 .cta-section{
   padding:120px 24px;
   text-align:center;
@@ -442,7 +450,7 @@ section{padding:100px 0;position:relative;}
 .cta-btn svg{transition:transform .3s;}
 .cta-btn:hover svg{transform:translateX(4px);}
 
-/* animations */
+/* ── ANIMATIONS ── */
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(24px);}
   to{opacity:1;transform:translateY(0);}
@@ -484,7 +492,7 @@ section{padding:100px 0;position:relative;}
 .reveal-delay-3{transition-delay:.3s;}
 .reveal-delay-4{transition-delay:.4s;}
 
-/* responsive */
+/* ── RESPONSIVE ── */
 @media(max-width:900px){
   .founder-grid,.story-grid{grid-template-columns:1fr;gap:48px;}
   .values-grid{grid-template-columns:1fr 1fr;}
@@ -504,14 +512,14 @@ section{padding:100px 0;position:relative;}
 </head>
 <body>
 
-<!-- custom cursor -->
+<!-- Custom Cursor -->
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
 
-<!-- animated background canvas -->
+<!-- Animated Background Canvas -->
 <canvas id="bg-canvas"></canvas>
 
-<!-- hero -->
+<!-- ════════════ HERO ════════════ -->
 <section class="hero">
   <div style="text-align:center;max-width:800px;margin:0 auto;">
     <div class="hero-badge">
@@ -522,7 +530,7 @@ section{padding:100px 0;position:relative;}
       <span class="line2">AVIORCART</span>
     </h1>
     <p class="hero-sub">
-      Born from a dream, built with passion — India's rising premium shopping destination where quality meets affordability, and every order feels special.
+      Born from a dream, built with passion — India's growing online shopping destination where quality meets affordability, and every order feels special.
     </p>
     <div class="hero-scroll">
       <div class="scroll-line"></div>
@@ -533,7 +541,7 @@ section{padding:100px 0;position:relative;}
 
 <div class="divider"></div>
 
-<!-- founder -->
+<!-- ════════════ FOUNDER ════════════ -->
 <section class="founder-section">
   <div class="wrap">
     <div class="founder-grid">
@@ -568,7 +576,7 @@ section{padding:100px 0;position:relative;}
         </p>
 
         <p class="founder-bio">
-          His journey began with a simple question: <em>Why should premium shopping be complicated or expensive?</em> That question sparked the creation of a platform where every Indian customer — from metro cities to small towns — can discover, explore, and shop the best products with complete confidence.
+          His journey began with a simple question: <em>Why should good shopping be complicated or expensive?</em> That question sparked the creation of a platform where every Indian customer — from metro cities to small towns — can discover, explore, and shop the best products with complete confidence.
         </p>
 
         <blockquote class="founder-quote">
@@ -599,14 +607,14 @@ section{padding:100px 0;position:relative;}
 
 <div class="divider"></div>
 
-<!-- mission -->
+<!-- ════════════ MISSION ════════════ -->
 <section class="mission-section">
   <div class="wrap" style="position:relative;z-index:1;">
     <div style="text-align:center;margin-bottom:16px;" class="reveal">
       <div class="section-label">Our Purpose</div>
     </div>
     <p class="mission-text-big reveal">
-      We believe <span class="accent">premium quality</span> and <span class="accent">great value</span> should always go hand in hand — for every Indian shopper.
+      We believe <span class="accent">good quality</span> and <span class="accent">great value</span> should always go hand in hand — for every Indian shopper.
     </p>
 
     <div class="values-grid">
@@ -634,7 +642,7 @@ section{padding:100px 0;position:relative;}
 
 <div class="divider"></div>
 
-<!-- story timeline -->
+<!-- ════════════ STORY TIMELINE ════════════ -->
 <section class="story-section">
   <div class="wrap">
     <div class="story-grid">
@@ -643,7 +651,7 @@ section{padding:100px 0;position:relative;}
         <div class="section-label">Our Journey</div>
         <h2 class="section-title">How AVIORCART Came to Life</h2>
         <p style="color:var(--muted);font-size:15px;line-height:1.8;margin-top:16px;">
-          Every great store has a story. Ours started with one founder, one laptop, and one big dream — to make premium shopping accessible to every Indian household.
+          Every great store has a story. Ours started with one founder, one laptop, and one big dream — to make quality shopping accessible to every Indian household.
         </p>
         <div class="story-year">24</div>
       </div>
@@ -652,7 +660,7 @@ section{padding:100px 0;position:relative;}
         <div class="tl-item reveal">
           <div class="tl-date">The Beginning</div>
           <div class="tl-title">The Idea is Born</div>
-          <div class="tl-text">Parth Rajpurohit notices a gap — Indian online stores either feel too basic or too expensive. The idea for AVIORCART takes shape: a premium-feel store with prices that make sense.</div>
+          <div class="tl-text">Parth Rajpurohit notices a gap — Indian online stores either feel too basic or too expensive. The idea for AVIORCART takes shape: a store that feels good to shop at, with prices that make sense.</div>
         </div>
         <div class="tl-item reveal reveal-delay-1">
           <div class="tl-date">Foundation</div>
@@ -677,7 +685,7 @@ section{padding:100px 0;position:relative;}
 
 <div class="divider"></div>
 
-<!-- promises -->
+<!-- ════════════ PROMISES ════════════ -->
 <section class="promise-section">
   <div class="wrap" style="position:relative;z-index:1;">
     <div class="reveal">
@@ -710,7 +718,7 @@ section{padding:100px 0;position:relative;}
   </div>
 </section>
 
-<!-- cta -->
+<!-- ════════════ CTA ════════════ -->
 <section class="cta-section">
   <div class="cta-glow"></div>
   <div class="cta-inner">
@@ -727,7 +735,7 @@ section{padding:100px 0;position:relative;}
 </section>
 
 <script>
-/* custom cursor */
+/* ── Custom Cursor ── */
 const cursor = document.getElementById('cursor');
 const ring   = document.getElementById('cursor-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
@@ -751,7 +759,7 @@ document.querySelectorAll('a,button,.value-card,.promise-card').forEach(el => {
   el.addEventListener('mouseleave', () => { cursor.style.width='12px'; cursor.style.height='12px'; ring.style.width='36px'; ring.style.height='36px'; });
 });
 
-/* canvas star/particle background */
+/* ── Canvas Star/Particle Background ── */
 const canvas = document.getElementById('bg-canvas');
 const ctx    = canvas.getContext('2d');
 let W, H, stars = [], conns = [];
@@ -825,7 +833,7 @@ function drawFrame() {
 }
 drawFrame();
 
-/* scroll reveal */
+/* ── Scroll Reveal ── */
 const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => {
@@ -837,7 +845,7 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 reveals.forEach(el => observer.observe(el));
 
-/* counter animation */
+/* ── Counter Animation ── */
 function animateCount(el, target, suffix='') {
   let start = 0;
   const dur = 1400;
