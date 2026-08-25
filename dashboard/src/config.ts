@@ -1,4 +1,4 @@
-/* AVIORCART Admin Dashboard — configuration
+/* config
    Fill these two values from Supabase → Project Settings → API */
 
 const SUPABASE_URL = "https://pgcsmotbkzrnnfuduaje.supabase.co";

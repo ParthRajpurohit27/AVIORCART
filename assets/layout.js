@@ -1,4 +1,4 @@
-/* AVIORCART — Shared Layout (Header + Footer + Overlays) */
+/* shared header/footer layout */
 
 (function() {
   const NAV_LINKS = [
@@ -115,12 +115,12 @@
 '      <a href="' + href('shipping-policy.html') + '">Shipping Policy</a><a href="' + href('refund-policy.html') + '">Return &amp; Refund Policy</a><a href="' + href('terms-and-conditions.html') + '">Terms &amp; Conditions</a><a href="' + href('privacy-policy.html') + '">Privacy Policy</a>' +
 '    </div>' +
 '    <div class="footer__col"><h4>Contact Us</h4>' +
-'      <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.8;">👤 Parth Rajpurohit<br>📍 Rajasthan 327001<br>📧 parthrajpurohit08@gmail.com<br>📞 +91 9425619133<br>🕐 Mon-Sat 11AM - 7PM</p>' +
+'      <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.8;">👤 <a href="https://parth27.vercel.app" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Parth Rajpurohit</a><br>📍 Rajasthan 327001<br>📧 parthrajpurohit08@gmail.com<br>📞 +91 9425619133<br>🕐 Mon-Sat 11AM - 7PM</p>' +
 '    </div>' +
 '  </div></div></div>' +
 '  <div class="footer__bottom"><div class="container footer__bottom-inner">' +
 '    <span>© ' + yr + ' AVIORCART. All rights reserved.</span>' +
-'    <span>Made with ❤️ by Parth Rajpurohit</span>' +
+'    <span>Made with ❤️ by <a href="https://parth27.vercel.app" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Parth Rajpurohit</a></span>' +
 '  </div></div>' +
 '</footer>' +
 '<div class="cart-drawer" id="cart-drawer">' +

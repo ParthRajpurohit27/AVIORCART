@@ -1,7 +1,5 @@
-/* ═══════════════════════════════════════════════════
-   AVIORCART — Local Storage Cart Engine
-   Full cart: add, remove, update qty, persist
-   ═══════════════════════════════════════════════════ */
+/* aviorcart - local storage cart engine
+   full cart: add, remove, update qty, persist */
 
 const CART_KEY = 'aviorcart_cart';
 
@@ -77,7 +75,7 @@ function cartClear() {
   updateCartCount();
 }
 
-/* ══ UI FUNCTIONS ══ */
+/* ui functions */
 
 function updateCartCount() {
   const count = cartCount();
@@ -165,7 +163,7 @@ function drawerRemove(key) {
   renderCartDrawer();
 }
 
-/* ══ ADD TO CART (called from product cards & product pages) ══ */
+/* add to cart (called from product cards & product pages) */
 function addToCart(product, variantId, qty, btn) {
   if (btn) { btn.disabled = true; btn.textContent = 'Adding...'; }
   try {
@@ -184,7 +182,7 @@ function addToCart(product, variantId, qty, btn) {
   }
 }
 
-/* ══ TOAST ══ */
+/* toast */
 let _toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -195,7 +193,7 @@ function showToast(msg) {
   _toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-/* ══ WISHLIST (localStorage) ══ */
+/* wishlist (localstorage) */
 const WISH_KEY = 'aviorcart_wishlist';
 function getWishlist() { try { return JSON.parse(localStorage.getItem(WISH_KEY)) || []; } catch(e){ return []; } }
 function toggleWishlist(btn, productId) {
@@ -215,7 +213,7 @@ function toggleWishlist(btn, productId) {
   localStorage.setItem(WISH_KEY, JSON.stringify(wish));
 }
 
-/* ══ MOBILE MENU ══ */
+/* mobile menu */
 function toggleMobileMenu() {
   const m = document.getElementById('mobile-menu');
   if (!m) return;
@@ -223,7 +221,7 @@ function toggleMobileMenu() {
   document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
 }
 
-/* ══ INIT ══ */
+/* init */
 document.addEventListener('DOMContentLoaded', () => {
   updateCartCount();
   // Header scroll shadow

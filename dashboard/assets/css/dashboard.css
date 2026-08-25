@@ -1,4 +1,4 @@
-/* AVIORCART Admin Dashboard — theme */
+/* AVIORCART Admin Dashboard - theme */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
@@ -31,7 +31,7 @@ body{
 
 .dash-header,.dash-main,.dash-footer,.login-wrap{position:relative;z-index:1}
 
-/* ── Header ── */
+/* header */
 .dash-header{
   position:sticky;top:0;z-index:50;
   background:rgba(6,6,8,0.85);
@@ -58,7 +58,7 @@ body{
 }
 .btn-logout:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 16px rgba(251,191,36,.15)}
 
-/* ── Login ── */
+/* login */
 .login-wrap{
   min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
 }
@@ -93,7 +93,7 @@ body{
   color:#fca5a5;font-size:12.5px;padding:10px 12px;border-radius:8px;margin-bottom:14px;
 }
 
-/* ── Main layout ── */
+/* main layout */
 .dash-main{max-width:1280px;margin:0 auto;padding:28px 24px 60px}
 
 .stats-grid{
@@ -138,7 +138,7 @@ body{
 
 .download-group{display:flex;gap:8px}
 
-/* ── Order cards ── */
+/* order cards */
 .orders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
 
 .order-card{
@@ -182,7 +182,7 @@ body{
   grid-column:1 / -1;text-align:center;padding:60px 20px;color:var(--muted);font-size:14px;
 }
 
-/* ── Toast ── */
+/* toast */
 .toast{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
   background:var(--card);border:1px solid var(--gold);color:var(--white);
@@ -191,7 +191,7 @@ body{
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── Footer ── */
+/* footer */
 .dash-footer{
   border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--muted);font-size:12.5px;
 }

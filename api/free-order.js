@@ -6,7 +6,7 @@ const supabase = createClient(
 );
 
 // Orders at or below this amount skip PayU and are marked successful directly.
-// Keep this low — it exists only for the ₹1 test/demo product.
+// Keep this low - it exists only for the ₹1 test/demo product.
 const FREE_ORDER_MAX_AMOUNT = 1;
 
 module.exports = async (req, res) => {

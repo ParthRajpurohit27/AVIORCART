@@ -1,6 +1,6 @@
 // api/generate-hash.js
 // Computes the PayU v1 request hash server-side. PAYU_KEY / PAYU_SALT never
-// leave this function — the client only ever receives the final hash.
+// leave this function - the client only ever receives the final hash.
 
 const crypto = require('crypto');
 

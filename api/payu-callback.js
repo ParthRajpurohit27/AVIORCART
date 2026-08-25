@@ -92,7 +92,7 @@ await saveOrderToSupabase(order, amount, txnid, 'success');
 };
 
 // Saves any order attempt (success OR failed) to Supabase so the admin
-// dashboard can show both. Never throws — logs and swallows errors.
+// dashboard can show both. Never throws - logs and swallows errors.
 async function saveOrderToSupabase(order, amount, txnid, paymentStatus) {
   try {
     if (!order) {

@@ -1,24 +1,24 @@
 /**
- * AVIORCART — Infinite Scroll with Star Skeleton Loader
+ * infinite scroll + skeleton loader
  * Pages: Collection + Search only. Homepage untouched.
  */
 
 (function () {
   'use strict';
 
-  /* ── Config ─────────────────────────────── */
+  /* config */
   var SCROLL_THRESHOLD   = 400;
   var DEBOUNCE_MS        = 150;
   var CARD_STAGGER_MS    = 45;
   var SKELETON_COUNT     = 4;
 
-  /* ── State ──────────────────────────────── */
+  /* state */
   var nextPageUrl = null;
   var isLoading   = false;
   var scrollTimer = null;
   var loaderEl    = null;
 
-  /* ── Boot ───────────────────────────────── */
+  /* boot */
   function init() {
     var grid       = document.getElementById('product-grid');
     var pagination = document.getElementById('pagination');
@@ -37,7 +37,7 @@
     checkScroll();
   }
 
-  /* ── Scroll ─────────────────────────────── */
+  /* scroll */
   function debouncedScroll() {
     clearTimeout(scrollTimer);
     scrollTimer = setTimeout(checkScroll, DEBOUNCE_MS);
@@ -50,7 +50,7 @@
     if (fromBottom < SCROLL_THRESHOLD) loadNextPage();
   }
 
-  /* ── Fetch ──────────────────────────────── */
+  /* fetch */
   function loadNextPage() {
     if (isLoading || !nextPageUrl) return;
     isLoading = true;
@@ -104,7 +104,7 @@
       });
   }
 
-  /* ── Loader show / hide ─────────────────── */
+  /* loader show / hide */
   function showLoader() {
     if (!loaderEl) return;
     loaderEl.style.opacity    = '0';
@@ -134,7 +134,7 @@
     }, 320);
   }
 
-  /* ── Build loader ───────────────────────── */
+  /* build loader */
   function buildLoader() {
     var wrap = document.createElement('div');
     wrap.id  = 'is-loader';
@@ -214,7 +214,7 @@
     return card;
   }
 
-  /* ── End message ────────────────────────── */
+  /* end message */
   function showEndMessage() {
     var msg = document.createElement('div');
     msg.id  = 'is-end-msg';
@@ -239,7 +239,7 @@
     }
   }
 
-  /* ── getNextUrl ─────────────────────────── */
+  /* getnexturl */
   function getNextUrl(el) {
     if (!el) return null;
     var r = el.querySelector('a[rel="next"]');
@@ -255,7 +255,7 @@
     return null;
   }
 
-  /* ── Styles ─────────────────────────────── */
+  /* styles */
   function injectStyles() {
     if (document.getElementById('is-styles')) return;
     var s = document.createElement('style');
@@ -318,7 +318,7 @@
         'position:relative;' +
       '}' +
 
-      /* shimmer base — matches theme dark bg */
+      /* shimmer base - matches theme dark bg */
       '.is-skel{' +
         'background:linear-gradient(90deg,#181824 0%,#262638 42%,#181824 80%);' +
         'background-size:900px 100%;' +
@@ -350,7 +350,7 @@
     document.head.appendChild(s);
   }
 
-  /* ── Start ───────────────────────────────── */
+  /* start */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

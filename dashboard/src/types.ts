@@ -1,4 +1,4 @@
-/* AVIORCART Admin Dashboard — shared types & ambient declarations */
+/* shared types */
 
 interface OrderItem {
   title: string;

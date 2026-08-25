@@ -1,6 +1,4 @@
-// AVIORCART — All Products Data
-// Auto-generated from Shopify CSV export
-// Total: 97 active products
+// product catalog
 
 const PRODUCTS = [
   {

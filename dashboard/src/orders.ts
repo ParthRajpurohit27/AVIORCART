@@ -1,4 +1,4 @@
-/* AVIORCART Admin Dashboard — orders: fetch, realtime, filter, render */
+/* orders - fetch, realtime, filter, render */
 
 let allOrders: Order[] = [];
 let activeFilter: OrderFilter = "all";
@@ -226,6 +226,6 @@ function playNotifySound(): void {
     osc.start();
     osc.stop(ctx.currentTime + 0.15);
   } catch (e) {
-    /* audio not available — ignore */
+    /* audio not available - ignore */
   }
 }

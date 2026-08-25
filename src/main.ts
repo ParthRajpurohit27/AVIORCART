@@ -1,4 +1,4 @@
-/* AVIORCART Admin Dashboard — bootstrap */
+/* bootstrap */
 
 document.addEventListener("DOMContentLoaded", function () {
   initSupabase();

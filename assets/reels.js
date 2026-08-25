@@ -1,38 +1,28 @@
-/* ═══════════════════════════════════════════
-   AVIORCART — REELS  (v2 — Full Screen)
-   assets/reels.js
-═══════════════════════════════════════════ */
+/* aviorcart - reels  (v2 - full screen)
+   assets/reels.js */
 
 (function () {
   'use strict';
 
-  /* ──────────────────────────────────────
-     CONFIG
-  ────────────────────────────────────── */
+  /* config */
   const CFG = {
     pauseIconDuration: 900,  // ms
   };
 
-  /* ──────────────────────────────────────
-     HELPERS
-  ────────────────────────────────────── */
+  /* helpers */
   const $  = (sel, ctx) => (ctx || document).querySelector(sel);
   const $$ = (sel, ctx) => [...(ctx || document).querySelectorAll(sel)];
 
-  /* ──────────────────────────────────────
-     STATE
-     isMuted starts false — we WANT sound.
-     audioUnlocked tracks whether the browser
-     has allowed audio via a user gesture.
-  ────────────────────────────────────── */
+  /* state
+     ismuted starts false - we want sound.
+     audiounlocked tracks whether the browser
+     has allowed audio via a user gesture. */
   let isMuted        = false;   // ← unmuted by default
   let audioUnlocked  = false;   // flips true after first user interaction
   let pauseTimer     = null;
   let currentIndex   = 0;
 
-  /* ──────────────────────────────────────
-     DOM REFS
-  ────────────────────────────────────── */
+  /* dom refs */
   const feed          = $('#reels-feed');
   const cards         = $$('.reel-card');
   const dots          = $$('.reels-dot');
@@ -42,9 +32,7 @@
 
   if (!feed || cards.length === 0) return;
 
-  /* ──────────────────────────────────────
-     MUTE ICON — reflects current state
-  ────────────────────────────────────── */
+  /* mute icon - reflects current state */
   const ICON_UNMUTED = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
     <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
     <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
@@ -61,11 +49,9 @@
     if (muteBtn) muteBtn.innerHTML = isMuted ? ICON_MUTED : ICON_UNMUTED;
   }
 
-  /* ──────────────────────────────────────
-     "TAP TO UNMUTE" OVERLAY
-     Shown when browser blocks audio autoplay.
-     Hidden after user taps it (or mute btn).
-  ────────────────────────────────────── */
+  /* "tap to unmute" overlay
+     shown when browser blocks audio autoplay.
+     hidden after user taps it (or mute btn). */
   function showUnmuteOverlay() {
     if (unmuteOverlay) unmuteOverlay.classList.add('visible');
   }
@@ -91,9 +77,7 @@
     });
   }
 
-  /* ──────────────────────────────────────
-     MUTE TOGGLE BUTTON
-  ────────────────────────────────────── */
+  /* mute toggle button */
   if (muteBtn) {
     muteBtn.addEventListener('click', function () {
       isMuted       = !isMuted;
@@ -106,18 +90,14 @@
 
   updateMuteIcon(); // set initial icon (sound icon, since unmuted)
 
-  /* ──────────────────────────────────────
-     DOTS
-  ────────────────────────────────────── */
+  /* dots */
   function setActiveDot(idx) {
     dots.forEach(function (d, i) {
       d.classList.toggle('active', i === idx);
     });
   }
 
-  /* ──────────────────────────────────────
-     PROGRESS BAR
-  ────────────────────────────────────── */
+  /* progress bar */
   function bindProgress(card) {
     const video = $('.reel-video', card);
     const bar   = $('.reel-progress', card);
@@ -132,9 +112,7 @@
     });
   }
 
-  /* ──────────────────────────────────────
-     TAP TO PAUSE / PLAY
-  ────────────────────────────────────── */
+  /* tap to pause / play */
   function bindTapToPause(card) {
     const video = $('.reel-video', card);
     const icon  = $('.reel-pause-icon', card);
@@ -170,14 +148,12 @@
     });
   }
 
-  /* ──────────────────────────────────────
-     PLAY A CARD
-     Strategy:
-       1. Try play with sound (isMuted = false).
-       2. If browser rejects (autoplay policy) →
+  /* play a card
+     strategy:
+       1. try play with sound (ismuted = false).
+       2. if browser rejects (autoplay policy) →
           fall back to muted play and show
-          "Tap to Unmute" overlay.
-  ────────────────────────────────────── */
+          "tap to unmute" overlay. */
   function playCard(card) {
     const video = $('.reel-video', card);
     if (!video) return;
@@ -194,7 +170,7 @@
         if (!isMuted) hideUnmuteOverlay();
       })
       .catch(function () {
-        // Browser blocked audio autoplay — fall back to muted
+        // Browser blocked audio autoplay - fall back to muted
         video.muted = true;
         video.play()
           .then(function () {
@@ -212,9 +188,7 @@
     if (video && !video.paused) video.pause();
   }
 
-  /* ──────────────────────────────────────
-     SHOW MORE / SHOW LESS
-  ────────────────────────────────────── */
+  /* show more / show less */
   function initShowMore() {
     $$('.reel-desc-text').forEach(function (el) {
       const btn = el.nextElementSibling;
@@ -238,9 +212,7 @@
     });
   }
 
-  /* ──────────────────────────────────────
-     INTERSECTION OBSERVER
-  ────────────────────────────────────── */
+  /* intersection observer */
   function initObserver() {
     const observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -263,9 +235,7 @@
     cards.forEach(function (card) { observer.observe(card); });
   }
 
-  /* ──────────────────────────────────────
-     KEYBOARD
-  ────────────────────────────────────── */
+  /* keyboard */
   document.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
       e.preventDefault();
@@ -287,9 +257,7 @@
     }
   });
 
-  /* ──────────────────────────────────────
-     INIT
-  ────────────────────────────────────── */
+  /* init */
   cards.forEach(function (card) {
     bindTapToPause(card);
     bindProgress(card);

@@ -1,4 +1,4 @@
-/* AVIORCART Admin Dashboard — downloadable report generation (PDF / PNG) */
+/* report export (pdf/png) */
 
 function reportTitle(filter: OrderFilter): string {
   if (filter === "all") return "All Orders";

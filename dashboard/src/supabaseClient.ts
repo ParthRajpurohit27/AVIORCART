@@ -1,4 +1,4 @@
-/* AVIORCART Admin Dashboard — Supabase client init */
+/* supabase client */
 
 let sb: SupabaseClientLike;
 

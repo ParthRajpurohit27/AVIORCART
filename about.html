@@ -4,14 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About AVIORCART — Our Story</title>
-<meta name="description" content="Learn the story behind AVIORCART — India's online shopping destination for fashion, watches, beauty, footwear, jewelry and electronics. Shop Your Vibe.">
-<link rel="canonical" href="https://aviorcart.vercel.app/about.html">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="AVIORCART">
-<meta property="og:title" content="About AVIORCART — Our Story">
-<meta property="og:description" content="Learn the story behind AVIORCART — India's online shopping destination for fashion, watches, beauty, footwear, jewelry and electronics.">
-<meta property="og:url" content="https://aviorcart.vercel.app/about.html">
-<meta property="og:image" content="https://aviorcart.vercel.app/assets/icon-512x512.png">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -39,7 +31,7 @@ body{
   cursor:none;
 }
 
-/* ── CURSOR ── */
+/* cursor */
 .cursor{
   position:fixed;width:12px;height:12px;
   background:var(--gold);border-radius:50%;
@@ -56,23 +48,23 @@ body{
   transition:transform .12s ease,width .3s,height .3s;
 }
 
-/* ── CANVAS BACKGROUND ── */
+/* canvas background */
 #bg-canvas{
   position:fixed;inset:0;z-index:0;
   pointer-events:none;
 }
 
-/* ── NOISE OVERLAY ── */
+/* noise overlay */
 body::before{
   content:'';position:fixed;inset:0;z-index:1;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   opacity:.4;pointer-events:none;
 }
 
-/* ── LAYOUT ── */
+/* layout */
 .wrap{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 24px}
 
-/* ── HERO ── */
+/* hero */
 .hero{
   min-height:100vh;
   display:flex;align-items:center;justify-content:center;
@@ -129,7 +121,7 @@ body::before{
   animation:scrollDown 2s infinite;
 }
 
-/* ── SECTION COMMON ── */
+/* section common */
 section{padding:100px 0;position:relative;}
 
 .section-label{
@@ -150,14 +142,14 @@ section{padding:100px 0;position:relative;}
   margin-bottom:20px;
 }
 
-/* ── DIVIDER ── */
+/* divider */
 .divider{
   width:100%;height:1px;
   background:linear-gradient(90deg,transparent,var(--border),transparent);
   margin:0;
 }
 
-/* ── FOUNDER SECTION ── */
+/* founder section */
 .founder-section{padding:100px 0;}
 
 .founder-grid{
@@ -279,7 +271,7 @@ section{padding:100px 0;position:relative;}
 }
 .f-stat__label{font-size:12px;color:var(--muted);letter-spacing:.5px;}
 
-/* ── MISSION SECTION ── */
+/* mission section */
 .mission-section{padding:100px 0;background:var(--dark);}
 .mission-section::before{
   content:'';position:absolute;inset:0;
@@ -338,7 +330,7 @@ section{padding:100px 0;position:relative;}
 }
 .value-desc{font-size:14px;color:var(--muted);line-height:1.7;}
 
-/* ── STORY SECTION ── */
+/* story section */
 .story-section{padding:100px 0;}
 .story-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:80px;align-items:start;}
 .story-sticky{position:sticky;top:100px;}
@@ -372,7 +364,7 @@ section{padding:100px 0;position:relative;}
 }
 .tl-text{font-size:14px;color:var(--muted);line-height:1.7;}
 
-/* ── PROMISE SECTION ── */
+/* promise section */
 .promise-section{
   padding:100px 0;
   background:var(--dark);
@@ -404,7 +396,7 @@ section{padding:100px 0;position:relative;}
 }
 .promise-text{font-size:13px;color:var(--muted);line-height:1.6;}
 
-/* ── CTA ── */
+/* cta */
 .cta-section{
   padding:120px 24px;
   text-align:center;
@@ -450,7 +442,7 @@ section{padding:100px 0;position:relative;}
 .cta-btn svg{transition:transform .3s;}
 .cta-btn:hover svg{transform:translateX(4px);}
 
-/* ── ANIMATIONS ── */
+/* animations */
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(24px);}
   to{opacity:1;transform:translateY(0);}
@@ -492,7 +484,7 @@ section{padding:100px 0;position:relative;}
 .reveal-delay-3{transition-delay:.3s;}
 .reveal-delay-4{transition-delay:.4s;}
 
-/* ── RESPONSIVE ── */
+/* responsive */
 @media(max-width:900px){
   .founder-grid,.story-grid{grid-template-columns:1fr;gap:48px;}
   .values-grid{grid-template-columns:1fr 1fr;}
@@ -512,14 +504,14 @@ section{padding:100px 0;position:relative;}
 </head>
 <body>
 
-<!-- Custom Cursor -->
+<!-- custom cursor -->
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
 
-<!-- Animated Background Canvas -->
+<!-- animated background canvas -->
 <canvas id="bg-canvas"></canvas>
 
-<!-- ════════════ HERO ════════════ -->
+<!-- hero -->
 <section class="hero">
   <div style="text-align:center;max-width:800px;margin:0 auto;">
     <div class="hero-badge">
@@ -541,7 +533,7 @@ section{padding:100px 0;position:relative;}
 
 <div class="divider"></div>
 
-<!-- ════════════ FOUNDER ════════════ -->
+<!-- founder -->
 <section class="founder-section">
   <div class="wrap">
     <div class="founder-grid">
@@ -607,7 +599,7 @@ section{padding:100px 0;position:relative;}
 
 <div class="divider"></div>
 
-<!-- ════════════ MISSION ════════════ -->
+<!-- mission -->
 <section class="mission-section">
   <div class="wrap" style="position:relative;z-index:1;">
     <div style="text-align:center;margin-bottom:16px;" class="reveal">
@@ -642,7 +634,7 @@ section{padding:100px 0;position:relative;}
 
 <div class="divider"></div>
 
-<!-- ════════════ STORY TIMELINE ════════════ -->
+<!-- story timeline -->
 <section class="story-section">
   <div class="wrap">
     <div class="story-grid">
@@ -685,7 +677,7 @@ section{padding:100px 0;position:relative;}
 
 <div class="divider"></div>
 
-<!-- ════════════ PROMISES ════════════ -->
+<!-- promises -->
 <section class="promise-section">
   <div class="wrap" style="position:relative;z-index:1;">
     <div class="reveal">
@@ -718,7 +710,7 @@ section{padding:100px 0;position:relative;}
   </div>
 </section>
 
-<!-- ════════════ CTA ════════════ -->
+<!-- cta -->
 <section class="cta-section">
   <div class="cta-glow"></div>
   <div class="cta-inner">
@@ -735,7 +727,7 @@ section{padding:100px 0;position:relative;}
 </section>
 
 <script>
-/* ── Custom Cursor ── */
+/* custom cursor */
 const cursor = document.getElementById('cursor');
 const ring   = document.getElementById('cursor-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
@@ -759,7 +751,7 @@ document.querySelectorAll('a,button,.value-card,.promise-card').forEach(el => {
   el.addEventListener('mouseleave', () => { cursor.style.width='12px'; cursor.style.height='12px'; ring.style.width='36px'; ring.style.height='36px'; });
 });
 
-/* ── Canvas Star/Particle Background ── */
+/* canvas star/particle background */
 const canvas = document.getElementById('bg-canvas');
 const ctx    = canvas.getContext('2d');
 let W, H, stars = [], conns = [];
@@ -833,7 +825,7 @@ function drawFrame() {
 }
 drawFrame();
 
-/* ── Scroll Reveal ── */
+/* scroll reveal */
 const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => {
@@ -845,7 +837,7 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 reveals.forEach(el => observer.observe(el));
 
-/* ── Counter Animation ── */
+/* counter animation */
 function animateCount(el, target, suffix='') {
   let start = 0;
   const dur = 1400;

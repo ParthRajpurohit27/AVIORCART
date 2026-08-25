@@ -1,4 +1,4 @@
-/* AVIORCART Service Worker — Static Site */
+/* service worker */
 const CACHE_NAME = 'aviorcart-v1';
 const STATIC_ASSETS = [
   '/',

@@ -1,4 +1,4 @@
-/* AVIORCART Admin Dashboard — admin/owner authentication */
+/* auth */
 
 let currentUser: AdminSession | null = null;
 

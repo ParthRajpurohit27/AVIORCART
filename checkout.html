@@ -150,7 +150,7 @@
 <script src="assets/checkout.js"></script>
 <script src="assets/layout.js"></script>
 <script>
-/* ═══ Determine which items this checkout session covers ═══ */
+/* determine which items this checkout session covers */
 const params = new URLSearchParams(window.location.search);
 const MODE = params.get('mode') === 'buynow' ? 'buynow' : 'cart';
 
@@ -196,7 +196,7 @@ function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-/* ═══ Step navigation ═══ */
+/* step navigation */
 function goToStep(step, direction) {
   const s1 = document.getElementById('step-1');
   const s2 = document.getElementById('step-2');
@@ -221,7 +221,7 @@ function goToStep(step, direction) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ═══ Step 1: validate & collect address ═══ */
+/* step 1: validate & collect address */
 document.getElementById('address-form').addEventListener('submit', function(e) {
   e.preventDefault();
   const fd = new FormData(e.target);
@@ -274,7 +274,7 @@ function renderReview() {
     </div>`).join('');
 }
 
-/* ═══ Step 2: Proceed to Pay ═══ */
+/* step 2: proceed to pay */
 async function handleProceedToPay() {
   if (!addressData || !CHECKOUT_ITEMS.length) return;
   const btn = document.getElementById('pay-btn');
@@ -351,7 +351,7 @@ async function handleProceedToPay() {
   }
 }
 
-/* ═══ Free / ₹1 order — no PayU redirect ═══ */
+/* free / ₹1 order — no payu redirect */
 async function handleFreeOrder(btn) {
   try {
     const res = await fetch('/api/free-order', {
