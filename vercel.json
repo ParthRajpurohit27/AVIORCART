@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "outputDirectory": ".",
   "cleanUrls": false,
   "trailingSlash": false,
   "headers": [
