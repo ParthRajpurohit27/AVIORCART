@@ -3,137 +3,184 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard — AVIORCART</title>
-<meta name="robots" content="noindex, nofollow">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/dashboard/assets/css/dashboard.css">
-<link rel="icon" href="/assets/favicon-32.png">
+<title>AVIORCART — Online Shopping India | Fashion, Watches, Beauty, Electronics & More</title>
+<meta name="description" content="AVIORCART — Shop Your Vibe. Premium online shopping in India for fashion, watches, beauty, footwear, jewelry, electronics and home essentials. Free delivery, easy 10-day returns, 100% secure payments.">
+<meta name="keywords" content="AVIORCART, Aviorcart, aviorcart shopping, aviorcart online store, online shopping India, fashion, watches, beauty, footwear, jewelry, electronics">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://aviorcart.vercel.app/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AVIORCART">
+<meta property="og:title" content="AVIORCART — Shop Your Vibe | Online Shopping India">
+<meta property="og:description" content="Premium online shopping for fashion, watches, beauty, footwear, jewelry, electronics and more — best prices, free delivery, easy returns.">
+<meta property="og:url" content="https://aviorcart.vercel.app/">
+<meta property="og:image" content="https://aviorcart.vercel.app/assets/icon-512x512.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AVIORCART — Shop Your Vibe">
+<meta name="twitter:description" content="Premium online shopping for fashion, watches, beauty, footwear, jewelry, electronics and more.">
+<meta name="twitter:image" content="https://aviorcart.vercel.app/assets/icon-512x512.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="/assets/manifest.json">
+<link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="192x192" href="/assets/icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<script>
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('/assets/sw.js',{scope:'/'})
+        .then(()=>console.log('AVIORCART SW registered'))
+        .catch(err=>console.log('SW error:',err));
+    });
+  }
+</script>
+<link rel="stylesheet" href="assets/theme.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "AVIORCART",
+  "alternateName": "Aviorcart",
+  "url": "https://aviorcart.vercel.app/",
+  "logo": "https://aviorcart.vercel.app/assets/icon-512x512.png",
+  "sameAs": [],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+91-9425619133",
+    "contactType": "customer service",
+    "email": "parthrajpurohit08@gmail.com",
+    "areaServed": "IN"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "AVIORCART",
+  "alternateName": "Aviorcart",
+  "url": "https://aviorcart.vercel.app/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://aviorcart.vercel.app/search.html?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
+<div id="header-placeholder"></div>
 
-<!-- ═══ LOGIN SCREEN ═══ -->
-<div class="login-wrap" id="login-screen">
-  <div class="login-card">
-    <div class="login-card__logo">
-      <svg width="34" height="34" viewBox="0 0 24 24"><polygon points="12,2 14,9 21,9 15.5,13.5 17.5,21 12,17 6.5,21 8.5,13.5 3,9 10,9" fill="#fbbf24"/></svg>
+<main id="main-content">
+
+  <!-- HERO -->
+  <section class="hero-banner">
+    <div class="container hero-content">
+      <span class="hero-tag">✨ Shop Your Vibe</span>
+      <h1 class="hero-title">Welcome to <span class="gold">AVIORCART</span></h1>
+      <p class="hero-sub">India's go-to online store for fashion, watches, beauty, footwear, jewelry, electronics and home essentials — at the lowest prices, with free delivery and easy 10-day returns.</p>
+      <div class="hero-btns">
+        <a href="collections.html" class="btn btn-gold btn-lg">Shop All Products</a>
+        <a href="about.html" class="btn btn-outline-white btn-lg">Why AVIORCART?</a>
+      </div>
     </div>
-    <h1><span style="color:#fbbf24">AVI</span>OR<span style="color:#fbbf24">CART</span></h1>
-    <p>Admin &amp; Owner Dashboard</p>
+  </section>
 
-    <div class="login-error" id="login-error"></div>
+  <!-- CATEGORIES -->
+  <section class="section container">
+    <div class="section-head">
+      <h2 class="section-title">Shop by Category</h2>
+      <a href="collections.html" class="view-all">View All →</a>
+    </div>
+    <div class="cat-grid">
+      <a href="collections.html?cat=Clothing" class="cat-card">👗<br>Fashion</a>
+      <a href="collections.html?cat=Watches" class="cat-card">⌚<br>Watches</a>
+      <a href="collections.html?cat=Beauty" class="cat-card">💄<br>Beauty</a>
+      <a href="collections.html?cat=Footwear" class="cat-card">👟<br>Footwear</a>
+      <a href="collections.html?cat=Jewelry" class="cat-card">💍<br>Jewelry</a>
+      <a href="collections.html?cat=Electronics" class="cat-card">🔋<br>Electronics</a>
+      <a href="collections.html?cat=Home" class="cat-card">🏠<br>Home</a>
+      <a href="collections.html?cat=Sarees" class="cat-card">🥻<br>Sarees</a>
+    </div>
+  </section>
 
-    <form id="login-form">
-      <div class="field">
-        <label for="login-email">Email</label>
-        <input type="email" id="login-email" placeholder="you@aviorcart.com" required autocomplete="username">
-      </div>
-      <div class="field">
-        <label for="login-password">Password</label>
-        <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
-      </div>
-      <button type="submit" class="btn-primary" id="login-submit">Sign In</button>
-    </form>
+  <!-- FEATURED PRODUCTS -->
+  <section class="section container">
+    <div class="section-head">
+      <h2 class="section-title">Featured Products</h2>
+      <a href="collections.html" class="view-all">View All →</a>
+    </div>
+    <div class="product-grid" id="home-product-grid"></div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <section class="section container" aria-label="Why shop with AVIORCART">
+    <div class="cat-grid">
+      <div class="cat-card">🚚<br>Free Delivery</div>
+      <div class="cat-card">↩️<br>10-Day Easy Returns</div>
+      <div class="cat-card">🔒<br>100% Secure Payments</div>
+      <div class="cat-card">💬<br>WhatsApp Support</div>
+    </div>
+  </section>
+
+  <!-- SEO TEXT BLOCK -->
+  <section class="section container">
+    <h2 class="section-title">About AVIORCART</h2>
+    <p style="color:#4b5563;line-height:1.8;font-size:14px;max-width:800px;">
+      <strong>AVIORCART</strong> (also searched as <strong>Avior Cart</strong>) is an online shopping destination
+      built for the way you actually shop — fast browsing, honest prices, and quick delivery across India.
+      Explore fashion, watches, beauty products, footwear, jewelry, electronics, sarees and home essentials,
+      all in one place. New arrivals are added regularly, every order ships with a 10-day return window,
+      and our team is a WhatsApp message away for any help you need.
+    </p>
+  </section>
+
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/layout.js"></script>
+<script>
+function homeProductCardHTML(p) {
+  const onSale = p.compare_at_price > 0 && p.compare_at_price > p.price;
+  const disc = onSale ? Math.round((p.compare_at_price - p.price) * 100 / p.compare_at_price) : 0;
+  const hasVariants = p.variants.length > 1 && !(p.variants.length === 1 && p.variants[0].option1 === 'Default Title');
+  const badge = onSale ? `<span class="product-card__badge badge-sale">${disc}% OFF</span>` : `<span class="product-card__badge badge-hot">New</span>`;
+  const quickBtn = hasVariants
+    ? `<a href="products/${p.handle}.html" class="btn btn-gold btn-sm btn-full">View Options</a>`
+    : `<button class="btn btn-gold btn-sm btn-full" onclick="event.preventDefault();event.stopPropagation();addToCart(PRODUCTS.find(x=>x.id===${p.id}),${p.variants[0]?.id||0},1,this)">+ Add to Cart</button>`;
+  return `
+<div class="product-card" data-animate>
+  <div class="product-card__img">
+    <a href="products/${p.handle}.html">
+      <img src="${p.images[0]||''}" alt="${p.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:#f9fafb;\\'>🛍️</div>'">
+    </a>
+    ${badge}
+    <div class="product-card__quick">${quickBtn}</div>
   </div>
-</div>
-
-<!-- ═══ DASHBOARD SCREEN ═══ -->
-<div id="dashboard-screen" style="display:none;flex-direction:column;min-height:100vh;">
-
-  <header class="dash-header">
-    <div class="dash-header__inner">
-      <a href="/dashboard/" class="dash-logo">
-        <svg width="20" height="20" viewBox="0 0 24 24"><polygon points="12,2 14,9 21,9 15.5,13.5 17.5,21 12,17 6.5,21 8.5,13.5 3,9 10,9" fill="#fbbf24"/></svg>
-        <span class="dash-logo-text"><span class="g">AVI</span>OR<span class="g">CART</span></span>
-        <span class="dash-badge">ADMIN</span>
-      </a>
-      <div class="dash-header__right">
-        <span id="welcome-user"></span>
-        <button class="btn-logout" id="logout-btn">Logout</button>
-      </div>
+  <div class="product-card__info">
+    <div class="product-card__brand">${p.vendor||'AVIORCART'}</div>
+    <a href="products/${p.handle}.html" class="product-card__name">${p.title}</a>
+    <div class="product-card__price">
+      <span class="price-current">${money(p.price)}</span>
+      ${onSale ? `<span class="price-old">${money(p.compare_at_price)}</span><span class="price-discount">${disc}% off</span>` : ''}
     </div>
-  </header>
+  </div>
+</div>`;
+}
 
-  <main class="dash-main">
-
-    <div class="stats-grid">
-      <div class="stat-card gold">
-        <div class="stat-card__label">Total Orders</div>
-        <div class="stat-card__value" id="stat-total">0</div>
-      </div>
-      <div class="stat-card gold">
-        <div class="stat-card__label">Total Revenue</div>
-        <div class="stat-card__value" id="stat-revenue">₹0</div>
-      </div>
-      <div class="stat-card success">
-        <div class="stat-card__label">Successful</div>
-        <div class="stat-card__value" id="stat-success">0</div>
-      </div>
-      <div class="stat-card failed">
-        <div class="stat-card__label">Failed</div>
-        <div class="stat-card__value" id="stat-failed">0</div>
-      </div>
-      <div class="stat-card pending">
-        <div class="stat-card__label">Pending</div>
-        <div class="stat-card__value" id="stat-pending">0</div>
-      </div>
-    </div>
-
-    <div class="toolbar">
-      <div class="filter-tabs">
-        <button class="filter-tab active" data-filter="all">All Orders <span id="tab-count-all">0</span></button>
-        <button class="filter-tab" data-filter="success">Successful <span id="tab-count-success">0</span></button>
-        <button class="filter-tab" data-filter="failed">Failed <span id="tab-count-failed">0</span></button>
-        <button class="filter-tab" data-filter="pending">Pending <span id="tab-count-pending">0</span></button>
-      </div>
-
-      <div class="toolbar-right">
-        <span id="last-updated"></span>
-        <button class="icon-btn" id="refresh-btn" title="Refresh orders">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-          Refresh
-        </button>
-        <div class="download-group">
-          <button class="icon-btn" data-download="pdf" title="Download as PDF">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            PDF
-          </button>
-          <button class="icon-btn" data-download="png" title="Download as Image">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            Image
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="orders-grid" id="orders-list">
-      <div class="empty-state">Loading orders…</div>
-    </div>
-
-  </main>
-
-  <footer class="dash-footer">
-    <div>© <span id="footer-year"></span> AVIORCART. All rights reserved. — Founder <strong>Parth Rajpurohit</strong></div>
-    <div style="margin-top:4px;">Payment Partners: Delhivery &bull; PayU</div>
-  </footer>
-
-</div>
-
-<div class="toast" id="toast"></div>
-
-<!-- CDN libraries -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<!-- Compiled TypeScript (order matters — plain global scripts, no bundler) -->
-<script src="/dashboard/assets/dist/config.js"></script>
-<script src="/dashboard/assets/dist/supabaseClient.js"></script>
-<script src="/dashboard/assets/dist/auth.js"></script>
-<script src="/dashboard/assets/dist/orders.js"></script>
-<script src="/dashboard/assets/dist/exportUtil.js"></script>
-<script src="/dashboard/assets/dist/main.js"></script>
-<script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+document.addEventListener('DOMContentLoaded', function() {
+  var grid = document.getElementById('home-product-grid');
+  if (grid && typeof PRODUCTS !== 'undefined') {
+    var featured = PRODUCTS.slice(0, 12);
+    grid.innerHTML = featured.map(homeProductCardHTML).join('');
+  }
+});
+</script>
 </body>
 </html>

@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /cart.html
+Disallow: /checkout.html
+Disallow: /order-success.html
+Disallow: /order-failure.html
+
+Sitemap: https://aviorcart.vercel.app/sitemap.xml
