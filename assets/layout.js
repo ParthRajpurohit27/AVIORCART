@@ -18,6 +18,14 @@
 
   function href(url) { return ROOT + url; }
 
+  // Product pages get the share button automatically (no per-page tag needed)
+  function loadProductExtras() {
+    if (!isProduct) return;
+    var s = document.createElement('script');
+    s.src = ROOT + 'assets/dist/share.js';
+    document.body.appendChild(s);
+  }
+
   function injectHeader() {
     var navLinks = NAV_LINKS.map(function(l){
       return '<a href="' + href(l.url) + '" class="category-nav__link">' + l.title + '</a>';
@@ -31,7 +39,7 @@
 '<div class="topbar">' +
 '  <div class="container topbar__inner">' +
 '    <span>✨ Free Delivery on all orders (Offer ends soon) &nbsp;|&nbsp; 10 Days Easy Returns &nbsp;|&nbsp; 100% Secure Payments</span>' +
-'    <div class="topbar__right"><a href="contact.html">Help</a><a href="about.html">About</a></div>' +
+'    <div class="topbar__right"><a href="' + href('track.html') + '">Track Order</a><a href="contact.html">Help</a><a href="about.html">About</a></div>' +
 '  </div>' +
 '</div>' +
 '<header class="site-header" id="site-header">' +
@@ -80,6 +88,7 @@
 '    <a href="' + href('collections.html') + '" class="mobile-menu__link">🛍️ All Products</a>' +
      mobileLinks +
 '    <div class="mobile-menu__divider"></div>' +
+'    <a href="' + href('track.html') + '" class="mobile-menu__link">📦 Track Order</a>' +
 '    <a href="' + href('wishlist.html') + '" class="mobile-menu__link">❤️ Wishlist</a>' +
 '    <a href="' + href('cart.html') + '" class="mobile-menu__link">🛒 Cart</a>' +
 '  </div>' +
@@ -112,7 +121,7 @@
 '      <a href="' + href('about.html') + '">About Us</a><a href="' + href('contact.html') + '">Contact</a>' +
 '    </div>' +
 '    <div class="footer__col"><h4>Customer Service</h4>' +
-'      <a href="' + href('shipping-policy.html') + '">Shipping Policy</a><a href="' + href('refund-policy.html') + '">Return &amp; Refund Policy</a><a href="' + href('terms-and-conditions.html') + '">Terms &amp; Conditions</a><a href="' + href('privacy-policy.html') + '">Privacy Policy</a>' +
+'      <a href="' + href('track.html') + '">Track Order</a><a href="' + href('shipping-policy.html') + '">Shipping Policy</a><a href="' + href('refund-policy.html') + '">Return &amp; Refund Policy</a><a href="' + href('terms-and-conditions.html') + '">Terms &amp; Conditions</a><a href="' + href('privacy-policy.html') + '">Privacy Policy</a>' +
 '    </div>' +
 '    <div class="footer__col"><h4>Contact Us</h4>' +
 '      <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.8;">👤 <a href="https://parth27.vercel.app" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Parth Rajpurohit</a><br>📍 Rajasthan 327001<br>📧 parthrajpurohit08@gmail.com<br>📞 +91 9425619133<br>🕐 Mon-Sat 11AM - 7PM</p>' +
@@ -184,6 +193,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     injectHeader();
     injectFooter();
+    loadProductExtras();
     setTimeout(function() {
       if (typeof updateCartCount === 'function') updateCartCount();
       initLiveSearch();

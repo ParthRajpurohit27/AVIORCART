@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Order — AVIORCART</title>
+  <meta name="description" content="Track your AVIORCART order live using your AWB number.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/assets/manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon-152x152.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="stylesheet" href="assets/track.css">
+</head>
+<body>
+<div id="header-placeholder"></div>
+<main id="main-content">
+  <div class="track-page">
+    <div class="track-bg" id="track-bg" aria-hidden="true"></div>
+    <div class="container">
+      <div class="track-card">
+        <h1><span class="track-emo">📦</span> Track Your Order</h1>
+        <p class="track-sub">Enter the AWB number from your shipping message.</p>
+        <form id="track-form" class="track-form" autocomplete="off">
+          <input id="track-input" type="text" inputmode="text" placeholder="e.g. 21825xxxxxxxx" aria-label="AWB number" maxlength="24" required>
+          <button id="track-btn" type="submit" class="btn btn-gold">Track</button>
+        </form>
+        <div id="track-recent" class="track-recent"></div>
+        <div id="track-loader" class="track-loader" aria-hidden="true" hidden><span>🚚</span></div>
+        <div id="track-error" class="track-error" role="alert" hidden></div>
+        <div id="track-result" class="track-result" hidden></div>
+      </div>
+    </div>
+  </div>
+</main>
+<div id="footer-placeholder"></div>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/layout.js"></script>
+<script src="assets/dist/trackBg.js"></script>
+<script src="assets/dist/track.js"></script>
+</body>
+</html>

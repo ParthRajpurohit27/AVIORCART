@@ -76,7 +76,7 @@
     },
     {
       "name": "Track Order",
-      "url": "/apps/parcelpanel",
+      "url": "/track",
       "icons": [
         {
           "src": "/cdn/shop/t/6/assets/icon-96x96.png",

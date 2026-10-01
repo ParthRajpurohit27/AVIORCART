@@ -5,9 +5,15 @@
   "trailingSlash": false,
   "headers": [
     {
-      "source": "/assets/(.*)",
+      "source": "/assets/(.*)\\.(png|jpg|jpeg|webp|svg|ico)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)\\.(js|css|json)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     },
     {
@@ -24,6 +30,7 @@
     { "source": "/cart", "destination": "/cart.html" },
     { "source": "/search", "destination": "/search.html" },
     { "source": "/wishlist", "destination": "/wishlist.html" },
+    { "source": "/track", "destination": "/track.html" },
     { "source": "/checkout", "destination": "/checkout.html" },
     { "source": "/order-success", "destination": "/order-success.html" },
     { "source": "/order-failure", "destination": "/order-failure.html" },
