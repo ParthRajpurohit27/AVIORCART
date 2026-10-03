@@ -1,0 +1,31 @@
+/* ==========================================================================
+   AVIORCART DIWALI / FESTIVE GOLDEN GLOW THEME
+   Warm royal gold, deep maroon undertones, festive spark vibe.
+   ========================================================================== */
+:root {
+  --gold: #f59e0b;
+  --gold-dark: #b45309;
+  --black: #0f0505;
+  --dark: #1f0a0a;
+  --white: #fffbeb;
+  --gray-50: #faf7f2;
+  --radius: 8px;
+}
+
+/* Festive Royal Gold Branding */
+.logo-avi, .logo-cart {
+  background: linear-gradient(180deg, #fcd34d, #f59e0b) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.topbar {
+  background: #180606 !important;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.25) !important;
+}
+
+.btn-gold, .header__search-btn {
+  background: linear-gradient(135deg, #fcd34d, #f59e0b) !important;
+  color: #120303 !important;
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35) !important;
+}

@@ -1,0 +1,26 @@
+/* ==========================================================================
+   AVIORCART SACRED BASELINE THEME (DO NOT DELETE)
+   This is the permanent original theme for AVIORCART.
+   ========================================================================== */
+:root {
+  --gold: #fbbf24;
+  --gold-dark: #d97706;
+  --black: #0a0a0a;
+  --dark: #1a1a1a;
+  --white: #fff;
+  --cream: #fffef9;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-700: #374151;
+  --gray-900: #111827;
+  --red: #ef4444;
+  --green: #22c55e;
+  --radius: 8px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --transition: 0.2s ease;
+  --container: 1280px;
+}

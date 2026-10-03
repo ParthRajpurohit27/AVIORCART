@@ -1,0 +1,31 @@
+/* ==========================================================================
+   AVIORCART WINTER WONDERLAND THEME
+   Icy blue accents, cool dark atmosphere, festive winter vibe.
+   ========================================================================== */
+:root {
+  --gold: #38bdf8;
+  --gold-dark: #0284c7;
+  --black: #050d1a;
+  --dark: #0c1829;
+  --white: #f0f9ff;
+  --gray-50: #f0f6fa;
+  --radius: 10px;
+}
+
+/* Winter Frost Branding */
+.logo-avi, .logo-cart {
+  background: linear-gradient(180deg, #38bdf8, #0284c7) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.topbar {
+  background: #030812 !important;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15) !important;
+}
+
+.btn-gold, .header__search-btn, .category-badge {
+  background: linear-gradient(135deg, #38bdf8, #0284c7) !important;
+  color: #030812 !important;
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25) !important;
+}
