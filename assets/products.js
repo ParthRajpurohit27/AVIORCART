@@ -5986,3 +5986,5 @@ function getProductByHandle(handle){return PRODUCTS.find(p=>p.handle===handle)||
 function getProductsByCategory(cat){if(!cat||cat==="all")return PRODUCTS;return PRODUCTS.filter(p=>p.category_name&&p.category_name.toLowerCase()===cat.toLowerCase());}
 function searchProducts(query){const q=query.toLowerCase();return PRODUCTS.filter(p=>p.title.toLowerCase().includes(q)||(p.description&&p.description.toLowerCase().includes(q))||(p.type&&p.type.toLowerCase().includes(q))||(p.tags&&p.tags.some(t=>t.toLowerCase().includes(q))));}
 function money(amount){return "\u20B9"+Math.round(amount).toLocaleString("en-IN");}
+function thumb(u,w){if(!u)return"";if(u.indexOf("cdn.shopify.com")===-1||/[?&]width=/.test(u))return u;return u+(u.indexOf("?")===-1?"?":"&")+"width="+w;}
+function srcsetFor(u){if(!u||u.indexOf("cdn.shopify.com")===-1)return"";return 'srcset="'+thumb(u,320)+' 320w, '+thumb(u,520)+' 520w" sizes="(max-width:768px) 46vw, (max-width:1024px) 30vw, 22vw"';}

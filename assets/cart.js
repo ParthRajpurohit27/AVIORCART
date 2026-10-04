@@ -123,7 +123,7 @@ function renderCartDrawer() {
   body.innerHTML = cart.map(item => `
     <div class="drawer-item">
       <a href="/products/${item.handle}.html" class="drawer-item__img" onclick="closeCart()">
-        <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><rect fill=\'%23f3f4f6\' width=\'60\' height=\'60\'/><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'24\'>🛍️</text></svg>'">
+        <img src="${typeof thumb === 'function' ? thumb(item.image,160) : item.image}" alt="${item.title}" loading="lazy" decoding="async" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><rect fill=\'%23f3f4f6\' width=\'60\' height=\'60\'/><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'24\'>🛍️</text></svg>'">
       </a>
       <div style="flex:1;min-width:0;">
         <div class="drawer-item__name">${item.title}</div>
@@ -224,11 +224,19 @@ function toggleMobileMenu() {
 /* init */
 document.addEventListener('DOMContentLoaded', () => {
   updateCartCount();
-  // Header scroll shadow
+  // Header scroll shadow (class toggle, rAF-throttled)
   const h = document.getElementById('site-header');
-  if (h) {
+  if (h && !window.__avScroll) {
+    window.__avScroll = true;
+    let ticking = false, on = false;
     window.addEventListener('scroll', () => {
-      h.style.boxShadow = window.scrollY > 10 ? '0 2px 20px rgba(0,0,0,0.4)' : '0 2px 8px rgba(0,0,0,0.3)';
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const s = window.scrollY > 10;
+        if (s !== on) { on = s; h.classList.toggle('is-scrolled', s); }
+        ticking = false;
+      });
     }, { passive: true });
   }
   // Animate on scroll

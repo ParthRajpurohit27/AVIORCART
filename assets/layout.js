@@ -1,8 +1,6 @@
 /* shared header/footer layout */
 
 (function() {
-  applyCustomTheme();
-
   const NAV_LINKS = [
     { title: '🛍️ All Products', url: 'collections.html' },
     { title: '👗 Fashion',       url: 'collections.html?cat=Clothing' },
@@ -21,11 +19,17 @@
   function href(url) { return ROOT + url; }
 
   // Product pages get the share button automatically (no per-page tag needed)
-  function loadProductExtras() {
-    if (!isProduct) return;
+  function loadScript(file) {
     var s = document.createElement('script');
-    s.src = ROOT + 'assets/dist/share.js';
+    s.src = ROOT + 'assets/dist/' + file;
+    s.async = true;
     document.body.appendChild(s);
+  }
+  function loadProductExtras() {
+    if (isProduct) loadScript('share.js');
+    var path = location.pathname;
+    var skip = /checkout|order-success|order-failure/.test(path) || path.indexOf('/dashboard') === 0;
+    if (!skip) setTimeout(function() { loadScript('chatbot.js'); }, 400);
   }
 
   function injectHeader() {
@@ -169,7 +173,7 @@
       }
       dropdown.innerHTML = results.map(function(p) {
         return '<a href="' + href('products/' + p.handle + '.html') + '" class="search-dropdown-item">' +
-          '<img src="' + (p.images[0]||'') + '" alt="' + p.title + '" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid #e5e7eb;" onerror="this.style.display=\'none\'">' +
+          '<img src="' + (typeof thumb==='function'?thumb(p.images[0]||'',96):(p.images[0]||'')) + '" loading="lazy" decoding="async" alt="' + p.title + '" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid #e5e7eb;" onerror="this.style.display=\'none\'">' +
           '<div class="search-dropdown-item__info">' +
             '<div class="search-dropdown-item__name">' + p.title + '</div>' +
             '<div class="search-dropdown-item__price">' + money(p.price) + '</div>' +
@@ -198,173 +202,22 @@
     loadProductExtras();
     setTimeout(function() {
       if (typeof updateCartCount === 'function') updateCartCount();
-      // Apply theme set from Admin Dashboard
-      applyCustomTheme();
-      // Scroll-based header shadow
+      initLiveSearch();
+      // Scroll-based header shadow (class toggle, rAF-throttled)
       var h = document.getElementById('site-header');
-      if (h) {
+      if (h && !window.__avScroll) {
+        window.__avScroll = true;
+        var ticking = false, on = false;
         window.addEventListener('scroll', function() {
-          h.style.boxShadow = window.scrollY > 10 ? '0 2px 20px rgba(0,0,0,0.4)' : '0 2px 8px rgba(0,0,0,0.3)';
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(function() {
+            var s = window.scrollY > 10;
+            if (s !== on) { on = s; h.classList.toggle('is-scrolled', s); }
+            ticking = false;
+          });
         }, { passive: true });
       }
     }, 10);
   });
-
-  var _activeOverlayAnim = null;
-
-  function applyOverlay(type) {
-    var existingCanvas = document.getElementById('theme-overlay-canvas');
-    if (_activeOverlayAnim) {
-      cancelAnimationFrame(_activeOverlayAnim);
-      _activeOverlayAnim = null;
-    }
-    if (!type || type === 'none') {
-      if (existingCanvas) existingCanvas.remove();
-      return;
-    }
-
-    var canvas = existingCanvas;
-    if (!canvas) {
-      canvas = document.createElement('canvas');
-      canvas.id = 'theme-overlay-canvas';
-      canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99998;';
-      document.body.appendChild(canvas);
-    }
-
-    var ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    var W = canvas.width = window.innerWidth;
-    var H = canvas.height = window.innerHeight;
-
-    window.addEventListener('resize', function() {
-      if (canvas) {
-        W = canvas.width = window.innerWidth;
-        H = canvas.height = window.innerHeight;
-      }
-    });
-
-    var count = type === 'snowfall' ? 45 : (type === 'sparkles' ? 35 : 30);
-    var particles = [];
-
-    for (var i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        r: type === 'snowfall' ? Math.random() * 3 + 1.2 : (type === 'sparkles' ? Math.random() * 2 + 1 : Math.random() * 4 + 2),
-        vx: type === 'snowfall' ? (Math.random() - 0.5) * 0.8 : (Math.random() - 0.5) * 0.4,
-        vy: type === 'snowfall' ? Math.random() * 1.4 + 0.8 : (type === 'sparkles' ? -(Math.random() * 0.8 + 0.3) : Math.random() * 1.2 + 0.5),
-        alpha: Math.random() * 0.7 + 0.3,
-        rot: Math.random() * Math.PI * 2,
-        vRot: (Math.random() - 0.5) * 0.03
-      });
-    }
-
-    function render() {
-      ctx.clearRect(0, 0, W, H);
-
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rot += p.vRot;
-
-        if (type === 'sparkles') {
-          if (p.y < 0) { p.y = H; p.x = Math.random() * W; }
-        } else {
-          if (p.y > H) { p.y = 0; p.x = Math.random() * W; }
-        }
-        if (p.x < 0) p.x = W;
-        if (p.x > W) p.x = 0;
-
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rot);
-
-        if (type === 'snowfall') {
-          ctx.beginPath();
-          ctx.arc(0, 0, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(255, 255, 255, ' + (p.alpha * 0.85) + ')';
-          ctx.shadowBlur = 4;
-          ctx.shadowColor = '#ffffff';
-          ctx.fill();
-        } else if (type === 'sparkles') {
-          ctx.beginPath();
-          ctx.arc(0, 0, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(251, 191, 36, ' + p.alpha + ')';
-          ctx.shadowBlur = 6;
-          ctx.shadowColor = '#fbbf24';
-          ctx.fill();
-        } else if (type === 'sakura') {
-          ctx.beginPath();
-          ctx.ellipse(0, 0, p.r * 1.6, p.r, p.rot, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(255, 183, 197, ' + (p.alpha * 0.85) + ')';
-          ctx.fill();
-        }
-
-        ctx.restore();
-      }
-
-      _activeOverlayAnim = requestAnimationFrame(render);
-    }
-
-    _activeOverlayAnim = requestAnimationFrame(render);
-  }
-
-  function applyThemeObj(theme) {
-    if (!theme || !theme.variables) return;
-    var styleEl = document.getElementById('custom-theme-vars');
-    if (!styleEl) {
-      styleEl = document.createElement('style');
-      styleEl.id = 'custom-theme-vars';
-      document.head.appendChild(styleEl);
-    }
-    var css = ':root {\n';
-    for (var k in theme.variables) {
-      css += '  ' + k + ': ' + theme.variables[k] + ' !important;\n';
-    }
-    css += '}\n' + (theme.customCSS || '');
-    styleEl.textContent = css;
-
-    // Apply atmospheric overlay (snowfall, sparkles, etc.)
-    applyOverlay(theme.overlay || 'none');
-  }
-
-  function applyCustomTheme() {
-    // 1. Instant check from localStorage (0ms latency, zero flicker)
-    try {
-      var cachedCloud = localStorage.getItem('aviorcart-cloud-theme');
-      if (cachedCloud) {
-        applyThemeObj(JSON.parse(cachedCloud));
-      } else {
-        var activeThemeName = localStorage.getItem('aviorcart-active-theme');
-        var themesStr = localStorage.getItem('aviorcart-themes');
-        if (activeThemeName && themesStr) {
-          var themes = JSON.parse(themesStr);
-          if (themes[activeThemeName]) applyThemeObj(themes[activeThemeName]);
-        }
-      }
-    } catch(e) {}
-
-    // 2. Fetch active theme from Supabase Cloud (syncs across separate repos & domains!)
-    try {
-      var sbUrl = 'https://pgcsmotbkzrnnfuduaje.supabase.co';
-      var sbKey = 'sb_publishable_58zPiYnUzw3E8ZizcctkVw_MGgtVZwi';
-      fetch(sbUrl + '/rest/v1/store_settings?key=eq.active_theme&select=value', {
-        headers: {
-          'apikey': sbKey,
-          'Authorization': 'Bearer ' + sbKey
-        }
-      })
-      .then(function(res) { return res.json(); })
-      .then(function(rows) {
-        if (rows && rows.length > 0 && rows[0].value) {
-          var cloudTheme = rows[0].value;
-          localStorage.setItem('aviorcart-cloud-theme', JSON.stringify(cloudTheme));
-          applyThemeObj(cloudTheme);
-        }
-      })
-      .catch(function(err) { /* silent offline fallback */ });
-    } catch(e) {}
-  }
 })();
