@@ -146,8 +146,7 @@
 '    <div class="cart-drawer__foot" id="cart-foot"></div>' +
 '  </div>' +
 '</div>' +
-'<div class="toast" id="toast"></div>' +
-'<a href="https://wa.me/919425619133?text=Hi%2C%20I%20want%20to%20order%20from%20AVIORCART" target="_blank" class="whatsapp-float" title="Chat on WhatsApp" style="position:fixed;bottom:24px;right:24px;z-index:9999;width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.5);text-decoration:none;font-size:28px;transition:transform .2s;">💬</a>';
+'<div class="toast" id="toast"></div>';
 
     var placeholder = document.getElementById('footer-placeholder');
     if (placeholder) {
