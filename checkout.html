@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script src="/assets/dist/boot.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout — AVIORCART</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -265,7 +266,7 @@ function renderReview() {
 
   document.getElementById('review-items').innerHTML = CHECKOUT_ITEMS.map(i => `
     <div class="review-item-row">
-      <div class="review-item__img"><img src="${i.image}" alt="${escapeHtml(i.title)}" onerror="this.style.display='none'"></div>
+      <div class="review-item__img"><img src="${typeof thumb === 'function' ? thumb(i.image,160) : i.image}" alt="${escapeHtml(i.title)}" onerror="this.style.display='none'"></div>
       <div>
         <div class="review-item__name">${escapeHtml(i.title)}</div>
         <div class="review-item__meta">${i.variant_title ? escapeHtml(i.variant_title) + ' · ' : ''}Qty ${i.quantity}</div>

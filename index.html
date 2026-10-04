@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script src="/assets/dist/boot.js"></script>
   <meta name="application-name" content="AVIORCART">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -58,6 +59,7 @@ src="https://www.facebook.com/tr?id=2044355849535858&ev=PageView&noscript=1"
 
   <!-- HERO BANNER -->
   <section class="hero-banner">
+    <div class="hero-bg" id="hero-bg" aria-hidden="true"></div>
     <div class="container">
       <div class="hero-content">
         <div class="hero-tag">⭐ New Season Arrivals</div>
@@ -178,6 +180,8 @@ src="https://www.facebook.com/tr?id=2044355849535858&ev=PageView&noscript=1"
 <script src="assets/products.js"></script>
 <script src="assets/cart.js"></script>
 <script src="assets/layout.js"></script>
+<script src="assets/dist/sky.js"></script>
+<script src="assets/dist/heroBg.js"></script>
 <script>
 /* ── HOME PAGE LOGIC ── */
 const CATEGORIES = [
@@ -197,7 +201,7 @@ function productCardHTML(p, root='') {
   const onSale = p.compare_at_price > 0 && p.compare_at_price > p.price;
   const disc = onSale ? Math.round((p.compare_at_price - p.price) * 100 / p.compare_at_price) : 0;
   const hasVariants = p.variants.length > 1 && !(p.variants.length === 1 && p.variants[0].option1 === 'Default Title');
-  const wishlist = JSON.parse(localStorage.getItem('aviorcart_wishlist') || '[]');
+  const wishlist = window.__wl || JSON.parse(localStorage.getItem('aviorcart_wishlist') || '[]');
   const isWished = wishlist.includes(p.id);
   const badge = onSale ? `<span class="product-card__badge badge-sale">${disc}% OFF</span>` : `<span class="product-card__badge badge-hot">New</span>`;
   const quickBtn = hasVariants
@@ -207,7 +211,7 @@ function productCardHTML(p, root='') {
 <div class="product-card" data-animate>
   <div class="product-card__img">
     <a href="${root}products/${p.handle}.html">
-      <img src="${(p.images[0]||'')+(p.images[0]?'&width=500':'')}" alt="${p.title}" width="500" height="500" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:#f9fafb;\'>🛍️</div>'">
+      <img src="${thumb(p.images[0]||'',500)}" ${srcsetFor(p.images[0]||'')} alt="${p.title}" width="500" height="500" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:#f9fafb;\\'>🛍️</div>'">
     </a>
     ${badge}
     <button class="product-card__wish${isWished?' active':''}" onclick="event.preventDefault();toggleWishlist(this,${p.id})" aria-label="Wishlist">
@@ -233,17 +237,27 @@ function quickAddToCart(productId, variantId, btn) {
   addToCart(p, variantId, 1, btn);
 }
 
+const cardObserver = 'IntersectionObserver' in window
+  ? new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        en.target.style.opacity = '1';
+        en.target.style.transform = 'translateY(0)';
+        cardObserver.unobserve(en.target);
+      });
+    }, {threshold:0.05})
+  : null;
+
 function renderGrid(gridId, products, limit, root='') {
   const el = document.getElementById(gridId);
   if (!el) return;
+  window.__wl = JSON.parse(localStorage.getItem('aviorcart_wishlist') || '[]');
   el.innerHTML = products.slice(0, limit).map(p => productCardHTML(p, root)).join('');
-  // Re-run animations
-  el.querySelectorAll('[data-animate]').forEach((el, i) => {
-    el.style.cssText = `opacity:0;transform:translateY(20px);transition:opacity 0.5s ${i*60}ms ease,transform 0.5s ${i*60}ms ease`;
-    const obs = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) { el.style.opacity='1'; el.style.transform='translateY(0)'; obs.disconnect(); }
-    }, {threshold:0.05});
-    obs.observe(el);
+  window.__wl = null;
+  el.querySelectorAll('[data-animate]').forEach((card, i) => {
+    if (!cardObserver) return;
+    card.style.cssText = `opacity:0;transform:translateY(20px);transition:opacity 0.5s ${Math.min(i,5)*60}ms ease,transform 0.5s ${Math.min(i,5)*60}ms ease`;
+    cardObserver.observe(card);
   });
 }
 

@@ -45,6 +45,13 @@ def esc(s):
     return htmllib.escape(str(s), quote=True)
 
 
+def sized(url, width):
+    """Shopify CDN resizes on request - saves a lot of mobile data. Other hosts unchanged."""
+    if "cdn.shopify.com" not in url or "width=" in url:
+        return url
+    return url + ("&" if "?" in url else "?") + f"width={width}"
+
+
 def load_products_js():
     content = open(PRODUCTS_JS, encoding="utf-8").read()
     start_marker = "const PRODUCTS = "
@@ -166,8 +173,8 @@ def gallery_html(product):
     imgs = product["images"]
     main_img = imgs[0]
     thumbs = "".join(
-        f'<div class="gallery__thumb{" active" if i == 0 else ""}" data-src="{esc(u)}">'
-        f'<img src="{esc(u)}" alt="{esc(product["title"])}" loading="lazy" onerror="this.style.display=\'none\'"></div>'
+        f'<div class="gallery__thumb{" active" if i == 0 else ""}" data-src="{esc(sized(u, 900))}">'
+        f'<img src="{esc(sized(u, 160))}" alt="{esc(product["title"])}" loading="lazy" decoding="async" onerror="this.style.display=\'none\'"></div>'
         for i, u in enumerate(imgs)
     )
     return main_img, thumbs
@@ -262,6 +269,7 @@ def generate_product_html(product, all_products):
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script src="/assets/dist/boot.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{esc(title)} — AVIORCART</title>
   <meta name="description" content="{esc(desc[:150])}">
@@ -294,7 +302,7 @@ def generate_product_html(product, all_products):
     <div class="product-layout">
       <div>
         <div class="gallery__main">
-          <img id="gallery-main" src="{esc(main_img)}" alt="{esc(title)}" loading="eager" onerror="this.src='{PLACEHOLDER_SVG}'">
+          <img id="gallery-main" src="{esc(sized(main_img, 900))}" alt="{esc(title)}" loading="eager" onerror="this.src='{PLACEHOLDER_SVG}'">
         </div>
         <div class="gallery__thumbs">{thumbs}</div>
       </div>

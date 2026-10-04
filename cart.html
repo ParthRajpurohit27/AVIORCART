@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script src="/assets/dist/boot.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart — AVIORCART</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,7 +73,7 @@ function renderCartPage() {
         <div class="cart-item-row" id="cart-row-${item.key}">
           <div class="cart-item__img">
             <a href="products/${item.handle}.html">
-              <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.style.display='none'">
+              <img src="${typeof thumb === 'function' ? thumb(item.image,200) : item.image}" alt="${item.title}" loading="lazy" decoding="async" onerror="this.style.display='none'">
             </a>
           </div>
           <div>

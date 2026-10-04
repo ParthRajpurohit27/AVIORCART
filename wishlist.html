@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script src="/assets/dist/boot.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wishlist — AVIORCART</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,7 +56,7 @@ function renderWishlist() {
     const disc = onSale ? Math.round((p.compare_at_price - p.price)*100/p.compare_at_price) : 0;
     return `<div class="product-card" data-animate>
       <div class="product-card__img">
-        <a href="products/${p.handle}.html"><img src="${p.images[0]||''}" alt="${p.title}" loading="lazy" onerror="this.style.display='none'"></a>
+        <a href="products/${p.handle}.html"><img src="${thumb(p.images[0]||'',500)}" ${srcsetFor(p.images[0]||'')} alt="${p.title}" loading="lazy" decoding="async" onerror="this.style.display='none'"></a>
         ${onSale ? `<span class="product-card__badge badge-sale">${disc}% OFF</span>` : '<span class="product-card__badge badge-hot">New</span>'}
         <button class="product-card__wish active" onclick="removeFromWishlist(${p.id}, this)" aria-label="Remove">❤️</button>
         <div class="product-card__quick">

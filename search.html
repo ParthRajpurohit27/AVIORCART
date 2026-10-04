@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script src="/assets/dist/boot.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Search — AVIORCART</title>
   <meta name="description" content="Search AVIORCART's full catalog of fashion, watches, beauty, footwear, jewelry and electronics.">
@@ -67,7 +68,7 @@ function productCardHTML(p) {
 <div class="product-card" data-animate>
   <div class="product-card__img">
     <a href="products/${p.handle}.html">
-      <img src="${p.images[0]||''}" alt="${p.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:#f9fafb;\'>🛍️</div>'">
+      <img src="${thumb(p.images[0]||'',500)}" ${srcsetFor(p.images[0]||'')} alt="${p.title}" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:#f9fafb;\\'>🛍️</div>'">
     </a>
     ${onSale ? `<span class="product-card__badge badge-sale">${disc}% OFF</span>` : '<span class="product-card__badge badge-hot">New</span>'}
     <button class="product-card__wish" onclick="event.preventDefault();toggleWishlist(this,${p.id})" aria-label="Wishlist">
