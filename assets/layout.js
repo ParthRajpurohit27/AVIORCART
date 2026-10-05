@@ -26,6 +26,7 @@
     document.body.appendChild(s);
   }
   function loadProductExtras() {
+    loadScript('storefront.js');
     if (isProduct) loadScript('share.js');
     var path = location.pathname;
     var skip = /checkout|order-success|order-failure/.test(path) || path.indexOf('/dashboard') === 0;
@@ -45,7 +46,7 @@
 '<div class="topbar">' +
 '  <div class="container topbar__inner">' +
 '    <span>✨ Free Delivery on all orders (Offer ends soon) &nbsp;|&nbsp; 10 Days Easy Returns &nbsp;|&nbsp; 100% Secure Payments</span>' +
-'    <div class="topbar__right"><a href="' + href('track.html') + '">Track Order</a><a href="contact.html">Help</a><a href="about.html">About</a></div>' +
+'    <div class="topbar__right"><a href="' + href('track.html') + '">Track Order</a><a href="' + href('contact.html') + '">Help</a><a href="' + href('about.html') + '">About</a></div>' +
 '  </div>' +
 '</div>' +
 '<header class="site-header" id="site-header">' +
@@ -62,7 +63,7 @@
 '      <div class="search-dropdown" id="search-dropdown"></div>' +
 '    </div>' +
 '    <div class="header__actions">' +
-'   <a href="#" class="header__action-item">' +
+'      <a href="#" class="header__action-item">' +
 '        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
 '        <span>Account</span>' +
 '      </a>' +

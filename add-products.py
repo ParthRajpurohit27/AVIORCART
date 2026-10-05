@@ -160,9 +160,9 @@ def build_product(row, new_id, existing_handles, category_emoji_map):
 
 # ───────────────────────── HTML page generation ─────────────────────────
 
-PLACEHOLDER_SVG = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E"
-                    "%3Crect fill='%23f3f4f6' width='400' height='400'/%3E%3Ctext x='50%25' y='50%25' "
-                    "dominant-baseline='middle' text-anchor='middle' font-size='80'%3E🛍️%3C/text%3E%3C/svg%3E")
+PLACEHOLDER_SVG = ("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E"
+                    "%3Crect fill=%22%23f3f4f6%22 width=%22400%22 height=%22400%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 "
+                    "dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2280%22%3E🛍️%3C/text%3E%3C/svg%3E")
 
 
 def money_str(amount):
@@ -302,7 +302,7 @@ def generate_product_html(product, all_products):
     <div class="product-layout">
       <div>
         <div class="gallery__main">
-          <img id="gallery-main" src="{esc(sized(main_img, 900))}" alt="{esc(title)}" loading="eager" onerror="this.src='{PLACEHOLDER_SVG}'">
+          <img id="gallery-main" src="{esc(sized(main_img, 900))}" alt="{esc(title)}" loading="eager" onerror="this.onerror=null;this.src='{PLACEHOLDER_SVG}'">
         </div>
         <div class="gallery__thumbs">{thumbs}</div>
       </div>

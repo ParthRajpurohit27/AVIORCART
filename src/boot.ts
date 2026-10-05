@@ -9,6 +9,26 @@
 
   const root = document.documentElement;
 
+  /* apply cached live theme immediately (no flash) */
+  try {
+    const raw = localStorage.getItem("av_theme_v1");
+    if (raw) {
+      const t = JSON.parse(raw) as { variables?: Record<string, string>; customCSS?: string };
+      let css = ":root{";
+      const v = t.variables || {};
+      Object.keys(v).forEach(function (k) {
+        if (/^--[a-z0-9-]+$/i.test(k) && typeof v[k] === "string") css += k + ":" + v[k] + ";";
+      });
+      css += "}\n" + (typeof t.customCSS === "string" ? t.customCSS : "");
+      const st = document.createElement("style");
+      st.id = "av-live-theme";
+      st.textContent = css;
+      document.head.appendChild(st);
+    }
+  } catch (_e) {
+    /* ignore */
+  }
+
   function hint(rel: string, href: string, cors: boolean): void {
     const l = document.createElement("link");
     l.rel = rel;

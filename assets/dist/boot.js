@@ -6,6 +6,25 @@
     const MAX_WAIT_MS = 15000;
     const FLAG = "av_boot_nav";
     const root = document.documentElement;
+    try {
+        const raw = localStorage.getItem("av_theme_v1");
+        if (raw) {
+            const t = JSON.parse(raw);
+            let css = ":root{";
+            const v = t.variables || {};
+            Object.keys(v).forEach(function (k) {
+                if (/^--[a-z0-9-]+$/i.test(k) && typeof v[k] === "string")
+                    css += k + ":" + v[k] + ";";
+            });
+            css += "}\n" + (typeof t.customCSS === "string" ? t.customCSS : "");
+            const st = document.createElement("style");
+            st.id = "av-live-theme";
+            st.textContent = css;
+            document.head.appendChild(st);
+        }
+    }
+    catch (_e) {
+    }
     function hint(rel, href, cors) {
         const l = document.createElement("link");
         l.rel = rel;

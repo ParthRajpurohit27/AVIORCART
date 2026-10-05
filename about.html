@@ -512,6 +512,19 @@ section{padding:100px 0;position:relative;}
 </style>
 </head>
 <body>
+<style>
+.av-slimnav{position:fixed;top:0;left:0;right:0;z-index:10000;display:flex;align-items:center;gap:6px;padding:10px 16px;background:rgba(6,6,8,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(251,191,36,.25);font-family:'DM Sans',system-ui,sans-serif;overflow-x:auto;white-space:nowrap}
+.av-slimnav a{color:#e2e2ea;text-decoration:none;font-size:14px;font-weight:500;padding:7px 12px;border-radius:8px;flex-shrink:0;cursor:pointer}
+.av-slimnav a:hover,.av-slimnav a.on{color:#0a0a0a;background:#fbbf24}
+.av-slimnav .logo{font-family:Orbitron,sans-serif;font-weight:800;color:#fbbf24;letter-spacing:.06em;margin-right:auto}
+.av-slimnav .logo:hover{background:none;color:#fde68a}
+body{padding-top:54px}
+</style>
+<nav class="av-slimnav" aria-label="Main">
+<a class="logo" href="index.html">★ AVIORCART</a>
+<a href="index.html">Home</a><a href="collections.html">Shop</a><a href="track.html">Track Order</a><a href="about.html" class="on">About</a><a href="contact.html">Contact</a><a href="cart.html">Cart</a>
+</nav>
+
 
 <!-- Custom Cursor -->
 <div class="cursor" id="cursor"></div>
@@ -728,7 +741,7 @@ section{padding:100px 0;position:relative;}
       <span class="shimmer">AVIORCART?</span>
     </h2>
     <p class="cta-sub">Join thousands of happy customers who shop smarter. Curated by Parth, crafted for you.</p>
-    <a href="/collections/all" class="cta-btn">
+    <a href="collections.html" class="cta-btn">
       Start Shopping
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
@@ -862,5 +875,8 @@ function animateCount(el, target, suffix='') {
 }
 </script>
 
+<script src="assets/products.js" defer></script>
+<script src="assets/dist/storefront.js" defer></script>
+<script src="assets/dist/chatbot.js" defer></script>
 </body>
 </html>
