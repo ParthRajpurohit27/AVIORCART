@@ -22,6 +22,19 @@
   <link rel="stylesheet" href="assets/theme.css">
   <link rel="stylesheet" href="assets/checkout.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+<style>
+.upi-apps{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0 6px;}
+.upi-app{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid #e5e7eb;border-radius:12px;background:#fff;color:#111827;text-decoration:none;font-weight:600;font-size:15px;text-align:left;transition:border-color .15s,box-shadow .15s,transform .05s;}
+.upi-app:hover{border-color:#d97706;box-shadow:0 2px 10px rgba(0,0,0,.08);}
+.upi-app:active{transform:scale(.98);}
+.upi-logo{width:44px;height:44px;border-radius:10px;flex:0 0 44px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;overflow:hidden;background:#6b7280;}
+.upi-logo img{width:100%;height:100%;object-fit:contain;background:#fff;}
+.upi-hint{display:none;margin-top:12px;padding:12px 14px;border-radius:10px;background:#fffbeb;border:1px solid #fde68a;font-size:13px;color:#92400e;text-align:left;}
+.upi-qr-details{margin-top:14px;}
+.upi-qr-details summary{cursor:pointer;font-size:13px;color:#6b7280;list-style:none;}
+.upi-qr-details summary::-webkit-details-marker{display:none;}
+@media (max-width:380px){.upi-apps{grid-template-columns:1fr;}}
+</style>
 </head>
 <body>
 <div id="header-placeholder"></div>
@@ -123,11 +136,40 @@
 
             <button type="button" class="btn btn-gold btn-full btn-lg btn-pay" id="pay-btn" onclick="handleProceedToPay()">
               <span class="btn-pay__spinner"></span>
-              <span class="btn-pay__label">🔒 Proceed to Pay</span>
+              <span class="btn-pay__label">🔒 Proceed to Payment</span>
             </button>
-            <div class="summary-note" style="margin-top:12px;">🔒 You'll be redirected to PayU's secure payment page.</div>
+            <div class="summary-note" style="margin-top:12px;">🔒 You will pay the exact order total using UPI in the next step.</div>
           </div>
 
+
+          <!-- STEP 3 — UPI PAYMENT -->
+          <div class="checkout-step" id="step-3" hidden>
+            <h2>📲 Complete Your Payment</h2>
+            <div class="review-block" style="text-align:center;">
+              <div style="font-size:13px;color:#6b7280;">Amount to pay</div>
+              <div id="upi-amount" style="font-size:34px;font-weight:800;margin:4px 0 2px;"></div>
+              <div style="font-size:12px;color:#6b7280;">Order ID: <b id="upi-txn"></b></div>
+              <div id="upi-mobile">
+                <div style="font-size:14px;font-weight:600;margin:16px 0 0;">Choose your payment app</div>
+                <div class="upi-apps" id="upi-apps"></div>
+                <div class="upi-hint" id="upi-hint">Complete the payment in your UPI app, then return to this page and tap <b>“I Have Completed the Payment”</b> below.</div>
+                <details class="upi-qr-details" id="upi-qr-details">
+                  <summary>Prefer to scan a QR code instead?</summary>
+                  <div id="upi-qr-wrap-m" style="margin:12px auto 0;display:inline-block;background:#fff;padding:10px;border-radius:12px;"></div>
+                </details>
+              </div>
+              <div id="upi-desktop" style="display:none;">
+                <div style="font-size:14px;font-weight:600;margin:16px 0 8px;">Scan with any UPI app</div>
+                <div id="upi-qr-wrap" style="margin:6px auto;display:inline-block;background:#fff;padding:10px;border-radius:12px;"></div>
+                <div style="font-size:12px;color:#6b7280;margin-top:6px;">Open Google Pay, PhonePe, Paytm or any UPI app on your phone and scan this code.</div>
+              </div>
+              <div style="font-size:12px;color:#6b7280;margin-top:12px;">UPI ID: <b id="upi-id"></b></div>
+            </div>
+            <button type="button" class="btn btn-black btn-full btn-lg" style="margin-top:4px;" onclick="confirmPaid()">
+              ✅ I Have Completed the Payment
+            </button>
+            <div class="summary-note" style="margin-top:12px;">Please tap the button above only after your payment is successful.</div>
+          </div>
         </div>
 
         <!-- RIGHT: order summary -->
@@ -138,7 +180,7 @@
           <div class="summary-total">
             <span>Total Amount</span><span id="summary-total-amount">₹0</span>
           </div>
-          <div class="summary-note">🔒 Safe and Secure Payments via PayU</div>
+          <div class="summary-note">🔒 Secure UPI payment — amount is pre-filled</div>
         </div>
       </div>
     </div>
@@ -148,6 +190,7 @@
 
 <script src="assets/products.js"></script>
 <script src="assets/cart.js"></script>
+<script src="assets/qrcode.js"></script>
 <script src="assets/checkout.js"></script>
 <script src="assets/layout.js"></script>
 <script>
@@ -199,26 +242,18 @@ function escapeHtml(str) {
 
 /* step navigation */
 function goToStep(step, direction) {
-  const s1 = document.getElementById('step-1');
-  const s2 = document.getElementById('step-2');
-  const target = step === 1 ? s1 : s2;
-  const other = step === 1 ? s2 : s1;
-
-  other.hidden = true;
-  target.hidden = false;
+  [1,2,3].forEach(n => { document.getElementById('step-' + n).hidden = (n !== step); });
+  const target = document.getElementById('step-' + step);
   target.classList.remove('step-back');
-  void target.offsetWidth; // restart animation
-  target.classList.add(direction === 'back' ? 'step-back' : '');
-
+  void target.offsetWidth;
+  if (direction === 'back') target.classList.add('step-back');
   currentStep = step;
-
   document.querySelectorAll('.checkout-progress__step').forEach(el => {
     const n = parseInt(el.dataset.step);
-    el.classList.toggle('is-active', n === step);
+    el.classList.toggle('is-active', n === Math.min(step, 2));
     el.classList.toggle('is-done', n < step);
   });
   document.getElementById('progress-bar').classList.toggle('is-filled', step >= 2);
-
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -275,143 +310,84 @@ function renderReview() {
     </div>`).join('');
 }
 
-/* step 2: proceed to pay */
-async function handleProceedToPay() {
+/* ── FamPay / UPI config ── */
+const UPI_ID = '9425619133@fam';
+const UPI_NAME = 'AviorCart';
+let currentTxn = null;
+
+/* step 2: create an order id and show the UPI payment step */
+function handleProceedToPay() {
   if (!addressData || !CHECKOUT_ITEMS.length) return;
-  const btn = document.getElementById('pay-btn');
-  btn.classList.add('is-loading');
-  btn.disabled = true;
-
-  // Free / ₹1 test products skip PayU entirely — order is saved as
-  // successful straight away, no payment redirect needed.
-  const FREE_ORDER_MAX_AMOUNT = 1;
-  if (checkoutTotal <= FREE_ORDER_MAX_AMOUNT) {
-    return handleFreeOrder(btn);
-  }
-
-  try {
-    const txnid = genTxnId();
-    const udf = encodeOrderToUdf(addressData, CHECKOUT_ITEMS);
-    const productinfo = CHECKOUT_ITEMS.length === 1
-      ? CHECKOUT_ITEMS[0].title.substring(0, 90)
-      : `AVIORCART Order (${checkoutCount} items)`;
-
-    const payload = {
-      txnid,
-      amount: checkoutTotal.toFixed(2),
-      productinfo,
-      firstname: addressData.fullName,
-      email: addressData.email,
-      phone: addressData.phone,
-      udf1: udf.udf1, udf2: udf.udf2, udf3: udf.udf3, udf4: udf.udf4, udf5: udf.udf5
-    };
-
-    // Keep a local copy so order-success.html can show a rich summary
-    // on this device. This is a UX nicety only — Telegram (sent from
-    // api/payu-callback.js after PayU verifies payment) is the real
-    // record for the seller.
-    saveOrderRecord(txnid, {
-      items: CHECKOUT_ITEMS,
-      address: addressData,
-      amount: checkoutTotal,
-      mode: MODE
-    });
-
-    const res = await fetch('/api/generate-hash', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    if (!res.ok) {
-      let serverMsg = '';
-      try {
-        const errBody = await res.json();
-        serverMsg = errBody && errBody.error ? errBody.error : '';
-      } catch (e) { /* response wasn't JSON, ignore */ }
-      throw new Error(serverMsg || `Payment could not be started (HTTP ${res.status})`);
-    }
-    const data = await res.json();
-
-    const origin = window.location.origin;
-    const formFields = Object.assign({}, data, {
-      surl: origin + '/api/payu-callback',
-      furl: origin + '/api/payu-callback'
-    });
-
-    submitToPayU(data.payuUrl, formFields);
-    // Note: we intentionally don't clear the cart/buy-now item here —
-    // it's cleared once PayU redirects back with a verified success
-    // (see order-success.html), so a failed/abandoned payment doesn't
-    // lose the customer's cart.
-  } catch (err) {
-    console.error(err);
-    btn.classList.remove('is-loading');
-    btn.disabled = false;
-    showToast('❌ ' + (err.message || 'Could not start payment. Please try again.'));
-  }
+  currentTxn = 'AVIOR' + Date.now() + Math.floor(Math.random() * 1000);
+  saveOrderRecord(currentTxn, { items: CHECKOUT_ITEMS, address: addressData, amount: checkoutTotal, mode: MODE });
+  showUpiStep(currentTxn, checkoutTotal.toFixed(2));
 }
 
-/* free / ₹1 order — no payu redirect */
-async function handleFreeOrder(btn) {
-  try {
-    const res = await fetch('/api/free-order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fullName: addressData.fullName,
-        phone: addressData.phone,
-        email: addressData.email,
-        address: addressData.address,
-        city: addressData.city,
-        state: addressData.state,
-        pincode: addressData.pincode,
-        items: CHECKOUT_ITEMS.map(i => ({ title: i.title, quantity: i.quantity, price: i.price })),
-        amount: checkoutTotal
-      })
-    });
+function showUpiStep(txnid, amountStr) {
+  const q = 'pa=' + encodeURIComponent(UPI_ID) +
+    '&pn=' + encodeURIComponent(UPI_NAME) +
+    '&am=' + encodeURIComponent(amountStr) +
+    '&cu=INR&tn=' + encodeURIComponent('AVIORCART ' + txnid);
+  const generic = 'upi://pay?' + q;
 
-    if (!res.ok) {
-      let serverMsg = '';
-      try {
-        const errBody = await res.json();
-        serverMsg = errBody && errBody.error ? errBody.error : '';
-      } catch (e) { /* response wasn't JSON, ignore */ }
-      throw new Error(serverMsg || `Order could not be placed (HTTP ${res.status})`);
-    }
+  document.getElementById('upi-amount').textContent = '₹' + amountStr;
+  document.getElementById('upi-txn').textContent = txnid;
+  document.getElementById('upi-id').textContent = UPI_ID;
 
-    const data = await res.json();
+  const ua = navigator.userAgent || '';
+  const isAndroid = /android/i.test(ua);
+  const isIOS = /iphone|ipad|ipod/i.test(ua);
+  const isMobile = isAndroid || isIOS;
 
-    saveOrderRecord(data.txnid, {
-      items: CHECKOUT_ITEMS,
-      address: addressData,
-      amount: checkoutTotal,
-      mode: MODE
-    });
-
-    window.location.href = `order-success.html?txnid=${encodeURIComponent(data.txnid)}&status=success`;
-  } catch (err) {
-    console.error(err);
-    btn.classList.remove('is-loading');
-    btn.disabled = false;
-    showToast('❌ ' + (err.message || 'Could not place order. Please try again.'));
-  }
-}
-
-function submitToPayU(url, fields) {
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = url;
-  ['key','txnid','amount','productinfo','firstname','email','phone','udf1','udf2','udf3','udf4','udf5','hash','surl','furl'].forEach(name => {
-    if (fields[name] === undefined) return;
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = name;
-    input.value = fields[name];
-    form.appendChild(input);
+  // QR (shown on desktop, or tucked away on mobile)
+  const qr = qrcode(0, 'M');
+  qr.addData(generic);
+  qr.make();
+  const svg = qr.createSvgTag({ cellSize: 5, margin: 0, scalable: true });
+  ['upi-qr-wrap', 'upi-qr-wrap-m'].forEach(id => {
+    const el = document.getElementById(id);
+    el.innerHTML = svg;
+    const sv = el.querySelector('svg');
+    if (sv) { sv.style.width = '190px'; sv.style.height = '190px'; }
   });
-  document.body.appendChild(form);
-  form.submit();
+
+  document.getElementById('upi-mobile').style.display = isMobile ? 'block' : 'none';
+  document.getElementById('upi-desktop').style.display = isMobile ? 'none' : 'block';
+
+  if (isMobile) {
+    // App list. Logos load from assets/upi/<id>.png if present, otherwise a coloured badge is shown.
+    const apps = isAndroid ? [
+      { id: 'gpay',    name: 'Google Pay', color: '#1a73e8', letter: 'G', url: intent(q, 'com.google.android.apps.nbu.paisa.user') },
+      { id: 'phonepe', name: 'PhonePe',    color: '#5f259f', letter: 'P', url: intent(q, 'com.phonepe.app') },
+      { id: 'paytm',   name: 'Paytm',      color: '#00baf2', letter: 'P', url: intent(q, 'net.one97.paytm') },
+      { id: 'bhim',    name: 'BHIM',       color: '#f26b21', letter: 'B', url: intent(q, 'in.org.npci.upiapp') },
+      { id: 'upi',     name: 'Other UPI Apps', color: '#374151', letter: 'U', url: generic }
+    ] : [
+      { id: 'gpay',    name: 'Google Pay', color: '#1a73e8', letter: 'G', url: 'gpay://upi/pay?' + q },
+      { id: 'phonepe', name: 'PhonePe',    color: '#5f259f', letter: 'P', url: 'phonepe://pay?' + q },
+      { id: 'paytm',   name: 'Paytm',      color: '#00baf2', letter: 'P', url: 'paytmmp://pay?' + q },
+      { id: 'upi',     name: 'Other UPI Apps', color: '#374151', letter: 'U', url: generic }
+    ];
+    document.getElementById('upi-apps').innerHTML = apps.map(a => `
+      <a class="upi-app" href="${a.url}" onclick="document.getElementById('upi-hint').style.display='block'">
+        <span class="upi-logo" style="background:${a.color}"><img src="assets/upi/${a.id}.png" alt="" onerror="this.parentNode.textContent='${a.letter}'"></span>
+        <span>${a.name}</span>
+      </a>`).join('');
+  } else {
+    document.getElementById('upi-qr-details').open = true;
+  }
+
+  goToStep(3);
+}
+
+// Android: open one specific app (falls back to the system chooser if that app is not installed)
+function intent(q, pkg) {
+  return 'intent://pay?' + q + '#Intent;scheme=upi;package=' + pkg + ';end';
+}
+
+function confirmPaid() {
+  if (!currentTxn) return;
+  window.location.href = `order-success.html?txnid=${encodeURIComponent(currentTxn)}&status=pending`;
 }
 
 document.addEventListener('DOMContentLoaded', init);
