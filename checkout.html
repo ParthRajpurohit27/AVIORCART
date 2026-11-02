@@ -294,45 +294,22 @@ const UPI_ID = '9425619133@fam';
 const UPI_NAME = 'AviorCart';
 let currentTxn = null;
 
-/* step 2: create pending order, then show UPI step */
+/* step 2: no backend — just make an order id and show the UPI step */
 async function handleProceedToPay() {
   if (!addressData || !CHECKOUT_ITEMS.length) return;
   const btn = document.getElementById('pay-btn');
-  btn.classList.add('is-loading');
-  btn.disabled = true;
 
   // Free / ₹1 test products skip payment entirely
   const FREE_ORDER_MAX_AMOUNT = 1;
-  if (checkoutTotal <= FREE_ORDER_MAX_AMOUNT) return handleFreeOrder(btn);
-
-  try {
-    const res = await fetch('/api/fampay-order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fullName: addressData.fullName, phone: addressData.phone, email: addressData.email,
-        address: addressData.address, city: addressData.city, state: addressData.state, pincode: addressData.pincode,
-        items: CHECKOUT_ITEMS.map(i => ({ title: i.title, quantity: i.quantity, price: i.price })),
-        amount: checkoutTotal
-      })
-    });
-    if (!res.ok) {
-      let m = ''; try { m = (await res.json()).error; } catch (e) {}
-      throw new Error(m || `Could not start payment (HTTP ${res.status})`);
-    }
-    const data = await res.json();
-    currentTxn = data.txnid;
-
-    saveOrderRecord(data.txnid, { items: CHECKOUT_ITEMS, address: addressData, amount: checkoutTotal, mode: MODE });
-    showUpiStep(data.txnid, data.amount);
-    btn.classList.remove('is-loading');
-    btn.disabled = false;
-  } catch (err) {
-    console.error(err);
-    btn.classList.remove('is-loading');
-    btn.disabled = false;
-    showToast('❌ ' + (err.message || 'Could not start payment. Please try again.'));
+  if (checkoutTotal <= FREE_ORDER_MAX_AMOUNT) {
+    btn.classList.add('is-loading'); btn.disabled = true;
+    return handleFreeOrder(btn);
   }
+
+  currentTxn = 'AVIORFAM' + Date.now() + Math.floor(Math.random() * 1000);
+  const amountStr = checkoutTotal.toFixed(2);
+  saveOrderRecord(currentTxn, { items: CHECKOUT_ITEMS, address: addressData, amount: checkoutTotal, mode: MODE });
+  showUpiStep(currentTxn, amountStr);
 }
 
 function showUpiStep(txnid, amountStr) {
@@ -357,26 +334,14 @@ function showUpiStep(txnid, amountStr) {
   goToStep(3);
 }
 
-async function submitUtr() {
+function submitUtr() {
   const utr = document.getElementById('utr-input').value.trim();
   if (!/^\d{12}$/.test(utr)) { showToast('❌ 12-digit UTR number daal'); return; }
-  const btn = document.getElementById('utr-btn');
-  btn.classList.add('is-loading'); btn.disabled = true;
-  try {
-    const res = await fetch('/api/fampay-confirm', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ txnid: currentTxn, utr })
-    });
-    if (!res.ok) {
-      let m = ''; try { m = (await res.json()).error; } catch (e) {}
-      throw new Error(m || `Could not confirm (HTTP ${res.status})`);
-    }
-    window.location.href = `order-success.html?txnid=${encodeURIComponent(currentTxn)}&status=pending`;
-  } catch (err) {
-    btn.classList.remove('is-loading'); btn.disabled = false;
-    showToast('❌ ' + (err.message || 'Please try again.'));
-  }
+  // keep UTR with the saved order, then go to the success page (it has the WhatsApp button)
+  const rec = getOrderRecord(currentTxn) || { items: CHECKOUT_ITEMS, address: addressData, amount: checkoutTotal, mode: MODE };
+  rec.utr = utr;
+  saveOrderRecord(currentTxn, rec);
+  window.location.href = `order-success.html?txnid=${encodeURIComponent(currentTxn)}&status=pending`;
 }
 
 /* free / ₹1 order — no payu redirect */

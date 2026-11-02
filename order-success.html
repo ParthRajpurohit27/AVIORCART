@@ -68,8 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const txnid = params.get('txnid') || '';
   const isPending = params.get('status') === 'pending';
   if (isPending) {
-    document.querySelector('.order-result-card h1').textContent = 'Order Received!';
-    document.getElementById('success-msg').textContent = 'Thanks! We will verify your UPI payment (usually within a few hours) and then confirm your order on your phone/email.';
+    document.querySelector('.order-result-card h1').textContent = 'Almost Done!';
+    document.getElementById('success-msg').textContent = 'Order complete karne ke liye neeche wale button se apni order details WhatsApp pe seller ko bhej do. Payment verify hote hi order confirm ho jayega.';
   }
   document.getElementById('txnid-badge').textContent = txnid ? `Order ID: ${txnid}` : '';
 
@@ -102,6 +102,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Payment is verified at this point (server redirected here only
     // after PayU + our reverse-hash check both succeeded) — safe to
     // clear whichever source this order came from.
+    if (isPending) {
+      const WHATSAPP_NUMBER = '919425619133'; // seller WhatsApp number (country code + number, no +)
+      const lines = (record.items || []).map(i => `• ${i.title}${i.variant_title ? ' (' + i.variant_title + ')' : ''} × ${i.quantity} — ₹${i.price * i.quantity}`).join('\n');
+      const msg = `🛒 New AVIORCART Order\nOrder ID: ${txnid}\nAmount paid: ₹${Number(record.amount).toFixed(2)}\nUTR: ${record.utr || 'N/A'}\n\nItems:\n${lines}\n\nDeliver to:\n${a.fullName}\n${a.address}\n${a.city}, ${a.state} - ${a.pincode}\nPhone: ${a.phone}\nEmail: ${a.email || ''}`;
+      const wa = document.createElement('a');
+      wa.className = 'btn btn-gold btn-full btn-lg';
+      wa.style.cssText = 'display:block;margin:16px 0;text-align:center;';
+      wa.target = '_blank';
+      wa.href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
+      wa.textContent = '💬 Send Order Details on WhatsApp';
+      document.querySelector('.order-result__actions').before(wa);
+    }
+
     if (record.mode === 'buynow') {
       clearBuyNowItem();
     } else {
