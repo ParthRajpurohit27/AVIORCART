@@ -27,7 +27,7 @@
           </svg>
         </div>
         <h1>Order Confirmed!</h1>
-        <p>Thank you — your payment was received and your order is being processed.</p>
+        <p id="success-msg">Thank you — your payment was received and your order is being processed.</p>
         <div class="order-result__txnid" id="txnid-badge"></div>
 
         <div class="order-result__summary" id="order-summary" style="display:none;">
@@ -40,7 +40,7 @@
             <div class="review-items" id="summary-items"></div>
           </div>
           <div class="summary-total" style="margin-top:8px;">
-            <span>Total Paid</span><span id="summary-amount">₹0</span>
+            <span>Total</span><span id="summary-amount">₹0</span>
           </div>
         </div>
 
@@ -66,6 +66,13 @@ function escapeHtml(str) {
 document.addEventListener('DOMContentLoaded', function() {
   const params = new URLSearchParams(window.location.search);
   const txnid = params.get('txnid') || '';
+  const isPending = params.get('status') === 'pending';
+  if (isPending) {
+    document.querySelector('.order-result-card h1').textContent = 'Thank You for Your Order!';
+    document.getElementById('success-msg').textContent = 'Your order will be confirmed in a few minutes. Thank you for ordering with AVIORCART.';
+    const lbl = document.querySelector('#order-summary .summary-total span');
+    if (lbl) lbl.textContent = 'Order Total';
+  }
   document.getElementById('txnid-badge').textContent = txnid ? `Order ID: ${txnid}` : '';
 
   // This local record is purely a same-device UX nicety — the seller's
